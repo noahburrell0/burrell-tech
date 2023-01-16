@@ -1,0 +1,9 @@
+<div class="uk-section uk-padding-small">            
+    <div class="uk-flex uk-flex-middle uk-flex-center">
+        <div class=""><img class="uk-border-circle uk-align-right uk-margin-remove" src="https://s3.burrell.tech/images/profile.jpg" width="200px" height="200px"></div>
+        <div class="uk-padding-large">
+            <div class="uk-heading-medium uk-text-center">Noah Burrell</div>
+            <div class="uk-text-large uk-text-center">CKA Certified SysAdmin and GitOps Wizard 🧙‍♂️</div>
+        </div>
+    </div>
+</div>
