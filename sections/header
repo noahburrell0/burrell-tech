@@ -4,10 +4,10 @@
         <div><img class="uk-border-circle uk-align-right uk-margin-remove" src="https://s3.burrell.tech/images/profile.jpg" width="200px" height="200px"></div>
         <div class="uk-padding-large">
             <div class="uk-heading-medium uk-text-center">Noah Burrell</div>
-            <div class="uk-text-large uk-text-center">Homelabber, SysAdmin, and GitOps Wizard 🧙‍♂️</div>
+            <div class="uk-text-lead uk-text-center">Homelabber, SysAdmin, and GitOps Wizard 🧙‍♂️</div>
         </div>
     </div>
-    <div class="uk-flex uk-flex-center">
+    <div class="uk-flex uk-flex-center uk-margin-small-top">
         <ul class="uk-subnav uk-subnav-pill" uk-switcher="connect: .switcher-container; animation: uk-animation-fade">
             <li><a href="#">About</a></li>
             <li><a href="#">Homelab</a></li>
@@ -29,7 +29,7 @@
     
     <div class="uk-margin-medium-bottom">
         <div class="uk-heading-medium uk-text-center">Noah Burrell</div>
-        <div class="uk-text-large uk-text-center">Homelabber, SysAdmin, and GitOps Wizard 🧙‍♂️</div>
+        <div class="uk-text-lead uk-text-center">Homelabber, SysAdmin, and GitOps Wizard 🧙‍♂️</div>
     </div>
 
     <div class="uk-flex uk-flex-column">
