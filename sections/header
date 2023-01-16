@@ -9,12 +9,12 @@
     <div class="uk-flex uk-flex-center">
         <ul class="uk-subnav uk-subnav-pill" uk-switcher="connect: .switcher-container">
             <li><a href="#">About</a></li>
-            <li><a href="#">Resume</a></li>
             <li><a href="#">Homelab</a></li>
+            <li><a href="#">Resume</a></li>
+            <li><a href="#">Hire Me</a></li>
+            <li><a href="#">Contact</a></li>
         </ul>
         <ul class="uk-subnav uk-subnav-pill uk-margin-small-left uk-margin-remove-top">
-            <li><a target="_blank" href="https://www.linkedin.com/in/noahburrell/">Linkedin</a></li>
-            <li><a target="_blank" href="https://github.com/noahburrell0">Github</a></li>
             <li><a target="_blank" href="https://blog.burrell.tech/">Blog</a></li>
         </ul>
     </div>
