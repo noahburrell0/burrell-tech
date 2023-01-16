@@ -1,13 +1,14 @@
-<div class="uk-section uk-padding-small">            
+<!-- Desktop Header -->
+<div class="uk-section uk-padding-small uk-visible@s">            
     <div class="uk-flex uk-flex-middle uk-flex-center">
-        <div class=""><img class="uk-border-circle uk-align-right uk-margin-remove" src="https://s3.burrell.tech/images/profile.jpg" width="200px" height="200px"></div>
+        <div><img class="uk-border-circle uk-align-right uk-margin-remove" src="https://s3.burrell.tech/images/profile.jpg" width="200px" height="200px"></div>
         <div class="uk-padding-large">
             <div class="uk-heading-medium uk-text-center">Noah Burrell</div>
             <div class="uk-text-large uk-text-center">Homelabber, SysAdmin, and GitOps Wizard 🧙‍♂️</div>
         </div>
     </div>
     <div class="uk-flex uk-flex-center">
-        <ul class="uk-subnav uk-subnav-pill" uk-switcher="connect: .switcher-container">
+        <ul class="uk-subnav uk-subnav-pill" uk-switcher="connect: .switcher-container; animation: uk-animation-fade">
             <li><a href="#">About</a></li>
             <li><a href="#">Homelab</a></li>
             <li><a href="#">Resume</a></li>
@@ -16,6 +17,28 @@
         </ul>
         <ul class="uk-subnav uk-subnav-pill uk-margin-small-left uk-margin-remove-top">
             <li><a target="_blank" href="https://blog.burrell.tech/">Blog</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Mobile Header -->
+<div class="uk-section uk-padding-small uk-hidden@s">
+    <div class="uk-flex uk-flex-center">
+        <img class="uk-border-circle uk-align-center uk-padding-small uk-margin-remove-bottom" src="https://s3.burrell.tech/images/profile.jpg" width="200px" height="200px">
+    </div>
+    
+    <div class="uk-margin-medium-bottom">
+        <div class="uk-heading-medium uk-text-center">Noah Burrell</div>
+        <div class="uk-text-large uk-text-center">Homelabber, SysAdmin, and GitOps Wizard 🧙‍♂️</div>
+    </div>
+
+    <div class="uk-flex uk-flex-column">
+        <ul class="uk-subnav uk-subnav-pill uk-align-center uk-margin-remove-bottom" uk-switcher="connect: .switcher-container; animation: uk-animation-fade">
+            <li class="uk-padding-remove-left uk-margin-small"><a href="#"><span class="uk-align-center uk-margin-remove-bottom">About</span></a></li>
+            <li class="uk-padding-remove-left uk-margin-small"><a href="#"><span class="uk-align-center uk-margin-remove-bottom">Homelab</span></a></li>
+            <li class="uk-padding-remove-left uk-margin-small"><a href="#"><span class="uk-align-center uk-margin-remove-bottom">Resume</span></a></li>
+            <li class="uk-padding-remove-left uk-margin-small"><a href="#"><span class="uk-align-center uk-margin-remove-bottom">Hire Me</span></a></li>
+            <li class="uk-padding-remove-left uk-margin-small"><a href="#"><span class="uk-align-center uk-margin-remove-bottom">Contact</span></a></li>
         </ul>
     </div>
 </div>
