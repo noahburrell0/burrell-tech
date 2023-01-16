@@ -7,7 +7,7 @@
             <div class="uk-text-lead uk-text-center">Homelabber, SysAdmin, and GitOps Wizard 🧙‍♂️</div>
         </div>
     </div>
-    <div class="uk-flex uk-flex-center uk-margin-remove-vertical">
+    <div class="uk-flex uk-flex-center uk-margin-small-top">
         <ul class="uk-subnav uk-subnav-pill uk-margin-remove-bottom" uk-switcher="connect: .switcher-container; animation: uk-animation-fade">
             <li><a href="#">About</a></li>
             <li><a href="#">Homelab</a></li>
