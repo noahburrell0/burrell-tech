@@ -3,3 +3,7 @@
          font-size: 130%; /* or 2.5em etc, just example */
     }
 }
+
+.icon-hover svg:hover {
+    color: #1e87f0
+}

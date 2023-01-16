@@ -1,10 +1,10 @@
 <div class="uk-section uk-section-secondary uk-padding-remove-vertical">
     <div class="uk-container uk-padding-small">
         <div class="uk-flex uk-flex-center">
-            <div class="uk-padding-small"><a target=”_blank” href="https://www.linkedin.com/in/noahburrell/" uk-icon="icon: linkedin; ratio: 1.5"></a></div>
-            <div class="uk-padding-small"><a target=”_blank” href="https://github.com/noahburrell0/" uk-icon="icon: github; ratio: 1.5"></a></div>     
+            <div class="uk-padding-small"><a class="icon-hover" target=”_blank” href="https://www.linkedin.com/in/noahburrell/" uk-icon="icon: linkedin; ratio: 2"></a></div>
+            <div class="uk-padding-small"><a class="icon-hover" target=”_blank” href="https://github.com/noahburrell0/" uk-icon="icon: github; ratio: 2"></a></div>     
         </div>
-        <div class="uk-flex uk-flex-center uk-text-small uk-text-bold">
+        <div class="uk-flex uk-flex-center uk-text-small">
             <p>Copyright &copy; Noah Burrell</p>
         </div>
     </div>
