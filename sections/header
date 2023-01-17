@@ -3,8 +3,9 @@
     <div class="uk-flex uk-flex-middle uk-flex-center">
         <div><img class="uk-border-circle uk-align-right uk-margin-remove" src="https://s3.burrell.tech/images/profile.jpg" width="200px" height="200px"></div>
         <div class="uk-padding-large">
-            <div class="uk-heading-medium uk-text-center">Noah Burrell</div>
-            <div class="uk-text-lead uk-text-center">Homelabber, SysAdmin, and GitOps Wizard 🧙‍♂️</div>
+            <div class="uk-heading-medium uk-text-center uk-margin-remove">Noah Burrell</div>
+            <div class="uk-text-small uk-text-center uk-margin-small-bottom"><span uk-icon="location"></span> Kitchener-Waterloo, Ontario, Canada</div>
+            <div class="uk-text-lead uk-text-center">Homelabber, SysAdmin, and GitOps Wizard 🧙‍♂️</div>            
         </div>
     </div>
     <div class="uk-flex uk-flex-center uk-margin-small-top">
@@ -30,8 +31,9 @@
     </div>
     
     <div class="uk-margin-medium-bottom">
-        <div class="uk-heading-medium uk-text-center">Noah Burrell</div>
-        <div class="uk-text-lead uk-text-center">Homelabber, SysAdmin, and GitOps Wizard 🧙‍♂️</div>
+        <div class="uk-heading-medium uk-text-center uk-margin-remove">Noah Burrell</div>
+        <div class="uk-text-small uk-text-center uk-margin-small-bottom"><span uk-icon="location"></span> Kitchener-Waterloo, Ontario, Canada</div>
+        <div class="uk-text-lead uk-text-center">Homelabber, SysAdmin, and GitOps Wizard 🧙‍♂️</div>        
     </div>
 
     <div class="uk-flex uk-flex-column">
