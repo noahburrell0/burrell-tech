@@ -1,0 +1,13 @@
+@media (min-width: 640px) {
+    .responsive-text {
+         font-size: 130%; /* or 2.5em etc, just example */
+    }
+}
+
+.icon-hover svg:hover {
+    color: #1e87f0
+}
+
+.gallery:hover {
+    cursor: pointer;
+}
