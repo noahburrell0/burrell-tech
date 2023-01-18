@@ -9,7 +9,7 @@
         </div>
     </div>
     <div class="uk-flex uk-flex-center uk-margin-small-top">
-        <ul class="uk-subnav uk-subnav-pill uk-margin-remove-bottom" uk-switcher="connect: .switcher-container; animation: uk-animation-fade">
+        <ul class="uk-subnav uk-subnav-pill uk-margin-remove-bottom" uk-switcher="connect: .switcher-container; animation: uk-animation-fade; swiping: false">
             <li><a href="#">About</a></li>
             <li><a href="#">Homelab</a></li>
             <li><a href="#">Resume</a></li>
@@ -37,7 +37,7 @@
     </div>
 
     <div class="uk-flex uk-flex-column">
-        <ul class="uk-subnav uk-subnav-pill uk-align-center uk-margin-remove-bottom" uk-switcher="connect: .switcher-container; animation: uk-animation-fade">
+        <ul class="uk-subnav uk-subnav-pill uk-align-center uk-margin-remove-bottom" uk-switcher="connect: .switcher-container; animation: uk-animation-fade; swiping: false">
             <li class="uk-padding-remove-left uk-margin-small"><a href="#"><span class="uk-align-center uk-margin-remove-bottom">About</span></a></li>
             <li class="uk-padding-remove-left uk-margin-small"><a href="#"><span class="uk-align-center uk-margin-remove-bottom">Homelab</span></a></li>
             <li class="uk-padding-remove-left uk-margin-small"><a href="#"><span class="uk-align-center uk-margin-remove-bottom">Resume</span></a></li>
