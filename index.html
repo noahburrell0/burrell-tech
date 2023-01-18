@@ -22,6 +22,7 @@
       <div class=" uk-container uk-width-1-1 uk-padding-remove-horizontal">
 
           <ul class="uk-switcher switcher-container uk-padding-small uk-padding-remove-bottom">
+            
             <!-- About -->
             <li>
               <div class="uk-container uk-text-default uk-margin-large responsive-text">
@@ -297,7 +298,33 @@
             <!-- Contact -->
             <li>
               <div class="uk-container uk-text-default uk-margin-large responsive-text">
-                Maecenas tincidunt at tellus lacinia convallis. Sed venenatis, urna vitae scelerisque congue, orci enim congue nisi, et malesuada neque ex vel erat. In enim metus, iaculis vitae elit nec, fringilla placerat purus. Vivamus imperdiet urna non neque ullamcorper, ut dignissim neque cursus. Nam mollis nisi ut nibh ultrices, at eleifend ligula ornare. Vivamus dapibus, eros id porta facilisis, dui augue finibus nisi, iaculis tempor dolor augue porttitor mauris. Proin cursus interdum aliquet. Aenean eu enim at mi porta maximus. Maecenas ullamcorper, lacus a ultricies convallis, nisi orci suscipit ligula, et vestibulum nulla dolor id orci. Proin ac lacinia tortor, viverra varius arcu. Suspendisse potenti. Suspendisse rhoncus pellentesque justo, vitae cursus urna dictum et. 
+
+                <p class="uk-heading-small uk-text-center uk-text-capitalize">Contact Me</p>
+                <p class="uk-text-large uk-text-center uk-text-capitalize">Average response time within 24 hours</p>
+
+                <form class="uk-margin-medium-top" id="contact-form" onsubmit="return contact()">
+                  <fieldset class="uk-fieldset">              
+            
+                    <div class="uk-margin">
+                        <input class="uk-input" type="email" placeholder="Email Address" aria-label="Input" name="reply_to" required>
+                    </div>
+
+                    <div class="uk-margin">
+                      <input class="uk-input" type="text" placeholder="Name" aria-label="Input" name="name" required>
+                    </div>
+
+                    <div class="uk-margin">
+                      <input class="uk-input" type="text" placeholder="Subject" aria-label="Input" name="subject" required>
+                    </div>
+            
+                    <div class="uk-margin">
+                        <textarea style="resize: vertical;" class="uk-textarea" rows="5" placeholder="Message" aria-label="Textarea" name="body" required></textarea>
+                    </div>
+                  </fieldset>
+
+                  <button class="uk-button uk-align-center uk-button-primary" type="submit">Submit</button>
+                </form>
+
               </div>
             </li>
 
