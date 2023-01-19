@@ -184,13 +184,244 @@
             </li>
 
             <!-- Homelab -->
-            <li>
+            <li class="boundary">
               <div class="uk-container uk-text-default uk-margin-large responsive-text">
-                Sed elementum enim nisl, eu porttitor dui scelerisque ut. Fusce pulvinar id augue a consequat. Nunc in leo venenatis, tempus sapien a, consequat turpis. Fusce vehicula ipsum nec euismod malesuada. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Etiam nec eros nibh. Etiam accumsan fermentum nisi quis dignissim. Pellentesque nunc erat, dignissim ut eros sed, tincidunt volutpat enim.
+              
+                <div class="uk-flex uk-flex-center uk-flex-middle uk-margin-medium-bottom" uk-grid>
 
-                In at finibus arcu, ac congue ex. Sed gravida venenatis convallis. Integer pretium augue id leo venenatis convallis. Sed a condimentum libero, ac viverra sapien. Proin mattis dignissim dui sed maximus. Duis rutrum dui sit amet dui ultrices facilisis. Integer auctor ornare egestas. Cras volutpat fringilla consequat. Nunc tempus urna eget blandit efficitur. Morbi et cursus mauris. Aliquam id neque turpis. Curabitur viverra lacus commodo velit facilisis, non pellentesque diam scelerisque. Fusce pharetra sed massa vel faucibus.
-                
-                Nunc tincidunt, magna a elementum scelerisque, est mauris congue ex, vel iaculis ante quam vitae justo. Vivamus orci nisi, tincidunt non sem vitae, elementum interdum massa. Sed ante nunc, elementum id condimentum non, vehicula at ante. Vestibulum eget rhoncus risus. Nullam placerat nunc nec orci semper consequat. Integer viverra efficitur turpis, vitae fermentum lectus semper quis. Sed faucibus vehicula aliquam. Cras pharetra, est eu egestas porta, massa velit ornare metus, sit amet scelerisque nulla nisi vitae ex. 
+                  <div class="uk-width-auto uk-flex-center" uk-lightbox>
+                    <a href="https://s3.burrell.tech/images/homelab_front.jpg">
+                      <img class="uk-border-pill uk-align-center uk-margin-remove" src="https://s3.burrell.tech/images/homelab_front.jpg" width="200">
+                    </a>
+                  </div>
+
+                  <div class="uk-width-expand@s">
+                    <p class="uk-dropcap">
+                      Meet my homelab. This is where I do the majority of my learning and work on fun and interesting projects. This is the brain of my house. It is where I run my router, Kubernetes cluster, storage services, and active directory server (among other things).
+                      <br /><br />
+                      There is a lot to dig into with my homelab configuration so I have annotated the diagrams below with additional context and details to help clarify what you are looking at.
+                      <br /><br />
+                      I am always excited to talk about homelabbing, so if you have questions about my lab or your own, please
+                      feel free to <a class="uk-link-heading" uk-switcher-item="4" href="#"><u>contact me!</u></a>
+                    </p>
+                  </div> 
+
+                </div>
+
+                <div class="uk-flex uk-flex-center">
+                  <div class="uk-inline uk-dark">
+                    <img src="https://s3.burrell.tech/images/diagram_homelab_1.png" alt="">
+
+                    <div>
+                      <button class="uk-position-absolute uk-transform-center" style="left: 39%; top: 3.8%" uk-marker></button>
+                      <div uk-dropdown="delay-hide: 0; container: .boundary">
+                        <h3 class="uk-heading-divider">Bell Home Hub 4000</h3>
+                        <ul>
+                          <li class="uk-text-small">3 Gbps symmetrical fibre connection.</li>
+                          <li class="uk-text-small">Configured to passthrough to TNSR VM, no NAT or firewall.</li>
+                          <li class="uk-text-small">Wifi disabled in favor of Ubiquiti access points.</li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div>
+                      <button class="uk-position-absolute uk-transform-center" style="left: 77.7%; top: 10.9%" uk-marker></button>
+                      <div uk-dropdown="delay-hide: 0; container: .boundary">
+                        <h3 class="uk-heading-divider">Ubiquiti Switch Pro 48</h3>
+                        <p class="uk-text-small">Network backbone. All wired network devices (excluding Bell Home Hub) connected to this switch.</p>
+                        <ul>
+                          <li class="uk-text-small">(4) 10 Gbps SFP+ Ports</li>
+                          <li class="uk-text-small">(48) 1 Gbps RJ45 Ports</li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div>
+                      <button class="uk-position-absolute uk-transform-center" style="left: 49.5%; top: 13.4%" uk-marker></button>
+                      <div uk-dropdown="delay-hide: 0; container: .boundary">
+                        <h3 class="uk-heading-divider">HPE ProLiant DL380 Gen9</h3>
+                        <p class="uk-text-small">The primary driver for my homelab. Runs Proxmox VE as the hypervisor. Directly attached to 2 EMC DAS chassis'.</p>
+                        <h4 class="uk-margin-remove">Hardware Specs</h4>
+                        <ul class="uk-margin-remove">
+                          <li class="uk-text-small"><b>CPUs:</b> (2) Intel Xeon E5-2650 v4</li>
+                          <li class="uk-text-small"><b>Memory:</b> 384 GB 2133 MT/s DDR4</li>
+                          <li class="uk-text-small"><b>RAID Controller:</b> HP P840AR</li>
+                          <li class="uk-text-small"><b>NVMe Adapter:</b> QNAP QM2-2P-384</li>
+                          <li class="uk-text-small"><b>Storage (NVMe):</b> 100 GB Intel Optane DC P4801X (Boot)</li>
+                          <li class="uk-text-small"><b>Storage (NVMe):</b> 2 TB WD Black SN750 (VM Disks)</li>
+                          <li class="uk-text-small"><b>Storage (SATA):</b> (2) 1 TB WD Blue SSD (General Storage, RAID 1)</li>
+                          <li class="uk-text-small"><b>Network:</b> HP 561FLR-T</li>
+                          <li class="uk-text-small"><b>HBA:</b> LSI 9207-8e (Connected to EMC DAS chassis')</li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div>
+                      <button class="uk-position-absolute uk-transform-center" style="left: 22.5%; top: 22%" uk-marker></button>
+                      <div uk-dropdown="delay-hide: 0; container: .boundary">
+                        <h3 class="uk-heading-divider">Supermicro Server</h3>
+                        <p class="uk-text-small">Components chassis and Components sourced individually, not a standard Supermicro SKU. Used to run a Chia harvester and store Chia plots. Running OpenMediaVault.</p>
+                        <h4 class="uk-margin-remove">Hardware Specs</h4>
+                        <ul class="uk-margin-remove">
+                          <li class="uk-text-small"><b>Chassis:</b> Supermicro 24x 3.5" Bays (SKU Unknown)</li>
+                          <li class="uk-text-small"><b>Motherboard:</b> Supermicro X11SSM-F</li>
+                          <li class="uk-text-small"><b>CPU:</b> Intel Xeon E3-1220 v5</li>
+                          <li class="uk-text-small"><b>Memory:</b> 24 GB 2133 MT/s DDR4</li>
+                          <li class="uk-text-small"><b>HBA:</b>(2) LSI 9201-16i (Connected to Chassis Backplane)</li>
+                          <li class="uk-text-small"><b>Storage (SATA):</b> 128 GB Kingston SSD (Boot)</li>
+                          <li class="uk-text-small"><b>Storage (SATA):</b> (5) 10 TB Western Digital WD101EMAZ (Chia Plots, MergerFS)</li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div>
+                      <button class="uk-position-absolute uk-transform-center" style="left: 49.5%; top: 34.5%" uk-marker></button>
+                      <div uk-dropdown="delay-hide: 0; container: .boundary">
+                        <h3 class="uk-heading-divider">Whitebox Desktop</h3>
+                        <p class="uk-text-small">General purpose PC running Windows 10. Primarily used for game streaming (Moonlight), and GPU media transcoding.</p>
+                        <h4 class="uk-margin-remove">Hardware Specs</h4>
+                        <ul class="uk-margin-remove">
+                          <li class="uk-text-small"><b>Chassis:</b> Silverstone GD09</li>
+                          <li class="uk-text-small"><b>Motherboard:</b> Gigabyte AB350</li>
+                          <li class="uk-text-small"><b>CPU:</b> AMD Ryzen 5 1500X</li>
+                          <li class="uk-text-small"><b>Memory:</b> 32 GB 3000 MT/s DDR4</li>
+                          <li class="uk-text-small"><b>GPU:</b> Nvidia GeForce RTX 2070</li>
+                          <li class="uk-text-small"><b>Storage (SATA):</b> 500GB Samsung 850 EVO</li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div>
+                      <button class="uk-position-absolute uk-transform-center" style="left: 22.5%; top: 40%" uk-marker></button>
+                      <div uk-dropdown="delay-hide: 0; container: .boundary">
+                        <h3 class="uk-heading-divider">EMC DAS Chassis (1 of 2)</h3>
+                        <p class="uk-text-small">Contains (12) 10 TB Western Digital WD101EMAZ hard drives. Directly connected to HPE ProLiant DL380 Gen9. Used for Media and general network storage.</p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <button class="uk-position-absolute uk-transform-center" style="left: 49.5%; top: 43.5%" uk-marker></button>
+                      <div uk-dropdown="delay-hide: 0; container: .boundary">
+                        <h3 class="uk-heading-divider">EMC DAS Chassis (2 of 2)</h3>
+                        <p class="uk-text-small">Contains (12) 10 TB Western Digital WD101EMAZ hard drives. Directly connected to HPE ProLiant DL380 Gen9. Used for Media and general network storage.</p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <button class="uk-position-absolute uk-transform-center" style="left: 22.5%; top: 47%" uk-marker></button>
+                      <div uk-dropdown="delay-hide: 0; container: .boundary">
+                        <h3 class="uk-heading-divider">APC UPS</h3>
+                        <p class="uk-text-small">3000VA (30 Amp) APC SMT3000RM2U UPS. Provides backup power for entire lab. Approximate runtime of 30 minutes from full charge.</p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <button class="uk-position-absolute uk-transform-center" style="left: 7%; top: 64%" uk-marker></button>
+                      <div uk-dropdown="delay-hide: 0; container: .boundary">
+                        <h3 class="uk-heading-divider">Netgate TNSR VM</h3>
+                        <p class="uk-text-small">Router and firewall for home network.</p>
+                        <ul class="uk-margin-remove">
+                          <li class="uk-text-small">10 Gbps network port assigned directly assigned in Proxmox, connects to Bell Home Hub.</li>
+                          <li class="uk-text-small">Routes 3 seperate VLANs on internal network (Kubernetes VLAN, General VLAN, Native VLAN).</li>
+                          <li class="uk-text-small">Performs BGP peering with Kubernetes (MetalLB) for dynamic route injection for special applications.</li>
+                          <li class="uk-text-small">RESTCONF enabled to allow dynamic ACL and NAT rule changes from Kubernetes.</li>
+                          <li class="uk-text-small">Network services such as DNS and DHCP handled seperately.</li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div>
+                      <button class="uk-position-absolute uk-transform-center" style="left: 15.7%; top: 64%" uk-marker></button>
+                      <div uk-dropdown="delay-hide: 0; container: .boundary">
+                        <h3 class="uk-heading-divider">Windows Server 2019 Standard</h3>
+                        <p class="uk-text-small">Active Directory controller and DNS server for network.</p>
+                        <ul class="uk-margin-remove">
+                          <li class="uk-text-small">Provides Active Directory services for Windows machines on the network.</li>
+                          <li class="uk-text-small">Acts as a non-primary DNS server for burrell.tech internally (Kubernetes is the primary).</li>
+                          <li class="uk-text-small">Upstream DNS server set as Cloudflare (1.1.1.1) and Google (8.8.8.8 and 8.8.4.4).</li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div>
+                      <button class="uk-position-absolute uk-transform-center" style="left: 24%; top: 64%" uk-marker></button>
+                      <div uk-dropdown="delay-hide: 0; container: .boundary">
+                        <h3 class="uk-heading-divider">Work VM</h3>
+                        <p class="uk-text-small">Runs Xubuntu, acts as a seperate environment that I perform my day job in.</p>
+                        <ul class="uk-margin-remove">
+                          <li class="uk-text-small">Runs XRDP for connectivity to my main workstation. Client used to connect is FreeRDP.</li>
+                          <li class="uk-text-small">Maintains a split-tunnel VPN connection to my workplace.</li>
+                          <li class="uk-text-small">Keeps all work accounts seperate from my personal accounts and computer/s.</li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div>
+                      <button class="uk-position-absolute uk-transform-center" style="left: 15.7%; top: 81.8%" uk-marker></button>
+                      <div uk-dropdown="delay-hide: 0; container: .boundary">
+                        <h3 class="uk-heading-divider">(3) Kubernetes Nodes</h3>
+                        <p class="uk-text-small">A 3-node Kubernetes cluster for running the vast majority of applications and services in my homelab. See the Kubernetes section of this page for more details.</p>
+                        <ul class="uk-margin-remove">
+                          <li class="uk-text-small">Each node spec'd with 8 vCPUs and 16 GB of memory.</li>
+                          <li class="uk-text-small">Running Kubernetes 1.26.0, setup with Kubeadm.</li>
+                          <li class="uk-text-small">Each node is both a controlplane and worker node.</li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div>
+                      <button class="uk-position-absolute uk-transform-center" style="left: 43%; top: 68.8%" uk-marker></button>
+                      <div uk-dropdown="delay-hide: 0; container: .boundary">
+                        <p class="uk-text-small">The Bell Home Hub and HP server are directly to connected to each other with CAT6a to enable a 10 Gbps connection. The port on the HP server is assigned exclusively to the TNSR VM to enable routing out to the internet at full-speed (3 Gbps) without affecting the throughput of the internal network.</p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <button class="uk-position-absolute uk-transform-center" style="left: 58.5%; top: 68.8%" uk-marker></button>
+                      <div uk-dropdown="delay-hide: 0; container: .boundary">
+                        <p class="uk-text-small">The HP server is connected directly to each of the two EMC DAS chassis' using SFF-8088 to SFF-8088 cables between the LSI HBA in the HP server, and the SAS controllers in the EMC DAS chassis'. <b>Note:</b> This is not a network connection, this is a direct SAS connection.</p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <button class="uk-position-absolute uk-transform-center" style="left: 43%; top: 76.8%" uk-marker></button>
+                      <div uk-dropdown="delay-hide: 0; container: .boundary">
+                        <p class="uk-text-small">The HP server is connected via Direct Attach Copper to the Ubiquiti switch at 10 Gbps. This is done using the second 10 Gbps port on the server as the first is reserved for the connection between TNSR and the Bell Home Hub. The iLo port of the server is also connected to the switch using standard CAT5e cabling for connectivity at 1 Gbps.</p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <button class="uk-position-absolute uk-transform-center" style="left: 43%; top: 83%" uk-marker></button>
+                      <div uk-dropdown="delay-hide: 0; container: .boundary">
+                        <p class="uk-text-small">The whitebox Windows 10 PC is connected to the Ubiquiti switch using standard CAT5e cabling as only 1 Gbps connectivity is required.</p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <button class="uk-position-absolute uk-transform-center" style="left: 74%; top: 83%" uk-marker></button>
+                      <div uk-dropdown="delay-hide: 0; container: .boundary">
+                        <p class="uk-text-small">The Supermicro Server is connected to the Ubiquiti switch using standard CAT5e cabling as only 1 Gbps connectivity is required. Communication with a Chia Harvester has very low bandwidth requirements. The IPMI port of the server is also connected to the switch using standard CAT5e cabling for connectivity at 1 Gbps.</p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <button class="uk-position-absolute uk-transform-center" style="left: 85%; top: 74.5%" uk-marker></button>
+                      <div uk-dropdown="delay-hide: 0; container: .boundary">
+                        <h3 class="uk-heading-divider">(2) Ubiquiti U6-LR</h3>
+                        <p class="uk-text-small">WiFi 6 long-range Ubiquiti access points located on the upper level of the house and in the basement for full WiFi coverage. Connected to the Unifi Controller running under Kubernetes. Powered with PoE injectors in the server rack. Cabled with CAT5e and directly connected to the Ubiquiti switch as these devices are only 1 Gbps capable.</p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <button class="uk-position-absolute uk-transform-center" style="left: 85%; top: 92%" uk-marker></button>
+                      <div uk-dropdown="delay-hide: 0; container: .boundary">
+                        <p class="uk-text-small">My personal desktop/workstation. Connected directly to the Ubiquiti switch using CAT6a to enable 10 Gbps throughput.</p>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              
               </div>
             </li>
 
