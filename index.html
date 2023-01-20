@@ -481,7 +481,163 @@
                   </div>
                 </div>
 
-                <p class="uk-text-center"><span uk-icon="icon: info"></span> I'm working on more content for this page... I just wanted to get something that wasn't Lorem Ipsum up.</p>
+                <h1 class="uk-heading-divider">Kubernetes</h1>
+
+                <p>
+                  As shown above, my Kubernetes cluster consists of 3 nodes running in virtual machines in Proxmox, each of which is assigned 8 GB of memory, and 8 vCPUs. Each node is both a controlplane and worker node. My eventual goal is to purchase a blade style server chassis to run Kubernetes on bare metal,
+                  and split up the controlplane and workers onto their own dedicated blades. However, that is a project for the future and is not currently on my immediate radar.
+                </p>
+
+                <p>
+                  My entire Kubernetes environment is described as code in the repository <a class="uk-link-heading" target="_blank" href="https://github.com/noahburrell0/k8s"><u>here</u></a>. This repository is what drives Argo CD, which is the tool responsible for keeping my Kubernetes environment aligned with
+                  what I have described in my Github repository.
+                </p>
+         
+                <ul uk-accordion="multiple: true">
+                  <li>
+                    <a class="uk-accordion-title uk-text-large uk-text-bolder" href="#">Critical Components</a>
+                    <div class="uk-accordion-content">
+                      <p>The critical components in my Kubernetes cluster include:</p>
+                      <ul class="uk-list uk-list-large">
+                        <li><b>Calico</b> - The CNI, no special configurations applied. Deployed directly using the manifest provided by Calico (This is the only component not installed or managed by Argo CD).</li>
+                        <li><b>Argo CD</b> - This is the GitOps tool that brings all of my configurations in from Github and deploys them. Aside from having to initially bootstrap it, it is completely self-managing and will deploy and upgrade its own configurations.</li>
+                        <li><b>Cert Manager</b> - This magical little controller automatically generates and deploys SSL certificates for anything I throw into my cluster. All I need to do is annotate the ingress and the SSL certificates automatically get taken care of for me using Lets Encrypt. Cert Manager has been given access to my Cloudflare API key to automatically handle the DNS challenges.</li>
+                        <li><b>External DNS</b> - External DNS is a Kubernetes SIG project that allows the automatic addition of DNS records to supported providers. My instance is configured to use my Cloudflare API token to automatically set the records there. I've added in a special Cron deployment to automatically update my IP address in Cloudflare if my IP address changes.</li>
+                        <li><b>K8S Gateway</b> - The name is a little deceiving, this is actually a plugin for CoreDNS. This is actually one of my favorites, it is responsible for running a seperate CoreDNS instance, watching my services (looks for a special annotation) and ingresses, and then automatically adds DNS records that match my specified DNS zones. I've got this guy hooked up to MetalLB to provide a static loadbalancer IP address so that I can use it as the primary DNS server for my network. When I add a new application, I never have to worry about adding internal DNS records for it. If there is something it doesn't know about, it is configured to forward requests to my Windows DNS server (where I do have to sometimes manually add things if they are not in Kubernetes). <a class="uk-link-heading" target="_blank" href="https://github.com/ori-edge/k8s_gateway"><u>I truly cannot recommend this project enough.</u></a></li>
+                        <li><b>Metacontroller and TNSR Controller</b> - Metacontroller is a Kubernetes controller that lets you rapidly develop and deploy your own controllers. TNSR Controller, deployed using Metacontroller, is my own little homebrew project that automatically configures my TNSR router using it's RESTCONF API. It is responsible for automatically adding ACL and NAT rules based on Kubernetes CRDs and annotations for services that I want exposed directly to the internet, but are not normal web applications and cannot be handled by my ingress controller. This thing is pretty buggy and terrible, I don't recommend using it, but if you want to take a look it is available on my Github <a class="uk-link-heading" target="_blank" href="https://github.com/noahburrell0/tnsr-controller"><u>here.</u></a>.</li>
+                        <li><b>MetalLB</b> - This is a loadbalancer meant for Kubernetes clusters that don't have access to a supported cloud loadbalancer (such as my on-premise cluster). This controller is set up with its own specific IP address pool that it can distribute to loadbalancer service resources however it sees fit. One of the special things about this controller is that I have it configured to BGP peer with my TNSR router. This provides multi-path redundancy (and loadbalancing at my router) for each of the IP addresses MetalLB manages. When a new loadbalancer service resource is added to the cluster, TNSR is automatically notified via BGP and 3 new routes are added to TNSR's routing table (1 for each node). This is particularily handy for things like my ingress controller, and K8S Gateway deployments where things outside the cluster need to talk to them, but can't do so via a traditional ingress.</li>
+                        <li><b>NFS Subdir External Provisioner</b> - I don't really have fast enough drives to deploy a cloud-native storage solution. I've tried out projects like Longhorn and Rook, and its pretty much all been terrible because of my slow storage (Longhorn even specifically mentions you should use NVMe drives). So this controller basically just connects to the NFS server I have running directly on the Proxmox hypervisor and automatically creates subdirectories whenever an application in Kubernetes needs persistent storage. This really isn't anything too special, but it is critical for making data persistent for an application. It also has the added benefit of allowing me to just log into Proxmox and easily look at or modify the data if I need to (which is remarkably hard to do with most cloud-native solutions). Storage is an area of my cluster I feel could be greatly improved, but it seems like it is likely to be expensive to do so. If anybody has suggestions, I would greatly appreciate hearing them!</li>
+                        <li><b>NGINX Ingress</b> - Nothing too special here, just a bog-standard Kubernetes ingress controller. The only modifications to this deployment from the base manifests were to make it the default ingress class and give it a loadbalancer service with a pre-defined IP (using MetalLB). A parameter also needed to be added to the ingress controller deployment so that the MetalLB IP address gets assigned to the ingress status field so that DNS resolution resolves to the highly-available MetalLB address and not the node address the ingress controller is running on.</li>
+                        <li><b>Sealed Secrets</b> - This is the magical little controller the lets me store all of my secrets (encrypted) in a public Git repository and then decrypt them on the fly when they are deployed via Argo CD. <a class="uk-link-heading" target="_blank" href="https://github.com/bitnami-labs/sealed-secrets"><u>This is another project that I strongly recommend.</u></a></li>
+                      </ul>   
+                    </div>
+                  </li>
+                  <li>
+                    <a class="uk-accordion-title uk-text-large uk-text-bolder" href="#">Full Application List and Syncronization Status</a>
+                    <div class="uk-accordion-content">
+                      <p>All configurations can be found in my <a class="uk-link-heading" target="_blank" href="https://github.com/noahburrell0/k8s"><u>Git repository</u></a></p>
+
+                      <div class="uk-grid-medium uk-child-width-1-2@m uk-child-width-1-1" uk-grid="masonry: true">
+                        <div>
+                          <p class="uk-text-bold uk-margin-small-bottom">Operators and Critical Components</p>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=app-of-apps&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="This application is used by Argo CD to automatically detect the configurations of all of the other applications."></span> App-Of-Apps</p>
+                          </div>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=argocd&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="Argo CD is the application responsible for deploying all of the applications in Kubernetes."></span> Argo CD</p>
+                          </div>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=cert-manager&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="Cert Manager automatically provisions new SSL certificates and renews existing certificates for application in Kubernetes."></span> Cert Manager</p>
+                          </div>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=external-dns&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="External DNS detects the FQDN used by ingress resources in the cluster and automatically creates associated DNS records in Cloudflare."></span> External DNS</p>
+                          </div>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=metallb&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="MetalLB is a loadbalancer controller responsible for assigning IP addresses and routing traffic to loadbalancer type service resources in the cluster. It also injects routes via BGP to my router."></span> MetalLB</p>
+                          </div>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=metrics-server&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="Metrics Server is responsible for providing cluster statistics. These statistics can be directly accessed with the `kubectl top` command."></span> Metrics Server</p>
+                          </div>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=nfs-subdir-provisioner&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="The NFS Subdir External Provisioner can dynamically provision Persistent Volumes to an existing NFS share on the network."></span> NFS <span class="uk-visible@l">Subdir External </span>Provisioner</p>
+                          </div>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=nginx-ingress&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="The NGINX Ingress controller automatically routes web traffic to the correct destination in the cluster when an Ingress resource is defined."></span> NGINX Ingress</p>
+                          </div>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=sealed-secrets&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="The Sealed Secrets controller encrypts end decrypts SealedSecret resources, making it safe to publically store secrets in Git."></span> Sealed Secrets</p>
+                          </div>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=tnsr-controller&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="The TNSR Controller handles automatic ACL and NAT rule creation on TNSR routers when requested by a Service resource in Kubernetes."></span> TNSR Controller</p>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <p class="uk-text-bold uk-margin-small-bottom">Externally Exposed Applications</p>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=chia-node&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="The Chia Node application maintains a copy of the Chia blockchain and acts as a collection point for the Chia Harvester located outside of Kubernetes."></span> Chia Node</p>
+                          </div>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=contact-api&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="The Contact API is a simple Flask application that converts submissions from the contact form on this website to an email and passes it to the SMTP relay in Kubernetes."></span> Contact API</p>
+                          </div>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=ghost&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="Ghost is a piece of blogging software that runs my personal blog. It is accessible at blog.burrell.tech."></span> Ghost</p>
+                          </div>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=main-site&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="This Website! An NGINX webserver that automatically clones a copy of this website's source code from Git and serves it to the internet."></span> This Website</p>
+                          </div>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=minio&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="Minio is an S3 compliant object storage system. It mostly holds static resources for this website like images and JS/CSS libraries and makes them accessible to the internet."></span> Minio</p>
+                          </div>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=ombi&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="Ombi is my multimedia request system for Plex. Primarily used by friends and family to request new movies and TV shows to be added to Plex."></span> Ombi</p>
+                          </div>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=paperless&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="Paperless is a document management system that allows me to scan physical documents or upload PDFs, and keep a digital copy of them all in one place."></span> Paperless</p>
+                          </div>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=plex&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="Plex Media Server is a media platform that allows my friends and family to stream my movie and television library."></span> Plex Media Server</p>
+                          </div>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=seafile&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="Seafile is a private cloud storage system similar in principle to Google Drive. It allows me and my friends and family to access our data from anywhere."></span> Seafile</p>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <p class="uk-text-bold uk-margin-small-bottom">Internal-Only Applications</p>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=nzbget&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="NZBGet is a usenet download client that is primarily used for downloading multimedia."></span> NZBGet</p>
+                          </div>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=radarr&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="Radarr is a movie management and download utility that searches usenet indexers for requested movies. It submits hits to NZBGet for download and then renames and organizes them once the download is completed."></span> Radarr</p>
+                          </div>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=sonarr&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="Sonarr is a TV series management and download utility that searches usenet indexers for requested TV series. It submits hits to NZBGet for download and then renames and organizes them once the download is completed."></span> Sonarr</p>
+                          </div>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=smtp&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="The SMTP relay acts as a central collection point on my internal network for SMTP submissions. It allows all applications that send emails to point at the same place and not need to authenticate with my mail provider."></span> SMTP Relay</p>
+                          </div>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=tdarr&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="Tdarr is a transcode management platform that automatically detects new media downloaded by Sonarr or Radarr and automatically transcodes it to a chosen media format."></span> Tdarr</p>
+                          </div>
+                          <div class="uk-flex">
+                            <img class="uk-object-none" src="https://app-status.burrell.tech/api/badge?name=unifi&revision=false">
+                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="The Ubiquiti Unifi Controller is a controller for provisioning and managing Ubiquiti network devices. I use this to manage my switch and access points."></span> <span class="uk-visible@s">Ubiquiti </span>Unifi Controller</p>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </li>
+                </ul>
+                
+
+
+                <p class="uk-text-center uk-text-bold"><span uk-icon="icon: info"></span> I'm still working on more content for this page...</p>
               
               </div>
             </li>
