@@ -258,7 +258,7 @@
             <li class="boundary">
               <div class="uk-container uk-text-default uk-margin-large responsive-text">
               
-                <div class="uk-flex uk-flex-center uk-flex-middle uk-margin-medium-bottom" uk-grid>
+                <div class="uk-flex uk-flex-center uk-flex-middle uk-margin-medium-bottom uk-margin-medium-top" uk-grid>
 
                   <div class="uk-width-auto uk-flex-center" uk-lightbox>
                     <a href="https://s3.burrell.tech/images/homelab_front.jpg">
@@ -278,6 +278,8 @@
                   </div> 
 
                 </div>
+
+                <h1 class="uk-heading-divider">Topology</h1>
 
                 <div class="uk-flex uk-flex-center">
                   <div class="uk-inline uk-dark">
@@ -644,6 +646,57 @@
                       </div>
 
                     </div>
+
+                    <h1 class="uk-heading-divider">Internal DNS Configuration</h1>
+
+                    <div class="uk-flex uk-flex-center">
+                      <div class="uk-inline uk-dark">
+                        <img src="https://s3.burrell.tech/images/diagram_homelab_2.png" alt="">
+    
+                        <div>
+                          <button class="uk-position-absolute uk-transform-center" style="left: 30.1%; top: 10%" uk-marker></button>
+                          <div uk-dropdown="delay-hide: 0; container: .boundary">
+                            <p>Kubernetes workloads resolve DNS against CoreDNS, as is the standard.</p>
+                          </div>
+                        </div>
+
+                        <div>
+                          <button class="uk-position-absolute uk-transform-center" style="left: 74%; top: 26%" uk-marker></button>
+                          <div uk-dropdown="delay-hide: 0; container: .boundary">
+                            <p>Any DNS requests that the both CoreDNS and the Windows DNS server are unable to resolve are finally forwarded externally to either Cloudflare (1.1.1.1) or Google (8.8.8.8 and 8.8.4.4)</p>
+                          </div>
+                        </div>
+
+                        <div>
+                          <button class="uk-position-absolute uk-transform-center" style="left: 35.1%; top: 50%" uk-marker></button>
+                          <div uk-dropdown="delay-hide: 0; container: .boundary">
+                            <p>CoreDNS and the K8S Gateway plugin handle name resolution for the burrell.tech, home.burrell.tech, and k8s.burrell.tech zones. Any queries it receives that it doesn't know how to answer get forwarded to the Windows DNS server. An IP address is statically assigned by MetalLB so that devices external to Kubernetes can query CoreDNS.</p>
+                          </div>
+                        </div>
+
+                        <div>
+                          <button class="uk-position-absolute uk-transform-center" style="left: 87%; top: 52%" uk-marker></button>
+                          <div uk-dropdown="delay-hide: 0; container: .boundary">
+                            <p>The Windows DNS server is mainly responsible for providing name resolution of DHCP registered devices and a handful of manual DNS entries for the burrell.tech zone for services that are not in Kubernetes.</p>
+                          </div>
+                        </div>
+
+                        <div>
+                          <button class="uk-position-absolute uk-transform-center" style="left: 75%; top: 67%" uk-marker></button>
+                          <div uk-dropdown="delay-hide: 0; container: .boundary">
+                            <p>The only devices that don't resolve against CoreDNS are the Kubernetes cluster node. This is to prevent a circular dependency on itself. Instead, they have been manually set to resolve directly against the Window DNS server.</p>
+                          </div>
+                        </div>
+
+                        <div>
+                          <button class="uk-position-absolute uk-transform-center" style="left: 3%; top: 83%" uk-marker></button>
+                          <div uk-dropdown="delay-hide: 0; container: .boundary">
+                            <p>Internal network devices all resolve against CoreDNS/K8S Gateway in Kubernetes. The DHCP server is configured out to give the IP address of CoreDNS as the nameserver.</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                   </li>
                 </ul>
                 
