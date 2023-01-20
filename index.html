@@ -7,7 +7,7 @@
 
     <link rel="preload" href="https://s3.burrell.tech/include/js/jquery-3.6.3.min.js" as="script" />
     <link rel="preload" href="/js/common.js" as="script" />
-    <link rel="preload" href="/sections/header" as="html" />
+    <link rel="preload" href="/sections/header" as="style" />
     <link rel="preload" href="https://s3.burrell.tech/images/profile.jpg" as="image"> 
 
     <link rel="apple-touch-icon" sizes="180x180" href="https://s3.burrell.tech/include/icons/apple-touch-icon.png">
@@ -22,7 +22,58 @@
     <script src="/js/common.js"></script>
   </head>
   <body>
-    <header id="header"></header>
+    <header>
+
+      <!-- Desktop Header -->
+      <div class="uk-section uk-padding-small uk-padding-remove-bottom uk-visible@s">            
+        <div class="uk-flex uk-flex-middle uk-flex-center">
+            <div><img class="uk-border-circle uk-align-right uk-margin-remove" src="https://s3.burrell.tech/images/profile.jpg" width="200px" height="200px"></div>
+            <div class="uk-padding-large">
+                <div class="uk-heading-medium uk-text-center uk-margin-remove">Noah Burrell</div>
+                <div class="uk-text-small uk-text-center uk-margin-small-bottom"><span uk-icon="location"></span> Kitchener-Waterloo, Ontario, Canada</div>
+                <div class="uk-text-lead uk-text-center">Homelabber, SysAdmin, and GitOps Wizard 🧙‍♂️</div>            
+            </div>
+        </div>
+        <div class="uk-flex uk-flex-center uk-margin-small-top">
+            <ul class="uk-subnav uk-subnav-pill uk-margin-remove-bottom" uk-switcher="connect: .switcher-container; animation: uk-animation-fade; swiping: false">
+                <li><a href="#">About</a></li>
+                <li><a href="#">Homelab</a></li>
+                <li><a href="#">Resume</a></li>
+                <li><a href="#">Hire Me</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <ul class="uk-subnav uk-subnav-pill uk-margin-small-left uk-margin-remove-vertical">
+                <li><a href="https://blog.burrell.tech/">Blog</a></li>
+            </ul>
+        </div>
+
+        <hr class="uk-margin-remove-top">
+      </div>
+
+      <!-- Mobile Header -->
+      <div class="uk-section uk-padding-small uk-hidden@s">
+        <div class="uk-flex uk-flex-center">
+            <img class="uk-border-circle uk-align-center uk-padding-small uk-margin-remove-bottom" src="https://s3.burrell.tech/images/profile.jpg" width="200px" height="200px">
+        </div>
+        
+        <div class="uk-margin-medium-bottom">
+            <div class="uk-heading-medium uk-text-center uk-margin-remove">Noah Burrell</div>
+            <div class="uk-text-small uk-text-center uk-margin-small-bottom"><span uk-icon="location"></span> Kitchener-Waterloo, Ontario, Canada</div>
+            <div class="uk-text-lead uk-text-center">Homelabber, SysAdmin, and GitOps Wizard 🧙‍♂️</div>        
+        </div>
+
+        <div class="uk-flex uk-flex-column">
+            <ul class="uk-subnav uk-subnav-pill uk-align-center uk-margin-remove-bottom" uk-switcher="connect: .switcher-container; animation: uk-animation-fade; swiping: false">
+                <li class="uk-padding-remove-left uk-margin-small"><a href="#"><span class="uk-align-center uk-margin-remove-bottom">About</span></a></li>
+                <li class="uk-padding-remove-left uk-margin-small"><a href="#"><span class="uk-align-center uk-margin-remove-bottom">Homelab</span></a></li>
+                <li class="uk-padding-remove-left uk-margin-small"><a href="#"><span class="uk-align-center uk-margin-remove-bottom">Resume</span></a></li>
+                <li class="uk-padding-remove-left uk-margin-small"><a href="#"><span class="uk-align-center uk-margin-remove-bottom">Hire Me</span></a></li>
+                <li class="uk-padding-remove-left uk-margin-small"><a href="#"><span class="uk-align-center uk-margin-remove-bottom">Contact</span></a></li>
+            </ul>
+        </div>
+      </div>
+
+    </header>
 
     <div class="uk-section uk-padding-remove-vertical uk-margin-medium-bottom" uk-height-viewport="expand: true">
       <div class=" uk-container uk-width-1-1 uk-padding-remove-horizontal">
