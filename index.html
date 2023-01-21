@@ -766,7 +766,7 @@
                         <div>
                           <button class="uk-position-absolute uk-transform-center" style="left: 75%; top: 67%" uk-marker></button>
                           <div uk-dropdown="delay-hide: 0; container: .boundary">
-                            <p>The only devices that don't resolve against CoreDNS are the Kubernetes cluster node. This is to prevent a circular dependency on itself. Instead, they have been manually set to resolve directly against the Window DNS server.</p>
+                            <p>The only devices that don't resolve against CoreDNS are the Kubernetes cluster nodes. This is to prevent a circular dependency where the nodes require CoreDNS to already be available before the cluster is ready. Instead, the nodes have been manually set to resolve directly against the Window DNS server.</p>
                           </div>
                         </div>
 
