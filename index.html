@@ -644,32 +644,92 @@
                           </div>
                         </div>
                       </div>
-
                     </div>
 
                     <h1 class="uk-heading-divider">Network Configuration</h1>
+
+                    <h2>Topology</h1>
                     <div class="uk-flex uk-flex-center">
                       <div class="uk-inline uk-dark">
-                        <img src="https://s3.burrell.tech/images/diagram_homelab_2.png" alt="">
-    
+                        <img src="https://s3.burrell.tech/images/diagram_homelab_2.png" alt="">    
                         <div>
                           <button class="uk-position-absolute uk-transform-center" style="left: 28%; top: 5%" uk-marker></button>
                           <div uk-dropdown="delay-hide: 0; container: .boundary">
                             <p>Bell fibre internet connection. 3 Gbps symmetrical.</p>
                           </div>
                         </div>
-
                         <div>
                           <button class="uk-position-absolute uk-transform-center" style="left: 28%; top: 20%" uk-marker></button>
                           <div uk-dropdown="delay-hide: 0; container: .boundary">
                             <p>Bell Home Hub 4000. Straight passthrough to TNSR.</p>
                           </div>
                         </div>
-
+                        <div>
+                          <button class="uk-position-absolute uk-transform-center" style="left: 5%; top: 37%" uk-marker></button>
+                          <div uk-dropdown="delay-hide: 0; container: .boundary">
+                            <p>TNSR router. 3 seperate virtual interfaces assigned to VM for each VLAN. Acts as the default gateway for all VLANs. Is directly connected to the Bell Home Hub on a dedicated interface.</p>
+                          </div>
+                        </div>
+                        <div>
+                          <button class="uk-position-absolute uk-transform-center" style="left: 44%; top: 43%" uk-marker></button>
+                          <div uk-dropdown="delay-hide: 0; container: .boundary">
+                            <p>MetalLB running within Kubernetes. Peers with TNSR using BGP and automatically injects routes to make all (non-HTTP/S) loadbalancer service resources in Kubernetes available to the boader network and the internet as required. Routes to this network are assigned using next-hop addresses of each Kubernetes node which are equally weighted allowing for BGP loadbalancing to occur.</p>
+                          </div>
+                        </div>
+                        <div>
+                          <button class="uk-position-absolute uk-transform-center" style="left: 65%; top: 24%" uk-marker></button>
+                          <div uk-dropdown="delay-hide: 0; container: .boundary">
+                            <p>An IP address pool that MetalLB has complete control over. Statically assigns addresses to NGINX and CoreDNS as these need to be well-known but otherwise dynamically assigns IP addresses to all other loadbalancer services in Kubernetes. Some of the other services MetalLB allocates IP addresses for include Plex, the Ubiquiti Unifi Controller, and the Chia node.</p>
+                          </div>
+                        </div>
+                        <div>
+                          <button class="uk-position-absolute uk-transform-center" style="left: 5%; top: 78%" uk-marker></button>
+                          <div uk-dropdown="delay-hide: 0; container: .boundary">
+                            <p>The Native VLAN is primarily used for servers and network devices. As an example, Proxmox and each access point have their own dedicated IP addresses on this network.</p>
+                          </div>
+                        </div>
+                        <div>
+                          <button class="uk-position-absolute uk-transform-center" style="left: 23%; top: 90%" uk-marker></button>
+                          <div uk-dropdown="delay-hide: 0; container: .boundary">
+                            <p>While the access points on the network have their own IP addresses on the Native VLAN, they connect wireless clients to the General VLAN as the connection between the access points and the switch allow for tagged frames (802.1q).</p>
+                          </div>
+                        </div>
+                        <div>
+                          <button class="uk-position-absolute uk-transform-center" style="left: 55%; top: 70%" uk-marker></button>
+                          <div uk-dropdown="delay-hide: 0; container: .boundary">
+                            <p>The General VLAN is where most devices get connected to. This includes all wireless devices and most wired devices. All VMs excluding the Kubernetes nodes have a presence on this network as well.</p>
+                          </div>
+                        </div>
+                        <div>
+                          <button class="uk-position-absolute uk-transform-center" style="left: 94%; top: 79%" uk-marker></button>
+                          <div uk-dropdown="delay-hide: 0; container: .boundary">
+                            <p>The Kubernetes VLAN is dedicated exclusively to the Kubernetes nodes. Nothing else is assigned to this network except for TNSR.</p>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
-                    <h1 class="uk-heading-divider">Internal DNS Configuration</h1>
+                    <p class="uk-margin-large-top uk-text-center">This is what the BGP routes in TNSR look like.</p>
+
+                    <div class="uk-flex uk-flex-center">
+                      <div class="uk-inline uk-light">
+                        <img src="https://s3.burrell.tech/images/homelab_bgp_example.png" alt="">    
+                        <div>
+                          <button class="uk-position-absolute uk-transform-center" style="left: 10%; top: 45%" uk-marker></button>
+                          <div uk-dropdown="delay-hide: 0; container: .boundary">
+                            <p>Routes for the NGINX ingress and CoreDNS.</p>
+                          </div>
+                        </div>
+                        <div>
+                          <button class="uk-position-absolute uk-transform-center" style="left: 58%; top: 60%" uk-marker></button>
+                          <div uk-dropdown="delay-hide: 0; container: .boundary">
+                            <p>Each route has 3 potential next hop addresses, one for each Kubernetes node. The next hop IP address is the actual address of the node.</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <h2>Internal DNS Configuration</h1>
 
                     <div class="uk-flex uk-flex-center">
                       <div class="uk-inline uk-dark">
