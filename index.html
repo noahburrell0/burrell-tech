@@ -99,6 +99,19 @@
             <li>
               <div class="uk-container uk-text-default uk-margin-large responsive-text">
 
+                <!-- <h2 class="uk-heading-divider">Who Am I</h2>
+
+                <div class="uk-panel">
+                  <img class="uk-align-left uk-margin-remove-bottom uk-border-circle uk-visible@s" src="https://s3.burrell.tech/images/profile.jpg" width="200">
+                  <p class="uk-dropcap">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
+                    incididunt ut labore et dolore magna aliqua.
+                  </p>
+                </div>
+
+                <h2 class="uk-heading-divider">Professional Experience</h2> -->
+
                 <h2 class="uk-heading-divider">About Me</h2>
 
                 <p>
@@ -253,28 +266,25 @@
 
             <!-- Homelab -->
             <li class="boundary">
-              <div class="uk-container uk-text-default uk-margin-large responsive-text">
-              
-                <div class="uk-flex uk-flex-center uk-flex-middle uk-margin-medium-bottom uk-margin-medium-top" uk-grid>
+              <div class="uk-container uk-text-default uk-margin-large responsive-text">         
 
-                  <div class="uk-width-auto uk-flex-center" uk-lightbox>
+                <div class="uk-panel">
+                  <div uk-lightbox>
                     <a href="https://s3.burrell.tech/images/homelab_front.jpg">
-                      <img class="uk-border-pill uk-align-center uk-margin-remove" src="https://s3.burrell.tech/images/homelab_front.jpg" width="200">
+                      <img class="uk-border-pill uk-margin-small-bottom uk-align-left" src="https://s3.burrell.tech/images/homelab_front.jpg" width="200">
                     </a>
                   </div>
-
-                  <div class="uk-width-expand@s">
-                    <p class="uk-dropcap">
-                      Meet my homelab. This is where I do the majority of my learning and work on fun and interesting projects. This is the brain of my house. It is where I run my router, Kubernetes cluster, storage services, and active directory server (among other things).
-                      <br /><br />
-                      There is a lot to dig into with my homelab configuration so I have annotated the diagrams below with additional context and details to help clarify what you are looking at.
-                      <br /><br />
-                      I am always excited to talk about homelabbing, so if you have questions about my lab or your own, please
-                      feel free to <a class="uk-link-heading" uk-switcher-item="4" href="#"><u>contact me!</u></a>
-                    </p>
-                  </div> 
-
-                </div>
+                  
+                  <p class="uk-dropcap">
+                    This is my homelab, it is where I test things, deploy personal projects and applications, and run all of the components for my home network. In my homelab I run my router (TNSR), hypervisor (Proxmox), Kubernetes cluster, storage services (NFS and Samba), active directory server, and much more. My homelab is even where I am running this website.
+                    <br /><br />
+                    While relatively speaking, this is a fairly small deployment when compared to the infrastructure that most businesses have, the concepts used can be easily abstracted and deployed at a much larger scale (up to and including data center scale).
+                    <br /><br />
+                    There is a lot to dig into with my homelab configuration so I have annotated the diagrams below with additional context and details to help clarify what you are looking at.
+                    <br /><br />
+                    I love to talk about IT topics and homelabbing/infrastructure, so if you have questions about what I am running in my lab or how you have your own infrastructure configured, feel free to <a class="uk-link-heading" uk-switcher-item="4" href="#"><u>contact me</u></a> or consider <a class="uk-link-heading" uk-switcher-item="3" href="#"><u>hiring me</u></a>.
+                  </p>
+                </div> 
 
                 <h1 class="uk-heading-divider">Topology</h1>
 
@@ -704,11 +714,9 @@
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div>                    
 
-                    <p class="uk-margin-large-top uk-text-center">This is what the BGP routes in TNSR look like.</p>
-
-                    <div class="uk-flex uk-flex-center">
+                    <div class="uk-flex uk-flex-center uk-margin-medium-top">
                       <div class="uk-inline uk-light">
                         <img src="https://s3.burrell.tech/images/homelab_bgp_example.png" alt="">    
                         <div>
@@ -725,6 +733,7 @@
                         </div>
                       </div>
                     </div>
+                    <p class="uk-margin-small-top uk-text-center uk-text-small">This is what the BGP routes that MetalLB propagates to TNSR look like.</p>
 
                     <h2>Internal DNS Configuration</h1>
 
