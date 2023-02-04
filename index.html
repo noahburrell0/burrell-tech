@@ -99,20 +99,26 @@
             <li>
               <div class="uk-container uk-text-default uk-margin-large responsive-text">
 
-                <!-- <h2 class="uk-heading-divider">Who Am I</h2>
+                <h2 class="uk-heading-divider">About Me</h2>
 
-                <div class="uk-panel">
+                <!-- <div class="uk-panel">
                   <img class="uk-align-left uk-margin-remove-bottom uk-border-circle uk-visible@s" src="https://s3.burrell.tech/images/profile.jpg" width="200">
                   <p class="uk-dropcap">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-                    incididunt ut labore et dolore magna aliqua.
+                    I am Noah Burrell, a <span id="age"></span> year old IT professional living and working in Canada. I work for 
+                    <a class="uk-link-heading" target=”_blank” href="https://www.empire.ca/"><u>Empire Life</u></a> as a Linux System Administrator 
+                    (but based on job functions a DevOps/Platform engineer would be more accurate). While managing Linux systems is a core function of my job, the majority of my
+                    time goes into planning, implementing, and managing a unified platform to allow development teams accelerate their workflows and deploy their applications
+                    in a highly-available and scalable format.
                   </p>
-                </div>
 
-                <h2 class="uk-heading-divider">Professional Experience</h2> -->
-
-                <h2 class="uk-heading-divider">About Me</h2>
+                  <p>
+                    The technologies that I work with the most day-to-day include Linux (RHEL), Kubernetes (Kubeadm and GKE), and Argo CD (GitOps), however simply
+                    saying these technologies are what I use the most doesn't draw a true picture of what I do or properly represent my knowledge base.
+                    Above all else, I am primarily responsible for designing, building, and maintaining highly-available and scalable systems based on Kubernetes,
+                    which run our core business applications. For the best picture of what I know and am capable of, I strongly recommend taking a look at my
+                    <a class="uk-link-heading" uk-switcher-item="1" href="#"><u>homelab</u></a> and <a class="uk-link-heading" uk-switcher-item="2" href="#"><u>my resume</u></a>.
+                  </p>
+                </div> -->
 
                 <p>
                   I'm <span id="age"></span> years old. Born and raised in Kingston, Ontario, I attended Carleton University in Ottawa where I studied computer networking and picked up a ton of useful information from it (the kind that I have actually been able to apply) which is what jumpstarted my career into IT.
@@ -123,7 +129,7 @@
                 
                 <p>
                   I'm pretty good at cooking. I enjoy some casual gaming on the weekends (Factorio is my favorite). I spend a lot of time fiddling around with my homelab, and I enjoy hanging out with my dog Ruby. Trust me, I'm not that exciting. What I am, however, is immensely inquisitive. I love to learn new things and apply
-                  that knowledge where I can. Generally, if there is something I need to know or a skill I need to learn, I'll do whatever I need to learn it.
+                  that knowledge where I can. Generally, if there is something I need to know  or a skill I need to learn, I'll do whatever I need to learn it.
                 </p>
 
                 <h2 class="uk-heading-divider">My Relationship With Technology</h2>
@@ -1200,9 +1206,14 @@
 
                 <p class="uk-heading-small uk-text-center uk-text-capitalize">Contact Me</p>
 
-                <div class="uk-flex uk-flex-center">
+                <div class="uk-flex uk-flex-center uk-visible@s">
                   <p class="uk-text uk-margin-remove-top uk-margin-small-right"><a class="uk-link-reset" href="mailto:noah@burrell.tech"><span uk-icon="mail"></span> noah@burrell.tech</a></p>
                   <p class="uk-text uk-margin-remove-top uk-margin-small-left"><a class="uk-link-reset" href="tel:+16135811896"><span uk-icon="receiver"></span> +1 (613) 581-1896</a></p>
+                </div>
+
+                <div class="uk-flex uk-flex-column uk-hidden@s">
+                  <p class="uk-text uk-text-center uk-margin-remove-top"><a class="uk-link-reset" href="mailto:noah@burrell.tech"><span uk-icon="mail"></span> noah@burrell.tech</a></p>
+                  <p class="uk-text uk-text-center uk-margin-remove-top"><a class="uk-link-reset" href="tel:+16135811896"><span uk-icon="receiver"></span> +1 (613) 581-1896</a></p>
                 </div>
 
                 <form class="uk-margin-medium-top" id="contact-form" onsubmit="return contact()">
