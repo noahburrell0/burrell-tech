@@ -1,15 +1,5 @@
-/* Set Age */
-var dateString = "1996-09-20"
-var today = new Date();
-var birthDate = new Date(dateString);
-var age = today.getFullYear() - birthDate.getFullYear();
-var m = today.getMonth() - birthDate.getMonth();
-if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-    age--;
-}
-window.document.getElementById('age').innerText = age;
-
 /* Set Current Year Copyright */
+var today = new Date();
 window.document.getElementById('year').innerText = today.getFullYear();
 
 /* Handle Contact Form */
