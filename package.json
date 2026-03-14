@@ -1,0 +1,29 @@
+{
+  "name": "burrell-tech",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tailwindcss -i css/input.css -o css/tailwind.css --minify",
+    "watch": "tailwindcss -i css/input.css -o css/tailwind.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/noahburrell0/burrell-tech.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/noahburrell0/burrell-tech/issues"
+  },
+  "homepage": "https://github.com/noahburrell0/burrell-tech#readme",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.2.1",
+    "tailwindcss": "^4.2.1"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.2.8"
+  }
+}

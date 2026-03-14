@@ -1,1126 +1,274 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Noah Burrell</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="IT professional and technology enthusiast. Find out how I can help you with Kubernetes, DevOps, and GitOps today."/>
+<html lang="en">
+<head>
+  <!-- Meta -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kubernetes & Argo CD Consulting — Burrell Technology Services S.A.</title>
+  <meta name="description" content="Expert remote Kubernetes and Argo CD consulting. Training, architecture reviews, troubleshooting, and embedded team support — delivered fully remote.">
+  <meta name="robots" content="index, follow">
+  <meta name="keywords" content="Kubernetes consulting, Argo CD consulting, GitOps consulting, Kubernetes training, Kubernetes engineer for hire, cloud-native consulting, Kubernetes expert, remote Kubernetes consultant, Kubernetes freelancer, Argo CD specialist, GitOps engineer, Helm consulting, Kubernetes troubleshooting, Kubernetes support retainer">
+  <link rel="canonical" href="https://burrell.tech/">
+  <link rel="icon" href="favicon.ico">
 
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Burrell Technology Services S.A.">
+  <meta property="og:title" content="Kubernetes & Argo CD Consulting — Burrell Technology Services S.A.">
+  <meta property="og:description" content="Expert remote Kubernetes and Argo CD consulting. Training, architecture reviews, troubleshooting, and embedded team support — delivered fully remote.">
+  <meta property="og:url" content="https://burrell.tech/">
+  <meta property="og:image" content="https://burrell.tech/logo.png">
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BCFH7EJYP0"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Kubernetes & Argo CD Consulting — Burrell Technology Services S.A.">
+  <meta name="twitter:description" content="Expert remote Kubernetes and Argo CD consulting. Training, architecture reviews, troubleshooting, and embedded team support.">
+  <meta name="twitter:image" content="https://burrell.tech/logo.png">
 
-      gtag('config', 'G-BCFH7EJYP0');
-    </script>
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://burrell.tech/#organization",
+        "name": "Burrell Technology Services S.A.",
+        "url": "https://burrell.tech",
+        "logo": "https://burrell.tech/logo.png",
+        "email": "noah@burrell.tech",
+        "telephone": "+16135811896",
+        "sameAs": ["https://www.linkedin.com/in/noahburrell/", "https://github.com/noahburrell0"]
+      },
+      {
+        "@type": "Person",
+        "@id": "https://burrell.tech/#person",
+        "name": "Noah Burrell",
+        "jobTitle": "Kubernetes & GitOps Consultant",
+        "worksFor": { "@id": "https://burrell.tech/#organization" },
+        "url": "https://burrell.tech/about.html",
+        "knowsAbout": ["Kubernetes", "Argo CD", "GitOps", "Helm", "Docker", "Linux", "Cloud Native Infrastructure", "DevOps", "RBAC", "Networking", "Secrets Management", "Cluster Administration", "GitHub Actions", "GCP", "Cloudflare"],
+        "sameAs": ["https://www.linkedin.com/in/noahburrell/", "https://github.com/noahburrell0"]
+      },
+      {
+        "@type": "ProfessionalService",
+        "name": "Burrell Technology Services S.A.",
+        "url": "https://burrell.tech",
+        "description": "Expert Kubernetes and Argo CD consulting, training, troubleshooting, and embedded professional services delivered fully remote.",
+        "provider": { "@id": "https://burrell.tech/#person" },
+        "areaServed": "Worldwide",
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Kubernetes & GitOps Consulting Services",
+          "itemListElement": [
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Kubernetes Training", "description": "Private 1:1 coaching and group workshops on Kubernetes and Argo CD GitOps." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Kubernetes & Argo CD Architecture Review", "description": "Expert assessment of your Kubernetes clusters and GitOps pipelines with written findings and recommendations." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Kubernetes Troubleshooting & Support", "description": "On-demand and retainer-based Kubernetes troubleshooting for incidents, crashes, networking, and Argo CD sync failures." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Embedded Kubernetes Professional Services", "description": "Fractional Kubernetes and GitOps engineer on a monthly retainer, embedded directly in your team." } }
+          ]
+        }
+      }
+    ]
+  }
+  </script>
 
+  <!-- Theme (blocking — must run before first paint to prevent flash) -->
+  <script src="js/theme.js"></script>
 
-    <link rel="preload" href="/js/utility.js" as="script" />
-    <link rel="preload" href="https://s3.burrell.tech/include/js/jquery-3.6.3.min.js" as="script" />
-    <link rel="preload" href="https://s3.burrell.tech/include/js/uikit.min.js" as="script" />
-    <link rel="preload" href="https://s3.burrell.tech/include/js/uikit-icons.min.js" as="script" />
-    <link rel="preload" href="/css/extras.css" as="style" />
-    <link rel="preload" href="https://s3.burrell.tech/include/css/uikit.min.css" as="style" />
-    <link rel="preload" href="https://s3.burrell.tech/images/profile.jpg" as="image">
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/tailwind.css">
+  <link rel="stylesheet" href="css/custom.css">
 
-    <link rel="apple-touch-icon" sizes="180x180" href="https://s3.burrell.tech/include/icons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://s3.burrell.tech/include/icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://s3.burrell.tech/include/icons/favicon-16x16.png">
-    <link rel="manifest" href="https://s3.burrell.tech/include/icons/site.webmanifest">
-    <link rel="stylesheet" href="https://s3.burrell.tech/include/css/uikit.min.css" />
-    <script src="https://s3.burrell.tech/include/js/uikit.min.js"></script>
-    <script src="https://s3.burrell.tech/include/js/uikit-icons.min.js"></script>
-    <script src="https://s3.burrell.tech/include/js/jquery-3.6.3.min.js"></script>
-    <link rel="stylesheet" href="/css/extras.css" />
-  </head>
-  <body>
-    <header>
+  <!-- Scripts -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BCFH7EJYP0"></script>
+  <script defer src="js/analytics.js"></script>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans antialiased">
 
-      <!-- Desktop Header -->
-      <div class="uk-section uk-padding-small uk-padding-remove-bottom uk-visible@s">
-        <div class="uk-flex uk-flex-middle uk-flex-center">
-            <div><img class="uk-border-circle uk-align-right uk-margin-remove" src="https://s3.burrell.tech/include/icons/android-chrome-512x512.png" width="200px" height="200px"></div>
-            <div class="uk-padding-large">
-                <div class="uk-heading-medium uk-text-center uk-margin-remove">Noah Burrell</div>
-                <div class="uk-text-small uk-text-center uk-margin-small-bottom"><span uk-icon="location"></span> Kitchener-Waterloo, Ontario, Canada</div>
-                <div class="uk-text-lead uk-text-center">IT Professional and Technology Enthusiast</div>
-            </div>
+  <div id="nav-placeholder" data-active-page="home"></div>
+
+  <!-- Hero -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-950 dark:to-blue-950/30 py-24 sm:py-32">
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+      <div class="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-blue-100/50 dark:bg-blue-900/20 blur-3xl"></div>
+      <div class="absolute -bottom-20 -left-20 w-72 h-72 rounded-full bg-indigo-100/50 dark:bg-indigo-900/20 blur-3xl"></div>
+    </div>
+    <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl">
+        <div class="inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 rounded-full px-4 py-1.5 text-sm font-medium text-blue-700 dark:text-blue-300 mb-6">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-600 dark:bg-blue-400"></span>
+          </span>
+          Available for new engagements
         </div>
-        <div class="uk-flex uk-flex-center uk-margin-small-top">
-            <ul class="uk-subnav uk-subnav-pill uk-margin-remove-bottom" uk-switcher="connect: .switcher-container; animation: uk-animation-fade; swiping: false">
-                <li><a href="#">About</a></li>
-                <li><a href="#">Homelab</a></li>
-                <li><a href="#">Resume</a></li>
-                <li><a href="#">Hire Me</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-            <!-- <ul class="uk-subnav uk-subnav-pill uk-margin-small-left uk-margin-remove-vertical">
-                <li><a href="https://blog.burrell.tech/">Blog</a></li>
-            </ul> -->
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-white leading-tight tracking-tight">
+          Expert Kubernetes<br>&amp; GitOps Consulting
+        </h1>
+        <p class="mt-6 text-xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl">
+          Production incidents, scaling bottlenecks, GitOps growing pains. I help engineering teams get Kubernetes and Argo CD under control.
+        </p>
+        <div class="mt-10 flex flex-wrap gap-4">
+          <a href="services.html" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors text-base shadow-sm">
+            View Services &amp; Pricing
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </a>
+          <a href="contact.html" class="inline-flex items-center gap-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-900 dark:text-white font-semibold px-6 py-3 rounded-lg transition-colors text-base">
+            Get in Touch
+          </a>
         </div>
-
-        <hr class="uk-margin-remove-top">
-      </div>
-
-      <!-- Mobile Header -->
-      <div class="uk-section uk-padding-small uk-hidden@s">
-        <div class="uk-flex uk-flex-center">
-            <img class="uk-border-circle uk-align-center uk-padding-small uk-margin-remove-bottom" src="https://s3.burrell.tech/include/icons/android-chrome-512x512.png" width="200px" height="200px">
+        <div class="mt-12 flex flex-wrap gap-x-8 gap-y-3 text-sm text-gray-500 dark:text-gray-500">
+          <div class="flex items-center gap-2">
+            <svg class="h-4 w-4 text-green-500" ><use href="#icon-check"/></svg>
+            100% Remote
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="h-4 w-4 text-green-500" ><use href="#icon-check"/></svg>
+            5+ Years Kubernetes &amp; Argo CD Experience
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="h-4 w-4 text-green-500" ><use href="#icon-check"/></svg>
+            Enterprise-Scale Argo CD Support Experience
+          </div>
         </div>
-
-        <div class="uk-margin-medium-bottom">
-            <div class="uk-heading-medium uk-text-center uk-margin-remove">Noah Burrell</div>
-            <div class="uk-text-small uk-text-center uk-margin-small-bottom"><span uk-icon="location"></span> Kitchener-Waterloo, Ontario, Canada</div>
-            <div class="uk-text-lead uk-text-center">IT Professional and Technology Enthusiast</div>
-        </div>
-
-        <div class="uk-flex uk-flex-column">
-            <ul class="uk-subnav uk-subnav-pill uk-align-center uk-margin-remove-bottom" uk-switcher="connect: .switcher-container; animation: uk-animation-fade; swiping: false">
-                <li class="uk-padding-remove-left uk-margin-small"><a href="#"><span class="uk-align-center uk-margin-remove-bottom">About</span></a></li>
-                <li class="uk-padding-remove-left uk-margin-small"><a href="#"><span class="uk-align-center uk-margin-remove-bottom">Homelab</span></a></li>
-                <li class="uk-padding-remove-left uk-margin-small"><a href="#"><span class="uk-align-center uk-margin-remove-bottom">Resume</span></a></li>
-                <li class="uk-padding-remove-left uk-margin-small"><a href="#"><span class="uk-align-center uk-margin-remove-bottom">Hire Me</span></a></li>
-                <li class="uk-padding-remove-left uk-margin-small"><a href="#"><span class="uk-align-center uk-margin-remove-bottom">Contact</span></a></li>
-            </ul>
-        </div>
-      </div>
-
-    </header>
-
-    <div class="uk-section uk-padding-remove-vertical uk-margin-medium-bottom" uk-height-viewport="expand: true">
-      <div class=" uk-container uk-width-1-1 uk-padding-remove-horizontal">
-
-          <ul class="uk-switcher switcher-container uk-padding-small uk-padding-remove-bottom">
-
-            <!-- About -->
-            <li>
-              <div class="uk-container uk-text-default uk-margin-large responsive-text">
-
-                <h2 class="uk-heading-divider">About Me</h2>
-
-                <img class="uk-align-center uk-margin-remove-bottom uk-border-circle uk-hidden@s" src="https://s3.burrell.tech/images/profile.jpg" width="200">
-                <div class="uk-panel">
-                  <img class="uk-align-left uk-margin-remove-bottom uk-border-circle uk-visible@s" src="https://s3.burrell.tech/images/profile.jpg" width="200">
-                  <p class="uk-dropcap">
-                    Hello! My name is Noah Burrell and I am an experienced IT professional with a passion for technology and innovation. I have 5+ years of experience
-                    working in various roles, including systems administration, network administration, and DevOps engineering. My expertise includes cloud-native
-                    computing, Kubernetes, automation, Linux, and networking. I am a strong collaborator who thrives in a team environment and enjoys working on
-                    complex problems that require innovative solutions. I am committed to staying up-to-date with the latest technologies and trends in the field and
-                    am constantly learning and expanding my knowledge base. Outside of work, I enjoy tinkering with new technologies
-                    (see my <a class="uk-link-heading" uk-switcher-item="1" href="#"><u>lab</u></a>), reading about science and technology, and spending time with my
-                    family and friends. I am excited about the opportunity to bring my skills, experience, and passion for technology to new challenges and to make a
-                    positive impact in the IT industry.
-                  </p>
-                </div>
-
-                <h2 class="uk-heading-divider">Professional Summary</h2>
-
-                <p>
-                  As an experienced IT professional specializing in DevOps, Kubernetes, and cloud-native computing, I have a proven track record of designing,
-                  implementing, and managing cloud-native solutions that are highly scalable, fault-tolerant, and cost-effective. With over 5 years of experience
-                  in the field, I have developed extensive knowledge and expertise in deploying and managing applications on Kubernetes, AWS, and GCP.
-                </p>
-
-                <p>
-                  My experience includes designing and deploying highly available Kubernetes clusters, managing resources, monitoring, and troubleshooting.
-                  I have worked with a variety of Kubernetes tools and platforms such as Helm, Istio, and Prometheus to deploy, configure, and manage Kubernetes
-                  workloads. My proficiency with Kubernetes has enabled me to develop and implement reliable and scalable architectures for organizations, ensuring
-                  that their applications are available and performing optimally at all times.
-                </p>
-
-                <p>
-                  In addition to my expertise in Kubernetes, I have worked with a wide range of cloud-native technologies such as Docker, Terraform, Kyverno, and Prometheus.
-                  I have a deep understanding of how these technologies work together to create scalable, resilient, and secure cloud-native architectures.
-                  I have also used CI/CD tools such as GitLab, Github Actions, and Argo CD to automate the deployment pipeline, reducing the time it takes to go from code
-                  to production.
-                </p>
-
-                <p>
-                  With my skills, experience, and passion for the field, I am committed to helping organizations build and deploy high-quality, scalable, and
-                  reliable applications on the cloud. I am a collaborative team player who enjoys working with cross-functional teams to solve complex problems and
-                  achieve business goals. I am comfortable working in fast-paced environments and can adapt quickly to new technologies and tools. I am excited
-                  about the opportunity to bring my skills and experience to your organization and contribute to its success.
-                </p>
-
-                <h2 class="uk-heading-divider">Open To Opportunities</h2>
-
-                <p>
-                  As an experienced professional in the IT industry, I am always looking for ways to expand my horizons and explore new opportunities. I am open to
-                  consulting opportunities, where I can share my expertise with organizations and help them solve complex
-                  problems in areas such as DevOps, Kubernetes, and cloud-native computing. I believe that my knowledge, skills, and experience can help
-                  businesses optimize their operations and achieve their goals. Furthermore, I am also open to new career opportunities that offer challenges
-                  and growth opportunities. I am excited to bring my passion and dedication to a new role where I can continue to learn, grow, and make a
-                  positive impact in the field of IT. Whether it's through consulting services or a new career opportunity, I am committed to providing
-                  high-quality solutions and delivering value to organizations.
-                </p>
-
-                <p>
-                  If I sound like a good fit for your organization on a contract or permanent basis, please
-                  <a class="uk-link-heading" uk-switcher-item="4" href="#"><u>contact me</u></a>.
-                </p>
-
-                <p>
-                  If you are looking for a consultant or for professional services, my rates can be be found
-                  <a class="uk-link-heading" uk-switcher-item="3" href="#"><u>here</u></a>.
-                </p>
-
-              </div>
-            </li>
-
-            <!-- Homelab -->
-            <li class="boundary">
-              <div class="uk-container uk-text-default uk-margin-large responsive-text">
-
-                <div class="uk-panel">
-                  <div uk-lightbox>
-                    <a href="https://s3.burrell.tech/images/homelab_front.jpg">
-                      <img class="uk-border-pill uk-margin-small-bottom uk-align-center uk-align-left@s" src="https://s3.burrell.tech/images/homelab_front.jpg" width="200">
-                    </a>
-                  </div>
-
-                  <p class="uk-dropcap">
-                    This is my homelab, it is where I test things, deploy personal projects and applications, and run all of the components for my home network. In my homelab I run my router (TNSR), hypervisor (Proxmox), Kubernetes cluster, storage services (NFS and Samba), active directory server, and much more. My homelab is even where I am running this website.
-                    <br /><br />
-                    While relatively speaking, this is a fairly small deployment when compared to the infrastructure that most businesses have, the concepts used can be easily abstracted and deployed at a much larger scale (up to and including data center scale).
-                    <br /><br />
-                    There is a lot to dig into with my homelab configuration so I have annotated the diagrams below with additional context and details to help clarify what you are looking at.
-                    <br /><br />
-                    I love to talk about IT topics and homelabbing/infrastructure, so if you have questions about what I am running in my lab or how you have your own infrastructure configured, feel free to <a class="uk-link-heading" uk-switcher-item="4" href="#"><u>contact me</u></a> or consider <a class="uk-link-heading" uk-switcher-item="3" href="#"><u>hiring me</u></a>.
-                  </p>
-                </div>
-
-                <h1 class="uk-heading-divider">Topology</h1>
-
-                <div class="uk-flex uk-flex-center">
-                  <div class="uk-inline uk-dark">
-                    <img src="https://s3.burrell.tech/images/diagram_homelab_1.png" alt="">
-
-                    <div>
-                      <button class="uk-position-absolute uk-transform-center" style="left: 39%; top: 3.8%" uk-marker></button>
-                      <div uk-dropdown="delay-hide: 0; container: .boundary">
-                        <h3 class="uk-heading-divider">Bell Home Hub 4000</h3>
-                        <ul>
-                          <li class="uk-text-small">3 Gbps symmetrical fibre connection.</li>
-                          <li class="uk-text-small">Configured to passthrough to TNSR VM, no NAT or firewall.</li>
-                          <li class="uk-text-small">Wifi disabled in favor of Ubiquiti access points.</li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div>
-                      <button class="uk-position-absolute uk-transform-center" style="left: 77.7%; top: 10.9%" uk-marker></button>
-                      <div uk-dropdown="delay-hide: 0; container: .boundary">
-                        <h3 class="uk-heading-divider">Ubiquiti Switch Pro 48</h3>
-                        <p class="uk-text-small">Network backbone. All wired network devices (excluding Bell Home Hub) connected to this switch.</p>
-                        <ul>
-                          <li class="uk-text-small">(4) 10 Gbps SFP+ Ports</li>
-                          <li class="uk-text-small">(48) 1 Gbps RJ45 Ports</li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div>
-                      <button class="uk-position-absolute uk-transform-center" style="left: 49.5%; top: 13.4%" uk-marker></button>
-                      <div uk-dropdown="delay-hide: 0; container: .boundary">
-                        <h3 class="uk-heading-divider">HPE ProLiant DL380 Gen9</h3>
-                        <p class="uk-text-small">The primary driver for my homelab. Runs Proxmox VE as the hypervisor. Directly attached to 2 EMC DAS chassis'.</p>
-                        <h4 class="uk-margin-remove">Hardware Specs</h4>
-                        <ul class="uk-margin-remove">
-                          <li class="uk-text-small"><b>CPUs:</b> (2) Intel Xeon E5-2650 v4</li>
-                          <li class="uk-text-small"><b>Memory:</b> 384 GB 2133 MT/s DDR4</li>
-                          <li class="uk-text-small"><b>RAID Controller:</b> HP P840AR</li>
-                          <li class="uk-text-small"><b>NVMe Adapter:</b> QNAP QM2-2P-384</li>
-                          <li class="uk-text-small"><b>Storage (NVMe):</b> 100 GB Intel Optane DC P4801X (Boot)</li>
-                          <li class="uk-text-small"><b>Storage (NVMe):</b> 2 TB WD Black SN750 (VM Disks)</li>
-                          <li class="uk-text-small"><b>Storage (SATA):</b> (2) 1 TB WD Blue SSD (General Storage, RAID 1)</li>
-                          <li class="uk-text-small"><b>Network:</b> HP 561FLR-T</li>
-                          <li class="uk-text-small"><b>HBA:</b> LSI 9207-8e (Connected to EMC DAS chassis')</li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div>
-                      <button class="uk-position-absolute uk-transform-center" style="left: 22.5%; top: 22%" uk-marker></button>
-                      <div uk-dropdown="delay-hide: 0; container: .boundary">
-                        <h3 class="uk-heading-divider">Supermicro Server</h3>
-                        <p class="uk-text-small">Components chassis and Components sourced individually, not a standard Supermicro SKU. Used to run a Chia harvester and store Chia plots. Running OpenMediaVault.</p>
-                        <h4 class="uk-margin-remove">Hardware Specs</h4>
-                        <ul class="uk-margin-remove">
-                          <li class="uk-text-small"><b>Chassis:</b> Supermicro 24x 3.5" Bays (SKU Unknown)</li>
-                          <li class="uk-text-small"><b>Motherboard:</b> Supermicro X11SSM-F</li>
-                          <li class="uk-text-small"><b>CPU:</b> Intel Xeon E3-1220 v5</li>
-                          <li class="uk-text-small"><b>Memory:</b> 24 GB 2133 MT/s DDR4</li>
-                          <li class="uk-text-small"><b>HBA:</b>(2) LSI 9201-16i (Connected to Chassis Backplane)</li>
-                          <li class="uk-text-small"><b>Storage (SATA):</b> 128 GB Kingston SSD (Boot)</li>
-                          <li class="uk-text-small"><b>Storage (SATA):</b> (5) 10 TB Western Digital WD101EMAZ (Chia Plots, MergerFS)</li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div>
-                      <button class="uk-position-absolute uk-transform-center" style="left: 49.5%; top: 34.5%" uk-marker></button>
-                      <div uk-dropdown="delay-hide: 0; container: .boundary">
-                        <h3 class="uk-heading-divider">Whitebox Desktop</h3>
-                        <p class="uk-text-small">General purpose PC running Windows 10. Primarily used for game streaming (Moonlight), and GPU media transcoding.</p>
-                        <h4 class="uk-margin-remove">Hardware Specs</h4>
-                        <ul class="uk-margin-remove">
-                          <li class="uk-text-small"><b>Chassis:</b> Silverstone GD09</li>
-                          <li class="uk-text-small"><b>Motherboard:</b> Gigabyte AB350</li>
-                          <li class="uk-text-small"><b>CPU:</b> AMD Ryzen 5 1500X</li>
-                          <li class="uk-text-small"><b>Memory:</b> 32 GB 3000 MT/s DDR4</li>
-                          <li class="uk-text-small"><b>GPU:</b> Nvidia GeForce RTX 2070</li>
-                          <li class="uk-text-small"><b>Storage (SATA):</b> 500GB Samsung 850 EVO</li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div>
-                      <button class="uk-position-absolute uk-transform-center" style="left: 22.5%; top: 40%" uk-marker></button>
-                      <div uk-dropdown="delay-hide: 0; container: .boundary">
-                        <h3 class="uk-heading-divider">EMC DAS Chassis (1 of 2)</h3>
-                        <p class="uk-text-small">Contains (12) 10 TB Western Digital WD101EMAZ hard drives. Directly connected to HPE ProLiant DL380 Gen9. Used for Media and general network storage.</p>
-                      </div>
-                    </div>
-
-                    <div>
-                      <button class="uk-position-absolute uk-transform-center" style="left: 49.5%; top: 43.5%" uk-marker></button>
-                      <div uk-dropdown="delay-hide: 0; container: .boundary">
-                        <h3 class="uk-heading-divider">EMC DAS Chassis (2 of 2)</h3>
-                        <p class="uk-text-small">Contains (12) 10 TB Western Digital WD101EMAZ hard drives. Directly connected to HPE ProLiant DL380 Gen9. Used for Media and general network storage.</p>
-                      </div>
-                    </div>
-
-                    <div>
-                      <button class="uk-position-absolute uk-transform-center" style="left: 22.5%; top: 47%" uk-marker></button>
-                      <div uk-dropdown="delay-hide: 0; container: .boundary">
-                        <h3 class="uk-heading-divider">APC UPS</h3>
-                        <p class="uk-text-small">3000VA (30 Amp) APC SMT3000RM2U UPS. Provides backup power for entire lab. Approximate runtime of 30 minutes from full charge.</p>
-                      </div>
-                    </div>
-
-                    <div>
-                      <button class="uk-position-absolute uk-transform-center" style="left: 7%; top: 64%" uk-marker></button>
-                      <div uk-dropdown="delay-hide: 0; container: .boundary">
-                        <h3 class="uk-heading-divider">Netgate TNSR VM</h3>
-                        <p class="uk-text-small">Router and firewall for home network.</p>
-                        <ul class="uk-margin-remove">
-                          <li class="uk-text-small">10 Gbps network port assigned directly assigned in Proxmox, connects to Bell Home Hub.</li>
-                          <li class="uk-text-small">Routes 3 seperate VLANs on internal network (Kubernetes VLAN, General VLAN, Native VLAN).</li>
-                          <li class="uk-text-small">Performs BGP peering with Kubernetes (MetalLB) for dynamic route injection for special applications.</li>
-                          <li class="uk-text-small">RESTCONF enabled to allow dynamic ACL and NAT rule changes from Kubernetes.</li>
-                          <li class="uk-text-small">Network services such as DNS and DHCP handled seperately.</li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div>
-                      <button class="uk-position-absolute uk-transform-center" style="left: 15.7%; top: 64%" uk-marker></button>
-                      <div uk-dropdown="delay-hide: 0; container: .boundary">
-                        <h3 class="uk-heading-divider">Windows Server 2019 Standard</h3>
-                        <p class="uk-text-small">Active Directory controller and DNS server for network.</p>
-                        <ul class="uk-margin-remove">
-                          <li class="uk-text-small">Provides Active Directory services for Windows machines on the network.</li>
-                          <li class="uk-text-small">Acts as a non-primary DNS server for burrell.tech internally (Kubernetes is the primary).</li>
-                          <li class="uk-text-small">Upstream DNS server set as Cloudflare (1.1.1.1) and Google (8.8.8.8 and 8.8.4.4).</li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div>
-                      <button class="uk-position-absolute uk-transform-center" style="left: 24%; top: 64%" uk-marker></button>
-                      <div uk-dropdown="delay-hide: 0; container: .boundary">
-                        <h3 class="uk-heading-divider">Work VM</h3>
-                        <p class="uk-text-small">Runs Xubuntu, acts as a seperate environment that I perform my day job in.</p>
-                        <ul class="uk-margin-remove">
-                          <li class="uk-text-small">Runs XRDP for connectivity to my main workstation. Client used to connect is FreeRDP.</li>
-                          <li class="uk-text-small">Maintains a split-tunnel VPN connection to my workplace.</li>
-                          <li class="uk-text-small">Keeps all work accounts seperate from my personal accounts and computer/s.</li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div>
-                      <button class="uk-position-absolute uk-transform-center" style="left: 15.7%; top: 81.8%" uk-marker></button>
-                      <div uk-dropdown="delay-hide: 0; container: .boundary">
-                        <h3 class="uk-heading-divider">(3) Kubernetes Nodes</h3>
-                        <p class="uk-text-small">A 3-node Kubernetes cluster for running the vast majority of applications and services in my homelab. See the Kubernetes section of this page for more details.</p>
-                        <ul class="uk-margin-remove">
-                          <li class="uk-text-small">Each node spec'd with 8 vCPUs and 16 GB of memory.</li>
-                          <li class="uk-text-small">Running Kubernetes 1.26.0, setup with Kubeadm.</li>
-                          <li class="uk-text-small">Each node is both a controlplane and worker node.</li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div>
-                      <button class="uk-position-absolute uk-transform-center" style="left: 43%; top: 68.8%" uk-marker></button>
-                      <div uk-dropdown="delay-hide: 0; container: .boundary">
-                        <p class="uk-text-small">The Bell Home Hub and HP server are directly to connected to each other with CAT6a to enable a 10 Gbps connection. The port on the HP server is assigned exclusively to the TNSR VM to enable routing out to the internet at full-speed (3 Gbps) without affecting the throughput of the internal network.</p>
-                      </div>
-                    </div>
-
-                    <div>
-                      <button class="uk-position-absolute uk-transform-center" style="left: 58.5%; top: 68.8%" uk-marker></button>
-                      <div uk-dropdown="delay-hide: 0; container: .boundary">
-                        <p class="uk-text-small">The HP server is connected directly to each of the two EMC DAS chassis' using SFF-8088 to SFF-8088 cables between the LSI HBA in the HP server, and the SAS controllers in the EMC DAS chassis'. <b>Note:</b> This is not a network connection, this is a direct SAS connection.</p>
-                      </div>
-                    </div>
-
-                    <div>
-                      <button class="uk-position-absolute uk-transform-center" style="left: 43%; top: 76.8%" uk-marker></button>
-                      <div uk-dropdown="delay-hide: 0; container: .boundary">
-                        <p class="uk-text-small">The HP server is connected via Direct Attach Copper to the Ubiquiti switch at 10 Gbps. This is done using the second 10 Gbps port on the server as the first is reserved for the connection between TNSR and the Bell Home Hub. The iLo port of the server is also connected to the switch using standard CAT5e cabling for connectivity at 1 Gbps.</p>
-                      </div>
-                    </div>
-
-                    <div>
-                      <button class="uk-position-absolute uk-transform-center" style="left: 43%; top: 83%" uk-marker></button>
-                      <div uk-dropdown="delay-hide: 0; container: .boundary">
-                        <p class="uk-text-small">The whitebox Windows 10 PC is connected to the Ubiquiti switch using standard CAT5e cabling as only 1 Gbps connectivity is required.</p>
-                      </div>
-                    </div>
-
-                    <div>
-                      <button class="uk-position-absolute uk-transform-center" style="left: 74%; top: 83%" uk-marker></button>
-                      <div uk-dropdown="delay-hide: 0; container: .boundary">
-                        <p class="uk-text-small">The Supermicro Server is connected to the Ubiquiti switch using standard CAT5e cabling as only 1 Gbps connectivity is required. Communication with a Chia Harvester has very low bandwidth requirements. The IPMI port of the server is also connected to the switch using standard CAT5e cabling for connectivity at 1 Gbps.</p>
-                      </div>
-                    </div>
-
-                    <div>
-                      <button class="uk-position-absolute uk-transform-center" style="left: 85%; top: 74.5%" uk-marker></button>
-                      <div uk-dropdown="delay-hide: 0; container: .boundary">
-                        <h3 class="uk-heading-divider">(2) Ubiquiti U6-LR</h3>
-                        <p class="uk-text-small">WiFi 6 long-range Ubiquiti access points located on the upper level of the house and in the basement for full WiFi coverage. Connected to the Unifi Controller running under Kubernetes. Powered with PoE injectors in the server rack. Cabled with CAT5e and directly connected to the Ubiquiti switch as these devices are only 1 Gbps capable.</p>
-                      </div>
-                    </div>
-
-                    <div>
-                      <button class="uk-position-absolute uk-transform-center" style="left: 85%; top: 92%" uk-marker></button>
-                      <div uk-dropdown="delay-hide: 0; container: .boundary">
-                        <p class="uk-text-small">My personal desktop/workstation. Connected directly to the Ubiquiti switch using CAT6a to enable 10 Gbps throughput.</p>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-
-                <h1 class="uk-heading-divider">Kubernetes</h1>
-
-                <p>
-                  As shown above, my Kubernetes cluster consists of 3 nodes running in virtual machines in Proxmox, each of which is assigned 8 GB of memory, and 8 vCPUs. Each node is both a controlplane and worker node. My eventual goal is to purchase a blade style server chassis to run Kubernetes on bare metal,
-                  and split up the controlplane and workers onto their own dedicated blades. However, that is a project for the future and is not currently on my immediate radar.
-                </p>
-
-                <p>
-                  My entire Kubernetes environment is described as code in the repository <a class="uk-link-heading" target="_blank" href="https://github.com/noahburrell0/k8s"><u>here</u></a>. This repository is what drives Argo CD, which is the tool responsible for keeping my Kubernetes environment aligned with
-                  what I have described in my Github repository.
-                </p>
-
-                <ul uk-accordion="multiple: true">
-                  <li>
-                    <a class="uk-accordion-title uk-text-large uk-text-bolder" href="#">Critical Components</a>
-                    <div class="uk-accordion-content">
-                      <p>The critical components in my Kubernetes cluster include:</p>
-                      <ul class="uk-list uk-list-large">
-                        <li><b>Calico</b> - The CNI, no special configurations applied. Deployed directly using the manifest provided by Calico (This is the only component not installed or managed by Argo CD).</li>
-                        <li><b>Argo CD</b> - This is the GitOps tool that brings all of my configurations in from Github and deploys them. Aside from having to initially bootstrap it, it is completely self-managing and will deploy and upgrade its own configurations.</li>
-                        <li><b>Cert Manager</b> - This magical little controller automatically generates and deploys SSL certificates for anything I throw into my cluster. All I need to do is annotate the ingress and the SSL certificates automatically get taken care of for me using Lets Encrypt. Cert Manager has been given access to my Cloudflare API key to automatically handle the DNS challenges.</li>
-                        <li><b>External DNS</b> - External DNS is a Kubernetes SIG project that allows the automatic addition of DNS records to supported providers. My instance is configured to use my Cloudflare API token to automatically set the records there. I've added in a special Cron deployment to automatically update my IP address in Cloudflare if my IP address changes.</li>
-                        <li><b>K8S Gateway</b> - The name is a little deceiving, this is actually a plugin for CoreDNS. This is actually one of my favorites, it is responsible for running a seperate CoreDNS instance, watching my services (looks for a special annotation) and ingresses, and then automatically adds DNS records that match my specified DNS zones. I've got this guy hooked up to MetalLB to provide a static loadbalancer IP address so that I can use it as the primary DNS server for my network. When I add a new application, I never have to worry about adding internal DNS records for it. If there is something it doesn't know about, it is configured to forward requests to my Windows DNS server (where I do have to sometimes manually add things if they are not in Kubernetes). <a class="uk-link-heading" target="_blank" href="https://github.com/ori-edge/k8s_gateway"><u>I truly cannot recommend this project enough.</u></a></li>
-                        <li><b>Metacontroller and TNSR Controller</b> - Metacontroller is a Kubernetes controller that lets you rapidly develop and deploy your own controllers. TNSR Controller, deployed using Metacontroller, is my own little homebrew project that automatically configures my TNSR router using it's RESTCONF API. It is responsible for automatically adding ACL and NAT rules based on Kubernetes CRDs and annotations for services that I want exposed directly to the internet, but are not normal web applications and cannot be handled by my ingress controller. This thing is pretty buggy and terrible, I don't recommend using it, but if you want to take a look it is available on my Github <a class="uk-link-heading" target="_blank" href="https://github.com/noahburrell0/tnsr-controller"><u>here.</u></a>.</li>
-                        <li><b>MetalLB</b> - This is a loadbalancer meant for Kubernetes clusters that don't have access to a supported cloud loadbalancer (such as my on-premise cluster). This controller is set up with its own specific IP address pool that it can distribute to loadbalancer service resources however it sees fit. One of the special things about this controller is that I have it configured to BGP peer with my TNSR router. This provides multi-path redundancy (and loadbalancing at my router) for each of the IP addresses MetalLB manages. When a new loadbalancer service resource is added to the cluster, TNSR is automatically notified via BGP and 3 new routes are added to TNSR's routing table (1 for each node). This is particularily handy for things like my ingress controller, and K8S Gateway deployments where things outside the cluster need to talk to them, but can't do so via a traditional ingress.</li>
-                        <li><b>NFS Subdir External Provisioner</b> - I don't really have fast enough drives to deploy a cloud-native storage solution. I've tried out projects like Longhorn and Rook, and its pretty much all been terrible because of my slow storage (Longhorn even specifically mentions you should use NVMe drives). So this controller basically just connects to the NFS server I have running directly on the Proxmox hypervisor and automatically creates subdirectories whenever an application in Kubernetes needs persistent storage. This really isn't anything too special, but it is critical for making data persistent for an application. It also has the added benefit of allowing me to just log into Proxmox and easily look at or modify the data if I need to (which is remarkably hard to do with most cloud-native solutions). Storage is an area of my cluster I feel could be greatly improved, but it seems like it is likely to be expensive to do so. If anybody has suggestions, I would greatly appreciate hearing them!</li>
-                        <li><b>NGINX Ingress</b> - Nothing too special here, just a bog-standard Kubernetes ingress controller. The only modifications to this deployment from the base manifests were to make it the default ingress class and give it a loadbalancer service with a pre-defined IP (using MetalLB). A parameter also needed to be added to the ingress controller deployment so that the MetalLB IP address gets assigned to the ingress status field so that DNS resolution resolves to the highly-available MetalLB address and not the node address the ingress controller is running on.</li>
-                        <li><b>Sealed Secrets</b> - This is the magical little controller the lets me store all of my secrets (encrypted) in a public Git repository and then decrypt them on the fly when they are deployed via Argo CD. <a class="uk-link-heading" target="_blank" href="https://github.com/bitnami-labs/sealed-secrets"><u>This is another project that I strongly recommend.</u></a></li>
-                      </ul>
-                    </div>
-                  </li>
-                  <li>
-                    <a class="uk-accordion-title uk-text-large uk-text-bolder" href="#">Full Application List and Syncronization Status</a>
-                    <div class="uk-accordion-content">
-                      <p>All configurations can be found in my <a class="uk-link-heading" target="_blank" href="https://github.com/noahburrell0/k8s"><u>Git repository</u></a></p>
-
-                      <div class="uk-grid-medium uk-child-width-1-2@m uk-child-width-1-1" uk-grid="masonry: true">
-                        <div>
-                          <p class="uk-text-bold uk-margin-small-bottom">Operators and Critical Components</p>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=app-of-apps&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="This application is used by Argo CD to automatically detect the configurations of all of the other applications."></span> App-Of-Apps</p>
-                          </div>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=argocd&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="Argo CD is the application responsible for deploying all of the applications in Kubernetes."></span> Argo CD</p>
-                          </div>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=cert-manager&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="Cert Manager automatically provisions new SSL certificates and renews existing certificates for application in Kubernetes."></span> Cert Manager</p>
-                          </div>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=external-dns&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="External DNS detects the FQDN used by ingress resources in the cluster and automatically creates associated DNS records in Cloudflare."></span> External DNS</p>
-                          </div>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=metallb&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="MetalLB is a loadbalancer controller responsible for assigning IP addresses and routing traffic to loadbalancer type service resources in the cluster. It also injects routes via BGP to my router."></span> MetalLB</p>
-                          </div>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=metrics-server&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="Metrics Server is responsible for providing cluster statistics. These statistics can be directly accessed with the `kubectl top` command."></span> Metrics Server</p>
-                          </div>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=nfs-subdir-provisioner&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="The NFS Subdir External Provisioner can dynamically provision Persistent Volumes to an existing NFS share on the network."></span> NFS <span class="uk-visible@l">Subdir External </span>Provisioner</p>
-                          </div>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=nginx-ingress&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="The NGINX Ingress controller automatically routes web traffic to the correct destination in the cluster when an Ingress resource is defined."></span> NGINX Ingress</p>
-                          </div>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=sealed-secrets&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="The Sealed Secrets controller encrypts end decrypts SealedSecret resources, making it safe to publically store secrets in Git."></span> Sealed Secrets</p>
-                          </div>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=tnsr-controller&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="The TNSR Controller handles automatic ACL and NAT rule creation on TNSR routers when requested by a Service resource in Kubernetes."></span> TNSR Controller</p>
-                          </div>
-                        </div>
-
-                        <div>
-                          <p class="uk-text-bold uk-margin-small-bottom">Externally Exposed Applications</p>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=chia-node&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="The Chia Node application maintains a copy of the Chia blockchain and acts as a collection point for the Chia Harvester located outside of Kubernetes."></span> Chia Node</p>
-                          </div>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=contact-api&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="The Contact API is a simple Flask application that converts submissions from the contact form on this website to an email and passes it to the SMTP relay in Kubernetes."></span> Contact API</p>
-                          </div>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=ghost&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="Ghost is a piece of blogging software that runs my personal blog. It is accessible at blog.burrell.tech."></span> Ghost</p>
-                          </div>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=main-site&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="This Website! An NGINX webserver that automatically clones a copy of this website's source code from Git and serves it to the internet."></span> This Website</p>
-                          </div>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=minio&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="Minio is an S3 compliant object storage system. It mostly holds static resources for this website like images and JS/CSS libraries and makes them accessible to the internet."></span> Minio</p>
-                          </div>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=ombi&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="Ombi is my multimedia request system for Plex. Primarily used by friends and family to request new movies and TV shows to be added to Plex."></span> Ombi</p>
-                          </div>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=paperless&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="Paperless is a document management system that allows me to scan physical documents or upload PDFs, and keep a digital copy of them all in one place."></span> Paperless</p>
-                          </div>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=plex&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="Plex Media Server is a media platform that allows my friends and family to stream my movie and television library."></span> Plex Media Server</p>
-                          </div>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=seafile&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="Seafile is a private cloud storage system similar in principle to Google Drive. It allows me and my friends and family to access our data from anywhere."></span> Seafile</p>
-                          </div>
-                        </div>
-
-                        <div>
-                          <p class="uk-text-bold uk-margin-small-bottom">Internal-Only Applications</p>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=nzbget&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="NZBGet is a usenet download client that is primarily used for downloading multimedia."></span> NZBGet</p>
-                          </div>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=radarr&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="Radarr is a movie management and download utility that searches usenet indexers for requested movies. It submits hits to NZBGet for download and then renames and organizes them once the download is completed."></span> Radarr</p>
-                          </div>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=sonarr&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="Sonarr is a TV series management and download utility that searches usenet indexers for requested TV series. It submits hits to NZBGet for download and then renames and organizes them once the download is completed."></span> Sonarr</p>
-                          </div>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=smtp&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="The SMTP relay acts as a central collection point on my internal network for SMTP submissions. It allows all applications that send emails to point at the same place and not need to authenticate with my mail provider."></span> SMTP Relay</p>
-                          </div>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=tdarr&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="Tdarr is a transcode management platform that automatically detects new media downloaded by Sonarr or Radarr and automatically transcodes it to a chosen media format."></span> Tdarr</p>
-                          </div>
-                          <div class="uk-flex">
-                            <img class="uk-object-none" src="https://api.burrell.tech/api/badge?name=unifi&revision=false">
-                            <p class="uk-margin-medium-left uk-margin-remove-vertical"><span uk-icon="question" uk-tooltip="The Ubiquiti Unifi Controller is a controller for provisioning and managing Ubiquiti network devices. I use this to manage my switch and access points."></span> <span class="uk-visible@s">Ubiquiti </span>Unifi Controller</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <h1 class="uk-heading-divider">Network Configuration</h1>
-
-                    <h2>Topology</h1>
-                    <div class="uk-flex uk-flex-center">
-                      <div class="uk-inline uk-dark">
-                        <img src="https://s3.burrell.tech/images/diagram_homelab_2.png" alt="">
-                        <div>
-                          <button class="uk-position-absolute uk-transform-center" style="left: 28%; top: 5%" uk-marker></button>
-                          <div uk-dropdown="delay-hide: 0; container: .boundary">
-                            <p>Bell fibre internet connection. 3 Gbps symmetrical.</p>
-                          </div>
-                        </div>
-                        <div>
-                          <button class="uk-position-absolute uk-transform-center" style="left: 28%; top: 20%" uk-marker></button>
-                          <div uk-dropdown="delay-hide: 0; container: .boundary">
-                            <p>Bell Home Hub 4000. Straight passthrough to TNSR.</p>
-                          </div>
-                        </div>
-                        <div>
-                          <button class="uk-position-absolute uk-transform-center" style="left: 5%; top: 37%" uk-marker></button>
-                          <div uk-dropdown="delay-hide: 0; container: .boundary">
-                            <p>TNSR router. 3 seperate virtual interfaces assigned to VM for each VLAN. Acts as the default gateway for all VLANs. Is directly connected to the Bell Home Hub on a dedicated interface.</p>
-                          </div>
-                        </div>
-                        <div>
-                          <button class="uk-position-absolute uk-transform-center" style="left: 44%; top: 43%" uk-marker></button>
-                          <div uk-dropdown="delay-hide: 0; container: .boundary">
-                            <p>MetalLB running within Kubernetes. Peers with TNSR using BGP and automatically injects routes to make all loadbalancer service resources in Kubernetes available to the boader network and the internet as required. Routes to this network are assigned using next-hop addresses of each Kubernetes node which are equally weighted allowing for BGP loadbalancing to occur.</p>
-                          </div>
-                        </div>
-                        <div>
-                          <button class="uk-position-absolute uk-transform-center" style="left: 65%; top: 24%" uk-marker></button>
-                          <div uk-dropdown="delay-hide: 0; container: .boundary">
-                            <p>An IP address pool that MetalLB has complete control over. Statically assigns addresses to NGINX and CoreDNS as these need to be well-known but otherwise dynamically assigns IP addresses to all other loadbalancer services in Kubernetes. Some of the other services MetalLB allocates IP addresses for include Plex, the Ubiquiti Unifi Controller, and the Chia node.</p>
-                          </div>
-                        </div>
-                        <div>
-                          <button class="uk-position-absolute uk-transform-center" style="left: 5%; top: 78%" uk-marker></button>
-                          <div uk-dropdown="delay-hide: 0; container: .boundary">
-                            <p>The Native VLAN is primarily used for servers and network devices. As an example, Proxmox and each access point have their own dedicated IP addresses on this network.</p>
-                          </div>
-                        </div>
-                        <div>
-                          <button class="uk-position-absolute uk-transform-center" style="left: 23%; top: 90%" uk-marker></button>
-                          <div uk-dropdown="delay-hide: 0; container: .boundary">
-                            <p>While the access points on the network have their own IP addresses on the Native VLAN, they connect wireless clients to the General VLAN.</p>
-                          </div>
-                        </div>
-                        <div>
-                          <button class="uk-position-absolute uk-transform-center" style="left: 55%; top: 70%" uk-marker></button>
-                          <div uk-dropdown="delay-hide: 0; container: .boundary">
-                            <p>The General VLAN is where most devices get connected to. This includes all wireless devices and most wired devices. All VMs excluding the Kubernetes nodes have a presence on this network as well.</p>
-                          </div>
-                        </div>
-                        <div>
-                          <button class="uk-position-absolute uk-transform-center" style="left: 94%; top: 79%" uk-marker></button>
-                          <div uk-dropdown="delay-hide: 0; container: .boundary">
-                            <p>The Kubernetes VLAN is dedicated exclusively to the Kubernetes nodes. Nothing else is assigned to this network except for TNSR.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="uk-flex uk-flex-center uk-margin-medium-top">
-                      <div class="uk-inline uk-light">
-                        <img src="https://s3.burrell.tech/images/homelab_bgp_example.png" alt="">
-                        <div>
-                          <button class="uk-position-absolute uk-transform-center" style="left: 10%; top: 45%" uk-marker></button>
-                          <div uk-dropdown="delay-hide: 0; container: .boundary">
-                            <p>Routes for the NGINX ingress and CoreDNS.</p>
-                          </div>
-                        </div>
-                        <div>
-                          <button class="uk-position-absolute uk-transform-center" style="left: 58%; top: 60%" uk-marker></button>
-                          <div uk-dropdown="delay-hide: 0; container: .boundary">
-                            <p>Each route has 3 potential next hop addresses, one for each Kubernetes node. The next hop IP address is the actual address of the node.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <p class="uk-margin-small-top uk-text-center uk-text-small">This is what the BGP routes that MetalLB propagates to TNSR look like.</p>
-
-                    <h2>Internal DNS Configuration</h1>
-
-                    <div class="uk-flex uk-flex-center">
-                      <div class="uk-inline uk-dark">
-                        <img src="https://s3.burrell.tech/images/diagram_homelab_3.png" alt="">
-
-                        <div>
-                          <button class="uk-position-absolute uk-transform-center" style="left: 30.1%; top: 10%" uk-marker></button>
-                          <div uk-dropdown="delay-hide: 0; container: .boundary">
-                            <p>Kubernetes workloads resolve DNS against CoreDNS, as is the standard.</p>
-                          </div>
-                        </div>
-
-                        <div>
-                          <button class="uk-position-absolute uk-transform-center" style="left: 74%; top: 26%" uk-marker></button>
-                          <div uk-dropdown="delay-hide: 0; container: .boundary">
-                            <p>Any DNS requests that both CoreDNS and the Windows DNS server are unable to resolve are finally forwarded externally to either Cloudflare (1.1.1.1) or Google (8.8.8.8 and 8.8.4.4)</p>
-                          </div>
-                        </div>
-
-                        <div>
-                          <button class="uk-position-absolute uk-transform-center" style="left: 35.1%; top: 50%" uk-marker></button>
-                          <div uk-dropdown="delay-hide: 0; container: .boundary">
-                            <p>CoreDNS and the K8S Gateway plugin handle name resolution for the burrell.tech, home.burrell.tech, and k8s.burrell.tech zones. Any queries it receives that it doesn't know how to answer get forwarded to the Windows DNS server. An IP address is statically assigned by MetalLB so that devices external to Kubernetes can query CoreDNS.</p>
-                          </div>
-                        </div>
-
-                        <div>
-                          <button class="uk-position-absolute uk-transform-center" style="left: 87%; top: 52%" uk-marker></button>
-                          <div uk-dropdown="delay-hide: 0; container: .boundary">
-                            <p>The Windows DNS server is mainly responsible for providing name resolution of DHCP registered devices and a handful of manual DNS entries for the burrell.tech zone for services that are not in Kubernetes.</p>
-                          </div>
-                        </div>
-
-                        <div>
-                          <button class="uk-position-absolute uk-transform-center" style="left: 75%; top: 67%" uk-marker></button>
-                          <div uk-dropdown="delay-hide: 0; container: .boundary">
-                            <p>The only devices that don't resolve against CoreDNS are the Kubernetes cluster nodes. This is to prevent a circular dependency where the nodes require CoreDNS to already be available before the cluster is ready. Instead, the nodes have been manually set to resolve directly against the Window DNS server.</p>
-                          </div>
-                        </div>
-
-                        <div>
-                          <button class="uk-position-absolute uk-transform-center" style="left: 3%; top: 83%" uk-marker></button>
-                          <div uk-dropdown="delay-hide: 0; container: .boundary">
-                            <p>Internal network devices all resolve against CoreDNS/K8S Gateway in Kubernetes. The DHCP server is configured out to give the IP address of CoreDNS as the nameserver.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </li>
-                </ul>
-
-
-
-                <p class="uk-text-center uk-text-bold"><span uk-icon="icon: info"></span> I'm still working on more content for this page...</p>
-
-              </div>
-            </li>
-
-            <!-- Resume -->
-            <li>
-              <div class="uk-container uk-text-default uk-margin-large responsive-text">
-
-                <div class="uk-text-lead uk-margin-medium-top">Technical Skills</div>
-                <hr class="uk-margin-remove-top">
-
-                <div class="uk-flex uk-flex-wrap uk-flex-wrap-around">
-                  <div class="uk-label uk-label-success uk-margin-small-right uk-margin-small-bottom"><b>Kubernetes</b></div>
-                  <div class="uk-label uk-label-success uk-margin-small-right uk-margin-small-bottom"><b>Argo CD / GitOps</b></div>
-                  <div class="uk-label uk-label-success uk-margin-small-right uk-margin-small-bottom"><b>Docker / Containerization</b></div>
-                  <div class="uk-label uk-label-success uk-margin-small-right uk-margin-small-bottom"><b>Linux</b></div>
-                  <div class="uk-label uk-label-success uk-margin-small-right uk-margin-small-bottom"><b>Bash</b></div>
-                  <div class="uk-label uk-label-success uk-margin-small-right uk-margin-small-bottom"><b>Nginx</b></div>
-                  <div class="uk-label uk-label-success uk-margin-small-right uk-margin-small-bottom"><b>Network Infrastructure Configuration</b></div>
-                  <div class="uk-label uk-label-success uk-margin-small-right uk-margin-small-bottom"><b>Server Infrastructure Configuration</b></div>
-                  <div class="uk-label uk-label-success uk-margin-small-right uk-margin-small-bottom"><b>RAID / MDADM / ZFS</b></div>
-                  <div class="uk-label uk-label-success uk-margin-small-right uk-margin-small-bottom"><b>Proxmox</b></div>
-                  <div class="uk-label uk-label-success uk-margin-small-right uk-margin-small-bottom"><b>Cisco IOS</b></div>
-                  <div class="uk-label uk-label-success uk-margin-small-right uk-margin-small-bottom"><b>PfSense / TNSR</b></div>
-                  <div class="uk-label uk-label-success uk-margin-small-right uk-margin-small-bottom"><b>VoIP / 3CX</b></div>
-                  <div class="uk-label uk-label-success uk-margin-small-right uk-margin-small-bottom"><b>DNS</b></div>
-                </div>
-
-                <div class="uk-flex uk-flex-wrap uk-flex-wrap-around">
-                  <div class="uk-label uk-label-warning uk-margin-small-right uk-margin-small-bottom"><b>VMWare / ESXI / vSphere</b></div>
-                  <div class="uk-label uk-label-warning uk-margin-small-right uk-margin-small-bottom"><b>GCP</b></div>
-                  <div class="uk-label uk-label-warning uk-margin-small-right uk-margin-small-bottom"><b>Github Actions</b></div>
-                  <div class="uk-label uk-label-warning uk-margin-small-right uk-margin-small-bottom"><b>Cloudflare</b></div>
-                  <div class="uk-label uk-label-warning uk-margin-small-right uk-margin-small-bottom"><b>Apache</b></div>
-                  <div class="uk-label uk-label-warning uk-margin-small-right uk-margin-small-bottom"><b>Git</b></div>
-                  <div class="uk-label uk-label-warning uk-margin-small-right uk-margin-small-bottom"><b>HTML / CSS</b></div>
-                  <div class="uk-label uk-label-warning uk-margin-small-right uk-margin-small-bottom"><b>Python</b></div>
-                  <div class="uk-label uk-label-warning uk-margin-small-right uk-margin-small-bottom"><b>Ubiquiti / Unifi</b></div>
-                  <div class="uk-label uk-label-warning uk-margin-small-right uk-margin-small-bottom"><b>Zabbix</b></div>
-                </div>
-
-                <div class="uk-flex uk-flex-wrap uk-flex-wrap-around">
-                  <div class="uk-label uk-label-danger uk-margin-small-right uk-margin-small-bottom"><b>AWS</b></div>
-                  <div class="uk-label uk-label-danger uk-margin-small-right uk-margin-small-bottom"><b>Azure</b></div>
-                  <div class="uk-label uk-label-danger uk-margin-small-right uk-margin-small-bottom"><b>Windows Server</b></div>
-                  <div class="uk-label uk-label-danger uk-margin-small-right uk-margin-small-bottom"><b>Active Directory</b></div>
-                  <div class="uk-label uk-label-danger uk-margin-small-right uk-margin-small-bottom"><b>HAProxy</b></div>
-                  <div class="uk-label uk-label-danger uk-margin-small-right uk-margin-small-bottom"><b>MySQL</b></div>
-                  <div class="uk-label uk-label-danger uk-margin-small-right uk-margin-small-bottom"><b>Javascript</b></div>
-                  <div class="uk-label uk-label-danger uk-margin-small-right uk-margin-small-bottom"><b>MongoDB</b></div>
-                  <div class="uk-label uk-label-danger uk-margin-small-right uk-margin-small-bottom"><b>Ansible</b></div>
-                  <div class="uk-label uk-label-danger uk-margin-small-right uk-margin-small-bottom"><b>Terraform</b></div>
-                  <div class="uk-label uk-label-danger uk-margin-small-right uk-margin-small-bottom"><b>Ceph</b></div>
-                  <div class="uk-label uk-label-danger uk-margin-small-right uk-margin-small-bottom"><b>Jboss</b></div>
-                  <div class="uk-label uk-label-danger uk-margin-small-right uk-margin-small-bottom"><b>FreeRADIUS</b></div>
-                </div>
-
-                <div class="uk-flex uk-flex-center uk-margin-small-top">
-                  <div class="uk-label uk-label-success uk-margin-small-right"><b>Expert</b></div>
-                  <div class="uk-label uk-label-warning uk-margin-small-right"><b>Intermediate</b></div>
-                  <div class="uk-label uk-label-danger"><b>Beginner</b></div>
-                </div>
-
-                <div class="uk-text-lead uk-margin-medium-top">Soft Skills</div>
-                <hr class="uk-margin-remove-top">
-
-                <div class="uk-flex uk-flex-wrap uk-flex-wrap-around">
-                  <div class="uk-label uk-margin-small-right uk-margin-small-bottom"><b>Problem-Solving</b></div>
-                  <div class="uk-label uk-margin-small-right uk-margin-small-bottom"><b>Critical Thinking</b></div>
-                  <div class="uk-label uk-margin-small-right uk-margin-small-bottom"><b>Resourcefulness</b></div>
-                  <div class="uk-label uk-margin-small-right uk-margin-small-bottom"><b>Adaptability</b></div>
-                  <div class="uk-label uk-margin-small-right uk-margin-small-bottom"><b>Attention to Detail</b></div>
-                  <div class="uk-label uk-margin-small-right uk-margin-small-bottom"><b>Time Management</b></div>
-                  <div class="uk-label uk-margin-small-right uk-margin-small-bottom"><b>Creativity</b></div>
-                </div>
-
-                <div class="uk-text-lead uk-margin-medium-top">Experience</div>
-                <hr class="uk-margin-remove-top">
-
-                <div class="uk-grid-large uk-child-width-1-2@s" uk-grid>
-                  <div class="uk-width-expand">
-                    <p class="uk-text-default uk-text-emphasis uk-text-bold uk-margin-remove">System Administrator II</p>
-                    <p class="uk-text-default uk-text-emphasis uk-margin-remove">The Empire Life Insurance Company</p>
-                    <p class="uk-text-default uk-text-emphasis uk-margin-remove uk-hidden@s"><span uk-icon="location"></span> Remote</p>
-                    <p class="uk-text-small uk-text-muted uk-margin-remove">08/2021 - Present</p>
-                    <p class="uk-text-small uk-text-muted uk-text-bold uk-margin-remove">A Canadian life insurance and financial services company.</p>
-                    <p class="uk-text-small uk-text-emphasis uk-text-bold uk-margin-remove">Tasks and Responsibilities</p>
-                    <ul class="uk-margin-remove">
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Linux administration.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Kubernetes administration.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Assist development teams with deploying their applications.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Design and implement GitOps framework using Argo CD.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Maintain and enhance monitoring with Nagios, DataDog, and Sumologic.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Action IT infrastructure requests from other business units.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Manage Cloudflare and DNS.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Provision and expand server infrastructure.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Configure loadbalancing infrastructure including Nginx, Apache, and HAProxy.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Renew and replace TLS/SSL certificates as required.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Ensure that data backups and disaster recovery plans remain effective.</p></li>
-                    </ul>
-                  </div>
-                  <div class="uk-visible@s uk-margin-remove uk-width-auto uk-padding-remove-left">
-                    <p class="uk-text-default uk-text-emphasis uk-text-right"><span uk-icon="location"></span> Remote</p>
-                  </div>
-                </div>
-
-                <div class="uk-grid-large uk-child-width-1-2@s uk-margin-medium-top" uk-grid>
-                  <div class="uk-width-expand">
-                    <p class="uk-text-default uk-text-emphasis uk-text-bold uk-margin-remove">Network and Linux System Administrator</p>
-                    <p class="uk-text-default uk-text-emphasis uk-margin-remove">Telecom Metric Inc.</p>
-                    <p class="uk-text-default uk-text-emphasis uk-margin-remove uk-hidden@s"><span uk-icon="location"></span> Kingston, Canada</p>
-                    <p class="uk-text-small uk-text-muted uk-margin-remove">05/2019 - 08/2021</p>
-                    <p class="uk-text-small uk-text-muted uk-text-bold uk-margin-remove">A fully managed B2B phone system provider.</p>
-                    <p class="uk-text-small uk-text-emphasis uk-text-bold uk-margin-remove">Tasks and Responsibilities</p>
-                    <ul class="uk-margin-remove">
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Network and Linux administration.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Network diagnostics and troubleshooting.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Automation of manual processes using Bash, Ansible, and Terraform.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Maintain and enhance monitoring with Zabbix.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Develop and implement new products and solutions.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Administrate internal tools including ticket and password management systems.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Deploy hosted and on-premise PBXs.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Level 3 support tickets.</p></li>
-                    </ul>
-                  </div>
-                  <div class="uk-visible@s uk-margin-remove uk-width-auto uk-padding-remove-left">
-                    <p class="uk-text-default uk-text-emphasis uk-text-right"><span uk-icon="location"></span> Kingston, Ontario, Canada</p>
-                  </div>
-                </div>
-
-                <div class="uk-grid-large uk-child-width-1-2@s uk-margin-medium-top" uk-grid>
-                  <div class="uk-width-expand">
-                    <p class="uk-text-default uk-text-emphasis uk-text-bold uk-margin-remove">Research Assistant</p>
-                    <p class="uk-text-default uk-text-emphasis uk-margin-remove">Algonquin College of Applied Arts and Technology</p>
-                    <p class="uk-text-default uk-text-emphasis uk-margin-remove uk-hidden@s"><span uk-icon="location"></span> Ottawa, Canada</p>
-                    <p class="uk-text-small uk-text-muted uk-margin-remove">10/2017 - 01/2019</p>
-                    <p class="uk-text-small uk-text-emphasis uk-text-bold uk-margin-remove">Tasks and Responsibilities</p>
-                    <ul class="uk-margin-remove">
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Supervise and assist team members as needed.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Administration of network and compute resources.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Implement OpenStack and integrate using REST APIs.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Develop microservices for embedded hardware.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Research and implement a dynamic WPA2-PSK system.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">General exploration of SDN systems and technologies.</p></li>
-                    </ul>
-                  </div>
-                  <div class="uk-visible@s uk-margin-remove uk-width-auto uk-padding-remove-left">
-                    <p class="uk-text-default uk-text-emphasis uk-text-right"><span uk-icon="location"></span> Ottawa, Ontario, Canada</p>
-                  </div>
-                </div>
-
-                <div class="uk-text-lead uk-margin-medium-top">Education</div>
-                <hr class="uk-margin-remove-top">
-
-                <div class="uk-grid-large uk-child-width-1-2@s" uk-grid>
-                  <div>
-                    <p class="uk-text-default uk-text-emphasis uk-text-bold uk-margin-remove">Network Technology</p>
-                    <p class="uk-text-default uk-text-emphasis uk-margin-remove">Carleton University</p>
-                    <p class="uk-text-default uk-text-emphasis uk-margin-remove uk-hidden@s"><span uk-icon="location"></span> Ottawa, Canada</p>
-                    <p class="uk-text-small uk-text-muted uk-margin-remove">09/2015 - 04/2019</p>
-                    <p class="uk-text-small uk-text-muted uk-text-bold uk-margin-remove">Achievements</p>
-                    <ul class="uk-margin-remove">
-                      <li>
-                        <p class="uk-text-small uk-text-emphasis uk-margin-remove">Deans' Honour List (2015 - 2016)</p>
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="uk-visible@s uk-margin-remove">
-                    <p class="uk-text-default uk-text-emphasis uk-text-right"><span uk-icon="location"></span> Ottawa, Ontario, Canada</p>
-                  </div>
-                </div>
-
-                <div class="uk-text-lead uk-margin-medium-top">Projects</div>
-                <hr class="uk-margin-remove-top">
-
-                <div class="uk-grid-large uk-child-width-1-1 uk-child-width-1-2@s" uk-grid>
-
-                  <div>
-                    <p class="uk-text-default uk-text-emphasis uk-text-bold uk-margin-remove">Argo CD and  GitOps Implementation</p>
-                    <p class="uk-text-default uk-text-muted uk-margin-remove">The Empire Life Insurance Company</p>
-                    <p class="uk-text-small uk-text-muted uk-margin-remove">2022</p>
-                    <ul class="uk-margin-remove">
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Developed strategy for managing applications with Git and ArgoCD while complying with change management processes.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Consulted with various stakeholders including development teams, IT security, and the auditing department.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Created a series of generic Helm charts to facilitate and ease transition.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Architected a monolithic Git repository for managing key cluster resources while delegating application control to developers.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Implemented a deployment strategy with strict controls over production and relaxed controls over non-production.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Configured LDAP driven role-based access controls for privileges in ArgoCD.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Wrote Bash script to monitor ArgoCD API for monitoring in existing Nagios system.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Implemented Argo CD notifications to Slack.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Worked with development teams to create a Github action capable of automatically updating application configurations on new releases.</p></li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <p class="uk-text-default uk-text-emphasis uk-text-bold uk-margin-remove">Automated PBX Deployments</p>
-                    <p class="uk-text-default uk-text-muted uk-margin-remove">Telecom Metric Inc.</p>
-                    <p class="uk-text-small uk-text-muted uk-margin-remove">2021</p>
-                    <ul class="uk-margin-remove">
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Created a fully automatic and hands-off deployment strategy for 3CX PBXs.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Set up base images of PBX with minimal configurations for Ansible connectivity.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Utilized Terraform to orchestrate cloud provisioning and script triggers.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Created a series of Ansible tasks and Bash scripts to automatically configure VMs.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Reduced deployment process from 4 hours to 20 minutes.</p></li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <p class="uk-text-default uk-text-emphasis uk-text-bold uk-margin-remove">Homelab Colocation</p>
-                    <p class="uk-text-default uk-text-muted uk-margin-remove">Personal</p>
-                    <p class="uk-text-small uk-text-muted uk-margin-remove">2018-2021</p>
-                    <ul class="uk-margin-remove">
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Installed, cabled, and populated a 42u server rack within a local data center.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Configured a highly available and fault tolerant Proxmox cluster.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Provisioned a highly available multi-tier storage cluster (150+ TB).</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Designed a dynamically routed (OSPF), highly available, and redundant internal network.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Installed an out-of-band management system including a serial console server and IP KVM.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Implemented a site-to-site VPN between the data centre and home network.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Set up a fully automatic and multi-tier backup solution following the 3-2-1 rule.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Deployed numerous internet facing-services behind fault tolerant NGINX reverse proxies.</p></li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <p class="uk-text-default uk-text-emphasis uk-text-bold uk-margin-remove">WPA2-PSK Multi-Auth Proof of Concept</p>
-                    <p class="uk-text-default uk-text-muted uk-margin-remove">Algonquin College of Applied Arts and Technology</p>
-                    <p class="uk-text-small uk-text-muted uk-margin-remove">2018</p>
-                    <ul class="uk-margin-remove">
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Researched implementation strategy for using OpenWRT.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Configured FreeRADIUS on embedded hardware to act as authentication backend.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Deployed SQLite database on embedded hardware as backend store for FreeRADIUS.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Wrote web frontend and deployed on external server to enable user login and generate unique PSKs.</li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Deployed Python REST API to embedded hardware for communication with web frontend.</p></li>
-                      <li><p class="uk-text-small uk-text-emphasis uk-margin-remove">Set up hook to automatically bind individual MAC addresses to PSKs on first successful authentication.</p></li>
-                    </ul>
-                  </div>
-
-                </div>
-
-                <div class="uk-text-lead uk-margin-medium-top">Certifications and Courses</div>
-                <hr class="uk-margin-remove-top">
-
-                <div class="uk-grid-large uk-child-width-1-1 uk-child-width-1-3@s uk-text-left" uk-grid>
-                  <!-- <div>
-                      <p class="uk-text-default uk-text-emphasis uk-margin-remove-bottom">Certified Kubernetes Administrator (03/2023)</p>
-                      <p class="uk-text-small uk-margin-remove-vertical uk-text-muted uk-text-bold">Issuer: The Linux Foundation</p>
-                      <p class="uk-text-small uk-margin-remove-top uk-text-muted">ID: LF-XXXXXXXXXX</p>
-                  </div> -->
-                  <div>
-                    <p class="uk-text-default uk-text-emphasis uk-margin-remove-bottom">GitOps Fundamentals (10/2022)</p>
-                    <p class="uk-text-small uk-margin-remove-vertical uk-text-muted uk-text-bold">Issuer: Codefresh</p>
-                    <p class="uk-text-small uk-margin-remove-top uk-text-muted">ID: 634c515ced65512f3d42eafb</p>
-                  </div>
-                  <div>
-                    <p class="uk-text-default uk-text-emphasis uk-margin-remove-bottom">GitOps at Scale (10/2022)</p>
-                    <p class="uk-text-small uk-margin-remove-vertical uk-text-muted uk-text-bold">Issuer: Codefresh</p>
-                    <p class="uk-text-small uk-margin-remove-top uk-text-muted">ID: 634c7563efabc25be82dc112</p>
-                  </div>
-                  <div>
-                    <p class="uk-text-default uk-text-emphasis uk-margin-remove-bottom">3CX Advanced Certiﬁed Engineer (05/2019)</p>
-                    <p class="uk-text-small uk-margin-remove-vertical uk-text-muted uk-text-bold">Issuer: 3CX</p>
-                    <p class="uk-text-small uk-margin-remove-top uk-text-muted">ID: siq1JrVcEC</p>
-                  </div>
-                  <div>
-                    <p class="uk-text-default uk-text-emphasis uk-margin-remove-bottom">JNCIA-Junos (10/2018)</p>
-                    <p class="uk-text-small uk-margin-remove-vertical uk-text-muted uk-text-bold">Issuer: Juniper Networks</p>
-                    <p class="uk-text-small uk-margin-remove-top uk-text-muted">ID: 14PN2N1581E4QGSQ</p>
-                  </div>
-                </div>
-
-                <div class="uk-flex uk-flex-center uk-margin-large-top">
-                  <a href="https://s3.burrell.tech/resources/Burrell, Noah - Resume.pdf" target="_blank"><button class="uk-button uk-button-primary">Download As PDF</button></a>
-                </div>
-
-              </div>
-            </li>
-
-            <!-- Hire Me -->
-            <li>
-              <div class="uk-container uk-text-default uk-margin-large responsive-text">
-
-                <h2 class="uk-heading-divider">Areas Of Expertise</h2>
-
-                <div class="uk-margin-small">Areas of specific expertise include but are not limited to:</div>
-
-                <div>
-                  <ul class="uk-list uk-list-disc uk-list-primary">
-                      <li>Kubernetes</li>
-                      <li>DevOps/GitOps</li>
-                      <li>Linux Administration</li>
-                  </ul>
-                </div>
-
-                <p>Don't see what you're looking for? <a class="uk-link-heading" uk-switcher-item="4" href="#"><u>Contact me</u></a>, I may still be able to help.</p>
-
-                <h2 class="uk-heading-divider">Availability</h2>
-
-                <div><b>Standard Availability:</b> M-F 5 PM EST to 1 AM EST, all hours Saturday/Sunday. Minimum 24 hour notice required prior to start.</div>
-
-                <div class="uk-margin-small"><b>Enhanced Availability:</b> 24/7/365, subject to enhanced availability surcharge. No minimum notice required prior to start.</div>
-
-                <h2 class="uk-heading-divider">Rates</h2>
-                <div class="uk-text-small"><sup>*All rates listed in CAD. Minimum hours to be paid prior to start. Customer initiated cancellation of services prior to agreed upon start are non-refundable.</sup></div>
-
-                <div class="uk-flex uk-flex-column">
-
-                  <div class="uk-padding-small">
-                    <div class="uk-grid-small uk-margin-small uk-margin-remove-bottom" uk-grid>
-                      <div class="uk-width-expand" uk-leader="fill: .; media: 680">Remote</div>
-                      <div class="uk-text-right">$100<span class="uk-hidden@s">/Hour</span><span class="uk-visible@s">  Per Hour</span></div>
-                    </div>
-                    <div class="uk-flex uk-flex-right uk-text-small uk-padding-small uk-padding-remove-bottom uk-padding-remove-right"><sup>1 hour minimum.</sup></div>
-                  </div>
-
-                  <div class="uk-padding-small">
-                    <div class="uk-grid-small uk-margin-small uk-margin-remove-bottom" uk-grid>
-                      <div class="uk-width-expand" uk-leader="fill: .; media: 680">On-Site (GTA, SW Ontario)</div>
-                      <div class="uk-text-right">$150<span class="uk-hidden@s">/Hour</span><span class="uk-visible@s">  Per Hour</span></div>
-                    </div>
-                    <div class="uk-flex uk-flex-right uk-text-small uk-padding-small uk-padding-remove-bottom uk-padding-remove-right"><sup>2 hour minimum.</sup></div>
-                  </div>
-
-                  <div class="uk-padding-small">
-                    <div class="uk-grid-small uk-margin-small uk-margin-remove-bottom" uk-grid>
-                      <div class="uk-width-expand" uk-leader="fill: .; media: 680">On-Site (North America)</div>
-                      <div class="uk-text-right">$200<span class="uk-hidden@s">/Hour</span><span class="uk-visible@s">  Per Hour</span></div>
-                    </div>
-                    <div class="uk-flex uk-flex-right uk-text-small uk-padding-small uk-padding-remove-bottom uk-padding-remove-right"><sup>10 hour minimum + travel and accommodation expenses.</sup></div>
-                    <div class="uk-flex uk-flex-right uk-text-small uk-padding-small uk-padding-remove-bottom uk-padding-remove-right"><sup>Excluded from enhanced availability surcharge.</sup></div>
-                  </div>
-
-                  <div class="uk-padding-small">
-                    <div class="uk-grid-small uk-margin-small uk-margin-remove-bottom" uk-grid>
-                      <div class="uk-width-expand" uk-leader="fill: .; media: 680">On-Site (Worldwide)</div>
-                      <div class="uk-text-right">$300<span class="uk-hidden@s">/Hour</span><span class="uk-visible@s">  Per Hour</span></div>
-                    </div>
-                    <div class="uk-flex uk-flex-right uk-text-small uk-padding-small uk-padding-remove-bottom uk-padding-remove-right"><sup>20 hour minimum + travel and accommodation expenses.</sup></div>
-                    <div class="uk-flex uk-flex-right uk-text-small uk-padding-small uk-padding-remove-bottom uk-padding-remove-right"><sup>Excluded from enhanced availability surcharge.</sup></div>
-                  </div>
-
-                  <div class="uk-padding-small">
-                    <div class="uk-grid-small uk-margin-small uk-margin-remove-bottom" uk-grid>
-                      <div class="uk-width-expand" uk-leader="fill: .; media: 680">Enhanced Availability<span class="uk-visible@s"></span></div>
-                      <div class="uk-text-right">+100%<span class="uk-hidden@s">/Hour</span><span class="uk-visible@s">  Per Hour</span></div>
-                    </div>
-                    <div class="uk-flex uk-flex-right uk-text-small uk-padding-small uk-padding-remove-bottom uk-padding-remove-right"><sup>All hours will be billed at the modified rate.</sup></div>
-                  </div>
-
-                </div>
-
-                <h2 class="uk-heading-divider">Permanent and Contract Employment</h2>
-                <div>I am also open to permanent and contract opportunities. Please <a class="uk-link-heading" uk-switcher-item="4" href="#"><u>contact me</u></a> to discuss the opportunity.</div>
-
-                <div class="uk-flex uk-flex-center uk-margin-large-top">
-                  <button class="uk-button uk-button-primary uk-margin-small-right" uk-switcher-item="2">Resume</button>
-                  <button class="uk-button uk-button-secondary uk-margin-small-left" uk-switcher-item="4">Contact Me</button>
-                </div>
-
-              </div>
-            </li>
-
-            <!-- Contact -->
-            <li>
-              <div class="uk-container uk-text-default uk-margin-large responsive-text">
-
-                <p class="uk-heading-small uk-text-center uk-text-capitalize">Contact Me</p>
-
-                <div class="uk-flex uk-flex-center uk-visible@s">
-                  <p class="uk-text uk-margin-remove-top uk-margin-small-right"><a class="uk-link-reset" href="mailto:noah@burrell.tech"><span uk-icon="mail"></span> noah@burrell.tech</a></p>
-                  <p class="uk-text uk-margin-remove-top uk-margin-small-left"><a class="uk-link-reset" href="tel:+16135811896"><span uk-icon="receiver"></span> +1 (613) 581-1896</a></p>
-                </div>
-
-                <div class="uk-flex uk-flex-column uk-hidden@s">
-                  <p class="uk-text uk-text-center uk-margin-remove-top"><a class="uk-link-reset" href="mailto:noah@burrell.tech"><span uk-icon="mail"></span> noah@burrell.tech</a></p>
-                  <p class="uk-text uk-text-center uk-margin-remove-top"><a class="uk-link-reset" href="tel:+16135811896"><span uk-icon="receiver"></span> +1 (613) 581-1896</a></p>
-                </div>
-
-                <form class="uk-margin-medium-top" id="contact-form" onsubmit="return contact()">
-                  <fieldset class="uk-fieldset">
-
-                    <div class="uk-margin">
-                        <input class="uk-input" type="email" placeholder="Email Address" aria-label="Input" name="reply_to" required>
-                    </div>
-
-                    <div class="uk-margin">
-                      <input class="uk-input" type="text" placeholder="Name" aria-label="Input" name="name" required>
-                    </div>
-
-                    <div class="uk-margin">
-                      <input class="uk-input" type="text" placeholder="Subject" aria-label="Input" name="subject" required>
-                    </div>
-
-                    <div class="uk-margin">
-                        <textarea style="resize: vertical;" class="uk-textarea" rows="5" placeholder="Message" aria-label="Textarea" name="body" required></textarea>
-                    </div>
-                  </fieldset>
-
-                  <button class="uk-button uk-align-center uk-button-primary" type="submit">Submit</button>
-                </form>
-
-              </div>
-            </li>
-
-          </ul>
-
       </div>
     </div>
+  </section>
 
-    <footer>
+  <!-- Services Overview -->
+  <section class="py-20 sm:py-28">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-4xl mx-auto mb-16">
+        <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">What I Offer</h2>
+        <p class="mt-4 text-lg text-gray-600 dark:text-gray-400">Four focused service offerings built around Kubernetes and Argo CD, the tools your team relies on.</p>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-6">
 
-      <div class="uk-section uk-section-secondary uk-padding-remove-vertical">
-        <div class="uk-container uk-padding-small">
-            <div class="uk-flex uk-flex-center">
-                <div class="uk-padding-small"><a class="icon-hover" target=”_blank” href="https://www.linkedin.com/in/noahburrell/" uk-icon="icon: linkedin; ratio: 2"></a></div>
-                <div class="uk-padding-small"><a class="icon-hover" target=”_blank” href="https://github.com/noahburrell0/" uk-icon="icon: github; ratio: 2"></a></div>
+        <a href="services.html#training" class="group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all block">
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0 w-12 h-12 bg-blue-100 dark:bg-blue-950/60 rounded-xl flex items-center justify-center">
+              <svg class="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
             </div>
-            <div class="uk-flex uk-flex-center uk-text-small">
-                <p>Copyright &copy; <span id="year"></span> Noah Burrell</p>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Training</h3>
+              <p class="mt-2 text-gray-600 dark:text-gray-400 text-sm leading-relaxed">New to Kubernetes, or need your team to level up on GitOps? Private 1:1 coaching and group workshops covering fundamentals through advanced operations with Argo CD.</p>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-blue-600 dark:text-blue-400">View pricing <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
             </div>
+          </div>
+        </a>
+
+        <a href="services.html#review" class="group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all block">
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0 w-12 h-12 bg-indigo-100 dark:bg-indigo-950/60 rounded-xl flex items-center justify-center">
+              <svg class="h-6 w-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Review &amp; Analysis</h3>
+              <p class="mt-2 text-gray-600 dark:text-gray-400 text-sm leading-relaxed">Not sure your clusters or GitOps setup will hold up at scale? In-depth assessments delivered as written reports with prioritized, actionable recommendations.</p>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-blue-600 dark:text-blue-400">View pricing <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
+            </div>
+          </div>
+        </a>
+
+        <a href="services.html#support" class="group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all block">
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0 w-12 h-12 bg-amber-100 dark:bg-amber-950/60 rounded-xl flex items-center justify-center">
+              <svg class="h-6 w-6 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Troubleshooting &amp; Support</h3>
+              <p class="mt-2 text-gray-600 dark:text-gray-400 text-sm leading-relaxed">Pods crashing, syncs failing, or stuck on an issue that won't stay fixed? On-demand help available ad-hoc or on a monthly retainer.</p>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-blue-600 dark:text-blue-400">View pricing <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
+            </div>
+          </div>
+        </a>
+
+        <a href="services.html#embedded" class="group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all block">
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0 w-12 h-12 bg-emerald-100 dark:bg-emerald-950/60 rounded-xl flex items-center justify-center">
+              <svg class="h-6 w-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Professional Services</h3>
+              <p class="mt-2 text-gray-600 dark:text-gray-400 text-sm leading-relaxed">Need ongoing Kubernetes expertise without a full-time hire? I embed directly in your team on a flexible monthly retainer, working alongside your engineers.</p>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-blue-600 dark:text-blue-400">View pricing <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
+            </div>
+          </div>
+        </a>
+
+      </div>
+      <div class="mt-10 text-center">
+        <a href="services.html" class="inline-flex items-center gap-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-900 dark:text-white font-semibold px-6 py-3 rounded-lg transition-colors text-sm">
+          View All Services &amp; Pricing
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Remote Consulting Section -->
+  <section class="bg-gray-50 dark:bg-gray-900/40 py-20 sm:py-28 border-y border-gray-200 dark:border-gray-800">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">Built for Remote Teams</h2>
+          <p class="mt-5 text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+            Effective Kubernetes and GitOps consulting doesn't require being in the same building. It requires the right expertise and clear communication.
+          </p>
+          <p class="mt-4 text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+            Whether your team is distributed across time zones or co-located, I can collaborate synchronously via video call or asynchronously through your existing tooling.
+          </p>
+          <ul class="mt-8 space-y-4">
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>
+              <span class="text-gray-700 dark:text-gray-300">Based in EST (UTC−5), aligned with North and South American business hours.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>
+              <span class="text-gray-700 dark:text-gray-300">Will work within whatever tools your team already uses: Slack, Teams, Jira, GitHub, or anything else.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>
+              <span class="text-gray-700 dark:text-gray-300">No lengthy onboarding required. I can get up to speed on your stack and contribute meaningfully from day one.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>
+              <span class="text-gray-700 dark:text-gray-300">Work at the pace that fits your team: intensive project sprints, steady ongoing support, or on-demand as needed.</span>
+            </li>
+          </ul>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 text-center flex flex-col items-center justify-center">
+            <div class="text-4xl font-extrabold text-blue-600 dark:text-blue-400">5+</div>
+            <div class="mt-2 text-sm font-medium text-gray-600 dark:text-gray-400">Years Kubernetes Experience</div>
+          </div>
+          <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 text-center flex flex-col items-center justify-center">
+            <div class="text-4xl font-extrabold text-blue-600 dark:text-blue-400">50+</div>
+            <div class="mt-2 text-sm font-medium text-gray-600 dark:text-gray-400">Enterprises Supported</div>
+          </div>
+          <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 text-center flex flex-col items-center justify-center">
+            <div class="text-4xl font-extrabold text-blue-600 dark:text-blue-400">100%</div>
+            <div class="mt-2 text-sm font-medium text-gray-600 dark:text-gray-400">Remote Delivery</div>
+          </div>
+          <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 text-center flex flex-col items-center justify-center">
+            <div class="text-4xl font-extrabold text-blue-600 dark:text-blue-400">EST</div>
+            <div class="mt-2 text-sm font-medium text-gray-600 dark:text-gray-400">Timezone (UTC−5)</div>
+          </div>
         </div>
       </div>
+    </div>
+  </section>
 
-    </footer>
+  <div id="cta-placeholder"
+    data-heading="Ready to Get Started?"
+    data-body="Reach out to discuss your project, ask about availability, or get a quote for a specific engagement."
+    data-variant="full"></div>
 
-    <script src="/js/utility.js"></script>
-  </body>
+  <div id="footer-placeholder"></div>
+
+  <!-- components.js must run before Alpine (which is deferred) so nav x-data is in the DOM at Alpine init time -->
+  <script src="js/components.js"></script>
+  <script src="js/main.js"></script>
+</body>
 </html>
