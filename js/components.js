@@ -51,7 +51,7 @@
     '<header x-data="{ open: false }" class="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800">',
       '<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">',
         '<div class="flex items-center justify-between h-16">',
-          '<a href="index.html" class="flex items-center gap-2.5 font-bold text-gray-900 dark:text-white text-lg tracking-tight">',
+          '<a href="/" class="flex items-center gap-2.5 font-bold text-gray-900 dark:text-white text-lg tracking-tight">',
             '<img src="logo.png" alt="Burrell Technology Services home" class="h-8 w-8 rounded-lg">',
             'Burrell Technology Services',
           '</a>',
@@ -59,7 +59,7 @@
             desktopLink('home', 'index.html', 'Home'),
             desktopLink('services', 'services.html', 'Services'),
             desktopLink('about', 'about.html', 'About'),
-            '<a href="contact.html" class="text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">Get in Touch</a>',
+            '<a href="contact" class="text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">Get in Touch</a>',
           '</nav>',
           '<div class="flex items-center gap-2">',
             '<button onclick="toggleTheme()" class="p-2 rounded-md text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Toggle theme">',
@@ -131,10 +131,10 @@
           '<div>',
             '<p class="text-white font-semibold text-sm">Navigation</p>',
             '<div class="mt-3 space-y-2 text-sm">',
-              '<a href="index.html" class="block hover:text-white transition-colors">Home</a>',
-              '<a href="services.html" class="block hover:text-white transition-colors">Services &amp; Pricing</a>',
-              '<a href="about.html" class="block hover:text-white transition-colors">About</a>',
-              '<a href="contact.html" class="block hover:text-white transition-colors">Contact</a>',
+              '<a href="/" class="block hover:text-white transition-colors">Home</a>',
+              '<a href="services" class="block hover:text-white transition-colors">Services &amp; Pricing</a>',
+              '<a href="about" class="block hover:text-white transition-colors">About</a>',
+              '<a href="contact" class="block hover:text-white transition-colors">Contact</a>',
             '</div>',
           '</div>',
 
@@ -178,7 +178,7 @@
       '<span class="font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Retainer Terms:</span> ' +
       'Monthly retainers are a non-refundable minimum commitment. Unused hours do not roll over. ' +
       'Hours beyond the monthly minimum are billed at your retainer\u2019s hourly rate. ' +
-      '<a href="contact.html" class="hover:underline">Get in touch</a> to discuss fit before committing.' +
+      '<a href="contact" class="hover:underline">Get in touch</a> to discuss fit before committing.' +
     '</p>';
 
   document.querySelectorAll('.retainer-terms-placeholder').forEach(function (el) {
@@ -195,9 +195,9 @@
     var ctaBtnWrap = ctaVariant === 'full'
       ? 'mt-8 flex flex-wrap justify-center gap-4'
       : 'mt-8';
-    var ctaButtons = '<a href="contact.html" class="inline-flex items-center gap-2 bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors shadow-sm">Get in Touch</a>';
+    var ctaButtons = '<a href="contact" class="inline-flex items-center gap-2 bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors shadow-sm">Get in Touch</a>';
     if (ctaVariant === 'full') {
-      ctaButtons += '<a href="services.html" class="inline-flex items-center gap-2 border border-blue-400 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-500 transition-colors">View Services &amp; Pricing</a>';
+      ctaButtons += '<a href="services" class="inline-flex items-center gap-2 border border-blue-400 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-500 transition-colors">View Services &amp; Pricing</a>';
     }
 
     var ctaHTML = [
