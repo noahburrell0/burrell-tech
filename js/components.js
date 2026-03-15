@@ -187,30 +187,31 @@
   });
 
   // --- Cookie Consent Banner ---
+  // IDs avoid common "cookie" patterns that ad blockers target with cosmetic filters.
   var CONSENT_KEY = 'cookie_consent';
   if (!localStorage.getItem(CONSENT_KEY)) {
     var bannerHTML =
-      '<div id="cookie-banner" class="fixed bottom-0 left-0 right-0 z-50 bg-gray-900 dark:bg-black border-t border-gray-700 px-4 py-4 sm:px-6">' +
+      '<div id="site-notice" class="fixed bottom-0 left-0 right-0 z-50 bg-gray-900 dark:bg-black border-t border-gray-700 px-4 py-4 sm:px-6">' +
         '<div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-4">' +
           '<p class="text-sm text-gray-300 flex-1 min-w-48">' +
             'This site uses cookies for analytics. See our <a href="privacy" class="underline text-white hover:text-blue-400">Privacy Policy</a> for details.' +
           '</p>' +
           '<div class="flex items-center gap-3">' +
-            '<button id="cookie-decline" class="text-sm text-gray-400 hover:text-white transition-colors cursor-pointer">Decline</button>' +
-            '<button id="cookie-accept" class="text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors cursor-pointer">Accept</button>' +
+            '<button id="notice-dismiss" class="text-sm text-gray-400 hover:text-white transition-colors cursor-pointer">Decline</button>' +
+            '<button id="notice-confirm" class="text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors cursor-pointer">Accept</button>' +
           '</div>' +
         '</div>' +
       '</div>';
     document.body.insertAdjacentHTML('beforeend', bannerHTML);
 
-    document.getElementById('cookie-accept').addEventListener('click', function () {
+    document.getElementById('notice-confirm').addEventListener('click', function () {
       localStorage.setItem(CONSENT_KEY, 'accepted');
-      document.getElementById('cookie-banner').remove();
+      document.getElementById('site-notice').remove();
       if (window._loadGA) window._loadGA();
     });
-    document.getElementById('cookie-decline').addEventListener('click', function () {
+    document.getElementById('notice-dismiss').addEventListener('click', function () {
       localStorage.setItem(CONSENT_KEY, 'declined');
-      document.getElementById('cookie-banner').remove();
+      document.getElementById('site-notice').remove();
     });
   }
 
