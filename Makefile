@@ -11,6 +11,15 @@ start:
 		-p $(PORT):80 \
 		-v $(SITE_DIR):/usr/share/nginx/html:ro \
 		nginx:alpine
+	@docker exec $(CONTAINER) sh -c 'echo "server { \
+		listen 80; \
+		server_name _; \
+		root /usr/share/nginx/html; \
+		index index.html; \
+		location / { try_files \$$uri \$$uri/ @rm-ext; } \
+		location ~ \.html\$$ { try_files \$$uri =404; } \
+		location @rm-ext { rewrite ^(.*)\$$ \$$1.html last; } \
+	}" > /etc/nginx/conf.d/default.conf && nginx -s reload'
 	@echo "Serving at http://localhost:$(PORT)"
 
 stop:
