@@ -1,0 +1,30 @@
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Prevent flash of unstyled Alpine components */
+[x-cloak] {
+  display: none !important;
+}
+
+/* Custom scrollbar (Webkit) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 4px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background-color: #374151;
+}
+
+/* Focus visible outline for accessibility */
+:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}

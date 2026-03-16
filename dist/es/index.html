@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Meta -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consultoría de Kubernetes y Argo CD — Burrell Technology Services S.A.</title>
+  <meta name="description" content="Consultoría remota experta en Kubernetes y Argo CD. Capacitación, revisiones de arquitectura, soporte técnico y servicios profesionales integrados.">
+  <meta name="robots" content="index, follow">
+  <meta name="keywords" content="consultoría Kubernetes, consultoría Argo CD, consultoría GitOps, capacitación Kubernetes, ingeniero Kubernetes, consultoría cloud-native, experto Kubernetes, consultor Kubernetes remoto, especialista Argo CD, ingeniero GitOps, consultoría Helm, soporte Kubernetes">
+  <link rel="canonical" href="https://burrell.tech/es/">
+  <link rel="icon" href="/favicon.ico">
+
+  <!-- Hreflang -->
+  <link rel="alternate" hreflang="en" href="https://burrell.tech/">
+  <link rel="alternate" hreflang="es" href="https://burrell.tech/es/">
+  <link rel="alternate" hreflang="x-default" href="https://burrell.tech/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Burrell Technology Services S.A.">
+  <meta property="og:title" content="Consultoría de Kubernetes y Argo CD — Burrell Technology Services S.A.">
+  <meta property="og:description" content="Consultoría remota experta en Kubernetes y Argo CD. Capacitación, revisiones de arquitectura, soporte técnico y servicios profesionales integrados.">
+  <meta property="og:url" content="https://burrell.tech/es/">
+  <meta property="og:image" content="https://burrell.tech/logo.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Consultoría de Kubernetes y Argo CD — Burrell Technology Services S.A.">
+  <meta name="twitter:description" content="Consultoría remota experta en Kubernetes y Argo CD. Capacitación, revisiones de arquitectura, soporte técnico y servicios profesionales.">
+  <meta name="twitter:image" content="https://burrell.tech/logo.png">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://burrell.tech/#organization",
+        "name": "Burrell Technology Services S.A.",
+        "url": "https://burrell.tech",
+        "logo": "https://burrell.tech/logo.png",
+        "email": "noah@burrell.tech",
+        "telephone": "+16135811896",
+        "sameAs": ["https://www.linkedin.com/in/noahburrell/", "https://github.com/noahburrell0"]
+      },
+      {
+        "@type": "Person",
+        "@id": "https://burrell.tech/#person",
+        "name": "Noah Burrell",
+        "jobTitle": "Consultor de Kubernetes y GitOps",
+        "worksFor": { "@id": "https://burrell.tech/#organization" },
+        "url": "https://burrell.tech/about",
+        "knowsAbout": ["Kubernetes", "Argo CD", "GitOps", "Helm", "Docker", "Linux", "Cloud Native Infrastructure", "DevOps", "RBAC", "Networking", "Secrets Management", "Cluster Administration", "GitHub Actions", "GCP", "Cloudflare"],
+        "sameAs": ["https://www.linkedin.com/in/noahburrell/", "https://github.com/noahburrell0"]
+      },
+      {
+        "@type": "ProfessionalService",
+        "name": "Burrell Technology Services S.A.",
+        "url": "https://burrell.tech",
+        "description": "Consultoría experta en Kubernetes y Argo CD, capacitación, soporte técnico y servicios profesionales integrados, todo de forma remota.",
+        "provider": { "@id": "https://burrell.tech/#person" },
+        "areaServed": "Worldwide",
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Servicios de Consultoría Kubernetes y GitOps",
+          "itemListElement": [
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Capacitación en Kubernetes", "description": "Coaching privado 1:1 y talleres grupales sobre Kubernetes y GitOps con Argo CD." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Revisión de Arquitectura Kubernetes y Argo CD", "description": "Evaluación experta de sus clusters Kubernetes y pipelines GitOps con hallazgos escritos y recomendaciones." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Soporte Técnico y Resolución de Problemas Kubernetes", "description": "Soporte bajo demanda y con retainer para incidentes, fallos, problemas de red y errores de sincronización de Argo CD." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Servicios Profesionales Integrados de Kubernetes", "description": "Ingeniero fraccional de Kubernetes y GitOps con retainer mensual, integrado directamente en su equipo." } }
+          ]
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- Theme (blocking — must run before first paint to prevent flash) -->
+  <script src="/js/theme.js"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/tailwind.css">
+  <link rel="stylesheet" href="/css/custom.css">
+
+  <!-- Scripts -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="/js/analytics.js"></script>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans antialiased">
+
+  <div id="nav-placeholder" data-active-page="home"></div>
+
+  <!-- Hero -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-950 dark:to-blue-950/30 py-24 sm:py-32">
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+      <div class="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-blue-100/50 dark:bg-blue-900/20 blur-3xl"></div>
+      <div class="absolute -bottom-20 -left-20 w-72 h-72 rounded-full bg-indigo-100/50 dark:bg-indigo-900/20 blur-3xl"></div>
+    </div>
+    <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl">
+        <div class="inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 rounded-full px-4 py-1.5 text-sm font-medium text-blue-700 dark:text-blue-300 mb-6">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-600 dark:bg-blue-400"></span>
+          </span>
+          Disponible para nuevos proyectos
+        </div>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-white leading-tight tracking-tight">
+          Consultoría Experta en<br>Kubernetes y GitOps
+        </h1>
+        <p class="mt-6 text-xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl">
+          Incidentes en producción, cuellos de botella de escalabilidad, dificultades con GitOps. Ayudo a equipos de ingeniería a dominar Kubernetes y Argo CD.
+        </p>
+        <div class="mt-10 flex flex-wrap gap-4">
+          <a href="/es/services" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors text-base shadow-sm">
+            Ver servicios y precios
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </a>
+          <a href="/es/contact" class="inline-flex items-center gap-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-900 dark:text-white font-semibold px-6 py-3 rounded-lg transition-colors text-base">
+            Contacto
+          </a>
+        </div>
+        <div class="mt-12 flex flex-wrap gap-x-8 gap-y-3 text-sm text-gray-500 dark:text-gray-500">
+          <div class="flex items-center gap-2">
+            <svg class="h-4 w-4 text-green-500" ><use href="#icon-check"/></svg>
+            100% remoto
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="h-4 w-4 text-green-500" ><use href="#icon-check"/></svg>
+            5+ años de experiencia en Kubernetes y Argo CD
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="h-4 w-4 text-green-500" ><use href="#icon-check"/></svg>
+            Experiencia en soporte de Argo CD a escala empresarial
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Overview -->
+  <section class="py-20 sm:py-28">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-4xl mx-auto mb-16">
+        <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">Servicios</h2>
+        <p class="mt-4 text-lg text-gray-600 dark:text-gray-400">Cuatro ofertas de servicio enfocadas en Kubernetes y Argo CD, las herramientas en las que su equipo confía.</p>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-6">
+
+        <a href="/es/services#training" class="group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all block">
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0 w-12 h-12 bg-blue-100 dark:bg-blue-950/60 rounded-xl flex items-center justify-center">
+              <svg class="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Capacitación</h3>
+              <p class="mt-2 text-gray-600 dark:text-gray-400 text-sm leading-relaxed">¿Nuevo en Kubernetes o necesita que su equipo se perfeccione en GitOps? Coaching privado 1:1 y talleres grupales que cubren desde los fundamentos hasta operaciones avanzadas con Argo CD.</p>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-blue-600 dark:text-blue-400">Ver precios <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
+            </div>
+          </div>
+        </a>
+
+        <a href="/es/services#review" class="group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all block">
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0 w-12 h-12 bg-indigo-100 dark:bg-indigo-950/60 rounded-xl flex items-center justify-center">
+              <svg class="h-6 w-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Revisión y análisis</h3>
+              <p class="mt-2 text-gray-600 dark:text-gray-400 text-sm leading-relaxed">¿No está seguro de que sus clusters o su configuración GitOps escalarán bien? Evaluaciones detalladas entregadas como informes escritos con recomendaciones priorizadas y accionables.</p>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-blue-600 dark:text-blue-400">Ver precios <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
+            </div>
+          </div>
+        </a>
+
+        <a href="/es/services#support" class="group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all block">
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0 w-12 h-12 bg-amber-100 dark:bg-amber-950/60 rounded-xl flex items-center justify-center">
+              <svg class="h-6 w-6 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Soporte técnico</h3>
+              <p class="mt-2 text-gray-600 dark:text-gray-400 text-sm leading-relaxed">¿Pods fallando, sincronizaciones con errores o problemas que no se resuelven? Ayuda bajo demanda disponible de forma puntual o con un retainer mensual.</p>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-blue-600 dark:text-blue-400">Ver precios <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
+            </div>
+          </div>
+        </a>
+
+        <a href="/es/services#embedded" class="group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all block">
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0 w-12 h-12 bg-emerald-100 dark:bg-emerald-950/60 rounded-xl flex items-center justify-center">
+              <svg class="h-6 w-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Servicios profesionales</h3>
+              <p class="mt-2 text-gray-600 dark:text-gray-400 text-sm leading-relaxed">¿Necesita experiencia continua en Kubernetes sin una contratación a tiempo completo? Me integro directamente en su equipo con un retainer mensual flexible.</p>
+              <div class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-blue-600 dark:text-blue-400">Ver precios <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
+            </div>
+          </div>
+        </a>
+
+      </div>
+      <div class="mt-10 text-center">
+        <a href="/es/services" class="inline-flex items-center gap-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-900 dark:text-white font-semibold px-6 py-3 rounded-lg transition-colors text-sm">
+          Ver todos los servicios y precios
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Remote Consulting Section -->
+  <section class="bg-gray-50 dark:bg-gray-900/40 py-20 sm:py-28 border-y border-gray-200 dark:border-gray-800">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">Preparado para equipos remotos</h2>
+          <p class="mt-5 text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+            La consultoría efectiva en Kubernetes y GitOps no requiere estar en el mismo edificio. Requiere la experiencia adecuada y comunicación clara.
+          </p>
+          <p class="mt-4 text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+            Ya sea que su equipo esté distribuido en diferentes zonas horarias o en una misma ubicación, puedo colaborar de forma sincrónica por videollamada o asincrónica a través de sus herramientas existentes.
+          </p>
+          <ul class="mt-8 space-y-4">
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>
+              <span class="text-gray-700 dark:text-gray-300">Ubicado en EST (UTC−5), alineado con el horario laboral de Norte y Sudamérica.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>
+              <span class="text-gray-700 dark:text-gray-300">Trabajo con las herramientas que su equipo ya utiliza: Slack, Teams, Jira, GitHub o cualquier otra.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>
+              <span class="text-gray-700 dark:text-gray-300">Sin necesidad de un largo proceso de incorporación. Puedo ponerme al día con su stack y contribuir de manera significativa desde el primer día.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>
+              <span class="text-gray-700 dark:text-gray-300">Trabajo al ritmo que se ajuste a su equipo: sprints intensivos, soporte continuo o bajo demanda.</span>
+            </li>
+          </ul>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 text-center flex flex-col items-center justify-center">
+            <div class="text-4xl font-extrabold text-blue-600 dark:text-blue-400">5+</div>
+            <div class="mt-2 text-sm font-medium text-gray-600 dark:text-gray-400">Años de experiencia en Kubernetes</div>
+          </div>
+          <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 text-center flex flex-col items-center justify-center">
+            <div class="text-4xl font-extrabold text-blue-600 dark:text-blue-400">50+</div>
+            <div class="mt-2 text-sm font-medium text-gray-600 dark:text-gray-400">Empresas atendidas</div>
+          </div>
+          <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 text-center flex flex-col items-center justify-center">
+            <div class="text-4xl font-extrabold text-blue-600 dark:text-blue-400">100%</div>
+            <div class="mt-2 text-sm font-medium text-gray-600 dark:text-gray-400">Entrega remota</div>
+          </div>
+          <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 text-center flex flex-col items-center justify-center">
+            <div class="text-4xl font-extrabold text-blue-600 dark:text-blue-400">EST</div>
+            <div class="mt-2 text-sm font-medium text-gray-600 dark:text-gray-400">Zona horaria (UTC−5)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="cta-placeholder"
+    data-heading="¿Listo para comenzar?"
+    data-body="Contácteme para discutir su proyecto, consultar disponibilidad u obtener un presupuesto para un compromiso específico."
+    data-variant="full"></div>
+
+  <div id="footer-placeholder"></div>
+
+  <!-- components.js must run before Alpine (which is deferred) so nav x-data is in the DOM at Alpine init time -->
+  <script src="/js/components.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>
