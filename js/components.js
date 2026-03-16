@@ -141,11 +141,11 @@
     '<header x-data="{ open: false }" class="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800">',
       '<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">',
         '<div class="flex items-center justify-between h-16">',
-          '<a href="' + BASE + '/" class="flex items-center gap-2.5 font-bold text-gray-900 dark:text-white text-lg tracking-tight">',
+          '<a href="' + BASE + '/" class="flex items-center gap-2.5 font-bold text-gray-900 dark:text-white text-base sm:text-lg tracking-tight">',
             '<img src="/logo.png" alt="Burrell Technology Services home" class="h-8 w-8 rounded-lg">',
             'Burrell Technology Services',
           '</a>',
-          '<nav class="hidden md:flex items-center gap-8">',
+          '<nav class="hidden lg:flex items-center gap-8">',
             desktopLink('home', BASE + '/', T.nav_home),
             desktopLink('services', BASE + '/services', T.nav_services),
             desktopLink('about', BASE + '/about', T.nav_about),
@@ -153,7 +153,7 @@
             '<a href="' + BASE + '/contact" class="text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">' + T.nav_cta + '</a>',
           '</nav>',
           '<div class="flex items-center gap-2">',
-            '<span class="hidden md:inline-flex items-center gap-0.5 text-xs font-semibold text-gray-500 dark:text-gray-400 px-1.5 py-1 rounded border border-gray-300 dark:border-gray-700 leading-tight">' +
+            '<span class="hidden lg:inline-flex items-center gap-0.5 text-xs font-semibold text-gray-500 dark:text-gray-400 px-1.5 py-1 rounded border border-gray-300 dark:border-gray-700 leading-tight">' +
               (isBlog
                 ? '<button onclick="localStorage.setItem(\'lang\',\'en\');location.reload()" class="hover:text-gray-900 dark:hover:text-white transition-colors bg-transparent cursor-pointer' + enUnderline + '">English</button>'
                 : '<a href="' + enHref + '" class="hover:text-gray-900 dark:hover:text-white transition-colors' + enUnderline + '">English</a>') +
@@ -166,14 +166,14 @@
               '<svg class="block dark:hidden h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>',
               '<svg class="hidden dark:block h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>',
             '</button>',
-            '<button @click="open = !open" class="md:hidden p-2 rounded-md text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Toggle navigation">',
+            '<button @click="open = !open" class="lg:hidden p-2 rounded-md text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Toggle navigation">',
             '<svg x-show="!open" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>',
             '<svg x-show="open" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>',
           '</button>',
           '</div>',
         '</div>',
       '</div>',
-      '<div x-show="open" x-transition class="md:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-4 space-y-3" style="display:none">',
+      '<div x-show="open" x-transition class="lg:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-4 space-y-3" style="display:none">',
         mobileLink('home', BASE + '/', T.nav_home),
         mobileLink('services', BASE + '/services', T.nav_services),
         mobileLink('about', BASE + '/about', T.nav_about),
