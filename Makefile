@@ -1,8 +1,27 @@
 PORT      ?= 8080
 CONTAINER  = burrell-tech-dev
-SITE_DIR   = $(shell pwd)
+SITE_DIR   = $(shell pwd)/dist
 
-.PHONY: start stop setup build watch
+.PHONY: start stop build watch i18n clean
+
+build: clean
+	npm install
+	mkdir -p dist/css dist/js dist/fonts
+	npm run-script build
+	cp css/custom.css dist/css/
+	cp js/*.js dist/js/
+	cp static/* dist/
+	cp node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2 dist/fonts/
+	node scripts/build-i18n.js
+
+i18n:
+	node scripts/build-i18n.js
+
+watch:
+	npm run-script watch
+
+clean:
+	rm -rf dist
 
 start:
 	docker rm -f $(CONTAINER) 2>/dev/null || true
@@ -24,12 +43,3 @@ start:
 
 stop:
 	docker rm -f $(CONTAINER)
-
-build:
-	npm install
-	npm run-script build
-	mkdir -p fonts
-	cp node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2 fonts/
-
-watch:
-	npm run-script watch

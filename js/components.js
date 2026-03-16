@@ -15,6 +15,78 @@
  *   simple = Get in Touch button only
  */
 (function () {
+  // --- Language detection ---
+  var LANG = /^\/es(\/|$)/.test(window.location.pathname) ? 'es' : 'en';
+  var BASE = LANG === 'es' ? '/es' : '';
+
+  // Compute the equivalent page path in the other language (for the language switcher)
+  var currentPath = window.location.pathname;
+  var switchHref, switchLabel;
+  if (LANG === 'es') {
+    switchHref = currentPath.replace(/^\/es/, '') || '/';
+    switchLabel = 'EN';
+  } else {
+    switchHref = '/es' + (currentPath === '/' ? '/' : currentPath);
+    switchLabel = 'ES';
+  }
+
+  // --- Translations for shared components ---
+  var i18n = {
+    en: {
+      nav_home: 'Home',
+      nav_services: 'Services',
+      nav_about: 'About',
+      nav_cta: 'Get in Touch',
+      nav_contact_mobile: 'Contact',
+      footer_tagline: 'Expert Kubernetes &amp; GitOps consulting.',
+      footer_contact: 'Contact',
+      footer_nav: 'Navigation',
+      footer_home: 'Home',
+      footer_services: 'Services &amp; Pricing',
+      footer_about: 'About',
+      footer_contact_link: 'Contact',
+      footer_privacy: 'Privacy Policy',
+      footer_copyright: 'Burrell Technology Services S.A. All rights reserved.',
+      social_heading: 'Connect',
+      retainer_heading: 'Retainer Terms:',
+      retainer_body: 'Monthly retainers are a non-refundable minimum commitment. Unused hours do not roll over. Hours beyond the monthly minimum are billed at your retainer\u2019s hourly rate. ',
+      retainer_cta: 'Get in touch',
+      retainer_suffix: ' to discuss fit before committing.',
+      consent_text: 'This site uses cookies for analytics. See our <a href="' + BASE + '/privacy" class="underline text-white hover:text-blue-400">Privacy Policy</a> for details.',
+      consent_accept: 'Accept',
+      consent_decline: 'Decline',
+      cta_contact: 'Get in Touch',
+      cta_services: 'View Services &amp; Pricing'
+    },
+    es: {
+      nav_home: 'Inicio',
+      nav_services: 'Servicios',
+      nav_about: 'Acerca',
+      nav_cta: 'Contacto',
+      nav_contact_mobile: 'Contacto',
+      footer_tagline: 'Consultor\u00eda experta en Kubernetes y GitOps.',
+      footer_contact: 'Contacto',
+      footer_nav: 'Navegaci\u00f3n',
+      footer_home: 'Inicio',
+      footer_services: 'Servicios y precios',
+      footer_about: 'Acerca',
+      footer_contact_link: 'Contacto',
+      footer_privacy: 'Pol\u00edtica de privacidad',
+      footer_copyright: 'Burrell Technology Services S.A. Todos los derechos reservados.',
+      social_heading: 'Conectar',
+      retainer_heading: 'T\u00e9rminos del retainer:',
+      retainer_body: 'Los retainers mensuales son un compromiso m\u00ednimo no reembolsable. Las horas no utilizadas no se acumulan. Las horas adicionales se facturan a la tarifa por hora de su retainer. ',
+      retainer_cta: 'Cont\u00e1ctenos',
+      retainer_suffix: ' para discutir antes de comprometerse.',
+      consent_text: 'Este sitio utiliza cookies para an\u00e1lisis. Consulte nuestra <a href="/es/privacy" class="underline text-white hover:text-blue-400">Pol\u00edtica de Privacidad</a> para m\u00e1s detalles.',
+      consent_accept: 'Aceptar',
+      consent_decline: 'Rechazar',
+      cta_contact: 'Contacto',
+      cta_services: 'Ver servicios y precios'
+    }
+  };
+  var T = i18n[LANG];
+
   // --- SVG Sprite (injected once; referenced via <use href="#icon-check">) ---
   document.body.insertAdjacentHTML('afterbegin',
     '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:none">' +
@@ -51,17 +123,18 @@
     '<header x-data="{ open: false }" class="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800">',
       '<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">',
         '<div class="flex items-center justify-between h-16">',
-          '<a href="/" class="flex items-center gap-2.5 font-bold text-gray-900 dark:text-white text-lg tracking-tight">',
-            '<img src="logo.png" alt="Burrell Technology Services home" class="h-8 w-8 rounded-lg">',
+          '<a href="' + BASE + '/" class="flex items-center gap-2.5 font-bold text-gray-900 dark:text-white text-lg tracking-tight">',
+            '<img src="/logo.png" alt="Burrell Technology Services home" class="h-8 w-8 rounded-lg">',
             'Burrell Technology Services',
           '</a>',
           '<nav class="hidden md:flex items-center gap-8">',
-            desktopLink('home', '/', 'Home'),
-            desktopLink('services', 'services', 'Services'),
-            desktopLink('about', 'about', 'About'),
-            '<a href="contact" class="text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">Get in Touch</a>',
+            desktopLink('home', BASE + '/', T.nav_home),
+            desktopLink('services', BASE + '/services', T.nav_services),
+            desktopLink('about', BASE + '/about', T.nav_about),
+            '<a href="' + BASE + '/contact" class="text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">' + T.nav_cta + '</a>',
           '</nav>',
           '<div class="flex items-center gap-2">',
+            '<a href="' + switchHref + '" class="text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors px-1.5 py-1 rounded border border-gray-300 dark:border-gray-700">' + switchLabel + '</a>',
             '<button onclick="toggleTheme()" class="p-2 rounded-md text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Toggle theme">',
               '<svg class="block dark:hidden h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>',
               '<svg class="hidden dark:block h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>',
@@ -74,10 +147,11 @@
         '</div>',
       '</div>',
       '<div x-show="open" x-transition class="md:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-4 space-y-3" style="display:none">',
-        mobileLink('home', '/', 'Home'),
-        mobileLink('services', 'services', 'Services'),
-        mobileLink('about', 'about', 'About'),
-        mobileLink('contact', 'contact', 'Contact'),
+        mobileLink('home', BASE + '/', T.nav_home),
+        mobileLink('services', BASE + '/services', T.nav_services),
+        mobileLink('about', BASE + '/about', T.nav_about),
+        mobileLink('contact', BASE + '/contact', T.nav_contact_mobile),
+        '<a href="' + switchHref + '" class="block text-sm font-medium text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white">' + switchLabel + '</a>',
       '</div>',
     '</header>'
   ].join('');
@@ -97,7 +171,7 @@
           // Col 1: Brand + socials
           '<div>',
             '<p class="text-white font-semibold">Burrell Technology Services S.A.</p>',
-            '<p class="mt-2 text-sm leading-relaxed">Expert Kubernetes &amp; GitOps consulting.</p>',
+            '<p class="mt-2 text-sm leading-relaxed">' + T.footer_tagline + '</p>',
             '<div class="mt-4 flex items-center gap-4">',
               '<a href="' + LINKEDIN_URL + '" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" aria-label="LinkedIn">',
                 SVG_LINKEDIN,
@@ -110,7 +184,7 @@
 
           // Col 2: Contact info
           '<div>',
-            '<p class="text-white font-semibold text-sm">Contact</p>',
+            '<p class="text-white font-semibold text-sm">' + T.footer_contact + '</p>',
             '<div class="mt-3 space-y-2 text-sm">',
               '<a href="mailto:noah@burrell.tech" class="flex items-center gap-2 hover:text-white transition-colors">',
                 '<svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>',
@@ -129,19 +203,19 @@
 
           // Col 3: Nav links
           '<div>',
-            '<p class="text-white font-semibold text-sm">Navigation</p>',
+            '<p class="text-white font-semibold text-sm">' + T.footer_nav + '</p>',
             '<div class="mt-3 space-y-2 text-sm">',
-              '<a href="/" class="block hover:text-white transition-colors">Home</a>',
-              '<a href="services" class="block hover:text-white transition-colors">Services &amp; Pricing</a>',
-              '<a href="about" class="block hover:text-white transition-colors">About</a>',
-              '<a href="contact" class="block hover:text-white transition-colors">Contact</a>',
-              '<a href="privacy" class="block hover:text-white transition-colors">Privacy Policy</a>',
+              '<a href="' + BASE + '/" class="block hover:text-white transition-colors">' + T.footer_home + '</a>',
+              '<a href="' + BASE + '/services" class="block hover:text-white transition-colors">' + T.footer_services + '</a>',
+              '<a href="' + BASE + '/about" class="block hover:text-white transition-colors">' + T.footer_about + '</a>',
+              '<a href="' + BASE + '/contact" class="block hover:text-white transition-colors">' + T.footer_contact_link + '</a>',
+              '<a href="' + BASE + '/privacy" class="block hover:text-white transition-colors">' + T.footer_privacy + '</a>',
             '</div>',
           '</div>',
 
         '</div>',
         '<div class="mt-8 pt-8 border-t border-gray-800 text-sm text-center">',
-          '<p>&copy; <span id="copyright-year"></span> Burrell Technology Services S.A. All rights reserved.</p>',
+          '<p>&copy; <span id="copyright-year"></span> ' + T.footer_copyright + '</p>',
         '</div>',
       '</div>',
     '</footer>'
@@ -156,7 +230,7 @@
   if (socialLinksPlaceholder) {
     var socialHTML = [
       '<div>',
-        '<h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Connect</h2>',
+        '<h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">' + T.social_heading + '</h2>',
         '<div class="flex items-center gap-4">',
           '<a href="' + LINKEDIN_URL + '" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">',
             SVG_LINKEDIN,
@@ -176,10 +250,9 @@
   //   <div class="retainer-terms-placeholder"></div>
   var retainerTermsHTML =
     '<p class="mt-8 text-gray-400 dark:text-gray-500" style="font-size: 0.6rem;">' +
-      '<span class="font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Retainer Terms:</span> ' +
-      'Monthly retainers are a non-refundable minimum commitment. Unused hours do not roll over. ' +
-      'Hours beyond the monthly minimum are billed at your retainer\u2019s hourly rate. ' +
-      '<a href="contact" class="hover:underline">Get in touch</a> to discuss fit before committing.' +
+      '<span class="font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">' + T.retainer_heading + '</span> ' +
+      T.retainer_body +
+      '<a href="' + BASE + '/contact" class="hover:underline">' + T.retainer_cta + '</a>' + T.retainer_suffix +
     '</p>';
 
   document.querySelectorAll('.retainer-terms-placeholder').forEach(function (el) {
@@ -194,11 +267,11 @@
       '<div id="site-notice" class="fixed bottom-0 left-0 right-0 z-50 bg-gray-900 dark:bg-black border-t border-gray-700 px-4 py-4 sm:px-6">' +
         '<div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-4">' +
           '<p class="text-sm text-gray-300 flex-1 min-w-48">' +
-            'This site uses cookies for analytics. See our <a href="privacy" class="underline text-white hover:text-blue-400">Privacy Policy</a> for details.' +
+            T.consent_text +
           '</p>' +
           '<div class="flex items-center gap-3">' +
-            '<button id="notice-dismiss" class="text-sm text-gray-400 hover:text-white transition-colors cursor-pointer">Decline</button>' +
-            '<button id="notice-confirm" class="text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors cursor-pointer">Accept</button>' +
+            '<button id="notice-dismiss" class="text-sm text-gray-400 hover:text-white transition-colors cursor-pointer">' + T.consent_decline + '</button>' +
+            '<button id="notice-confirm" class="text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors cursor-pointer">' + T.consent_accept + '</button>' +
           '</div>' +
         '</div>' +
       '</div>';
@@ -225,9 +298,9 @@
     var ctaBtnWrap = ctaVariant === 'full'
       ? 'mt-8 flex flex-wrap justify-center gap-4'
       : 'mt-8';
-    var ctaButtons = '<a href="contact" class="inline-flex items-center gap-2 bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors shadow-sm">Get in Touch</a>';
+    var ctaButtons = '<a href="' + BASE + '/contact" class="inline-flex items-center gap-2 bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors shadow-sm">' + T.cta_contact + '</a>';
     if (ctaVariant === 'full') {
-      ctaButtons += '<a href="services" class="inline-flex items-center gap-2 border border-blue-400 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-500 transition-colors">View Services &amp; Pricing</a>';
+      ctaButtons += '<a href="' + BASE + '/services" class="inline-flex items-center gap-2 border border-blue-400 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-500 transition-colors">' + T.cta_services + '</a>';
     }
 
     var ctaHTML = [

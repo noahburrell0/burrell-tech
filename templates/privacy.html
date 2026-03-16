@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="{{_lang}}">
+<head>
+  <!-- Meta -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{privacy.meta.title}}</title>
+  <meta name="description" content="{{privacy.meta.description}}">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="{{_canonical}}">
+  <link rel="icon" href="/favicon.ico">
+
+  <!-- Hreflang -->
+{{_hreflang}}
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Burrell Technology Services S.A.">
+  <meta property="og:title" content="{{privacy.meta.og_title}}">
+  <meta property="og:description" content="{{privacy.meta.og_description}}">
+  <meta property="og:url" content="{{_canonical}}">
+  <meta property="og:image" content="https://burrell.tech/logo.png">
+
+  <!-- Theme (blocking) -->
+  <script src="/js/theme.js"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/tailwind.css">
+  <link rel="stylesheet" href="/css/custom.css">
+
+  <!-- Scripts -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="/js/analytics.js"></script>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans antialiased">
+
+  <div id="nav-placeholder" data-active-page=""></div>
+
+  <!-- Page Header -->
+  <section class="bg-gray-50 dark:bg-gray-900/40 border-b border-gray-200 dark:border-gray-800 py-16 sm:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">{{privacy.hero.heading}}</h1>
+      <p class="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl">{{privacy.hero.last_updated}}</p>
+    </div>
+  </section>
+
+  <!-- Content -->
+  <section class="py-16 sm:py-20">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 prose prose-gray dark:prose-invert">
+
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-10 mb-4">{{privacy.overview.heading}}</h2>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">{{privacy.overview.text}}</p>
+
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-10 mb-4">{{privacy.data.heading}}</h2>
+
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white mt-6 mb-3">{{privacy.data.contact.heading}}</h3>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">{{privacy.data.contact.text}}</p>
+
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white mt-6 mb-3">{{privacy.data.analytics.heading}}</h3>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">{{privacy.data.analytics.text1_before}} <code class="text-sm bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">_ga</code> {{privacy.data.analytics.text1_mid}} <code class="text-sm bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">_gid</code>{{privacy.data.analytics.text1_after}}</p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">{{privacy.data.analytics.text2}}</p>
+
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white mt-6 mb-3">{{privacy.data.storage.heading}}</h3>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">{{privacy.data.storage.text}}</p>
+      <ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2 mb-6">
+        <li><code class="text-sm bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">theme</code> - {{privacy.data.storage.item_theme}}</li>
+        <li><code class="text-sm bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">cookie_consent</code> - {{privacy.data.storage.item_consent}}</li>
+      </ul>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">{{privacy.data.storage.note}}</p>
+
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white mt-6 mb-3">{{privacy.data.cloudflare.heading}}</h3>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">{{privacy.data.cloudflare.text1}}</p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">{{privacy.data.cloudflare.text2}}</p>
+
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-10 mb-4">{{privacy.thirdparty.heading}}</h2>
+      <ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2 mb-6">
+        <li><strong>Cloudflare</strong> - {{privacy.thirdparty.cloudflare}} <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline">{{privacy.thirdparty.cloudflare_link}}</a></li>
+        <li><strong>Google Analytics</strong> - {{privacy.thirdparty.google}} <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline">{{privacy.thirdparty.google_link}}</a></li>
+        <li><strong>Alpine.js</strong> - {{privacy.thirdparty.alpine}}</li>
+      </ul>
+
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-10 mb-4">{{privacy.retention.heading}}</h2>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">{{privacy.retention.text}}</p>
+
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-10 mb-4">{{privacy.rights.heading}}</h2>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">{{privacy.rights.intro}}</p>
+      <ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2 mb-6">
+        <li>{{privacy.rights.item1}}</li>
+        <li>{{privacy.rights.item2}}</li>
+        <li>{{privacy.rights.item3}}</li>
+        <li>{{privacy.rights.item4}}</li>
+      </ul>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">{{privacy.rights.contact}} <a href="mailto:noah@burrell.tech" class="text-blue-600 dark:text-blue-400 hover:underline">noah@burrell.tech</a>.</p>
+
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-10 mb-4">{{privacy.contact.heading}}</h2>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">{{privacy.contact.text}}<br>
+        <strong>Burrell Technology Services S.A.</strong><br>
+        <a href="mailto:noah@burrell.tech" class="text-blue-600 dark:text-blue-400 hover:underline">noah@burrell.tech</a>
+      </p>
+
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="/js/components.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

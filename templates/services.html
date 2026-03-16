@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="{{_lang}}">
+<head>
+  <!-- Meta -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{svc.meta.title}}</title>
+  <meta name="description" content="{{svc.meta.description}}">
+  <meta name="robots" content="index, follow">
+  <meta name="keywords" content="{{svc.meta.keywords}}">
+  <link rel="canonical" href="{{_canonical}}">
+  <link rel="icon" href="/favicon.ico">
+
+  <!-- Hreflang -->
+{{_hreflang}}
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Burrell Technology Services S.A.">
+  <meta property="og:title" content="{{svc.meta.og_title}}">
+  <meta property="og:description" content="{{svc.meta.og_description}}">
+  <meta property="og:url" content="{{_canonical}}">
+  <meta property="og:image" content="https://burrell.tech/logo.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="{{svc.meta.twitter_title}}">
+  <meta name="twitter:description" content="{{svc.meta.twitter_description}}">
+  <meta name="twitter:image" content="https://burrell.tech/logo.png">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ItemList",
+        "name": "{{svc.schema.itemlist_name}}",
+        "url": "https://burrell.tech/services.html",
+        "itemListElement": [
+          {
+            "@type": "ListItem", "position": 1,
+            "item": {
+              "@type": "Service",
+              "name": "{{svc.schema.training_name}}",
+              "url": "https://burrell.tech/services.html#training",
+              "description": "{{svc.schema.training_desc}}",
+              "provider": { "@id": "https://burrell.tech/#person" },
+              "offers": [
+                { "@type": "Offer", "name": "{{svc.schema.training_offer1_name}}", "price": "125", "priceCurrency": "USD", "unitText": "hour" },
+                { "@type": "Offer", "name": "{{svc.schema.training_offer2_name}}", "price": "900", "priceCurrency": "USD" },
+                { "@type": "Offer", "name": "{{svc.schema.training_offer3_name}}", "price": "1600", "priceCurrency": "USD" }
+              ]
+            }
+          },
+          {
+            "@type": "ListItem", "position": 2,
+            "item": {
+              "@type": "Service",
+              "name": "{{svc.schema.review_name}}",
+              "url": "https://burrell.tech/services.html#review",
+              "description": "{{svc.schema.review_desc}}",
+              "provider": { "@id": "https://burrell.tech/#person" },
+              "offers": [
+                { "@type": "Offer", "name": "{{svc.schema.review_offer1_name}}", "price": "850", "priceCurrency": "USD" },
+                { "@type": "Offer", "name": "{{svc.schema.review_offer2_name}}", "price": "850", "priceCurrency": "USD" },
+                { "@type": "Offer", "name": "{{svc.schema.review_offer3_name}}", "price": "1500", "priceCurrency": "USD" }
+              ]
+            }
+          },
+          {
+            "@type": "ListItem", "position": 3,
+            "item": {
+              "@type": "Service",
+              "name": "{{svc.schema.support_name}}",
+              "url": "https://burrell.tech/services.html#support",
+              "description": "{{svc.schema.support_desc}}",
+              "provider": { "@id": "https://burrell.tech/#person" },
+              "offers": [
+                { "@type": "Offer", "name": "{{svc.schema.support_offer1_name}}", "price": "150", "priceCurrency": "USD", "unitText": "hour" },
+                { "@type": "Offer", "name": "{{svc.schema.support_offer2_name}}", "price": "1000", "priceCurrency": "USD", "unitText": "month" },
+                { "@type": "Offer", "name": "{{svc.schema.support_offer3_name}}", "price": "1800", "priceCurrency": "USD", "unitText": "month" }
+              ]
+            }
+          },
+          {
+            "@type": "ListItem", "position": 4,
+            "item": {
+              "@type": "Service",
+              "name": "{{svc.schema.embedded_name}}",
+              "url": "https://burrell.tech/services.html#embedded",
+              "description": "{{svc.schema.embedded_desc}}",
+              "provider": { "@id": "https://burrell.tech/#person" },
+              "offers": [
+                { "@type": "Offer", "name": "{{svc.schema.embedded_offer1_name}}", "price": "1250", "priceCurrency": "USD", "unitText": "month" },
+                { "@type": "Offer", "name": "{{svc.schema.embedded_offer2_name}}", "price": "2200", "priceCurrency": "USD", "unitText": "month" },
+                { "@type": "Offer", "name": "{{svc.schema.embedded_offer3_name}}", "price": "3400", "priceCurrency": "USD", "unitText": "month" }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Theme (blocking — must run before first paint to prevent flash) -->
+  <script src="/js/theme.js"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/tailwind.css">
+  <link rel="stylesheet" href="/css/custom.css">
+
+  <!-- Scripts -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="/js/analytics.js"></script>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans antialiased">
+
+  <div id="nav-placeholder" data-active-page="services"></div>
+
+  <!-- Page Header -->
+  <section class="bg-gray-50 dark:bg-gray-900/40 border-b border-gray-200 dark:border-gray-800 py-16 sm:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">{{svc.hero.heading}}</h1>
+      <p class="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl">{{svc.hero.subtitle}}</p>
+      <div class="mt-6 flex flex-wrap gap-2">
+        <a href="#training" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 hover:bg-blue-600 hover:text-white hover:border-blue-600 dark:hover:bg-blue-600 dark:hover:text-white dark:hover:border-blue-600 transition-colors">{{svc.hero.pill_training}}</a>
+        <a href="#review" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 dark:hover:bg-indigo-600 dark:hover:text-white dark:hover:border-indigo-600 transition-colors">{{svc.hero.pill_review}}</a>
+        <a href="#support" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-200 border border-amber-200 dark:border-amber-800 hover:bg-amber-600 hover:text-white hover:border-amber-600 dark:hover:bg-amber-600 dark:hover:text-white dark:hover:border-amber-600 transition-colors">{{svc.hero.pill_support}}</a>
+        <a href="#embedded" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-600 hover:text-white hover:border-emerald-600 dark:hover:bg-emerald-600 dark:hover:text-white dark:hover:border-emerald-600 transition-colors">{{svc.hero.pill_embedded}}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Training -->
+  <section id="training" class="py-20 sm:py-24 scroll-mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-start gap-4 mb-10">
+        <div class="flex-shrink-0 w-12 h-12 bg-blue-100 dark:bg-blue-950/60 rounded-xl flex items-center justify-center">
+          <svg class="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        </div>
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">{{svc.training.heading}}</h2>
+          <p class="mt-2 text-gray-600 dark:text-gray-400 max-w-2xl">{{svc.training.desc}}</p>
+        </div>
+      </div>
+
+      <div class="mb-10">
+        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">{{svc.training.topics_heading}}</h3>
+        <div class="flex flex-wrap gap-2">
+          <span class="px-3 py-1 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 rounded-full text-sm border border-blue-200 dark:border-blue-800">{{svc.training.topic1}}</span>
+          <span class="px-3 py-1 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 rounded-full text-sm border border-blue-200 dark:border-blue-800">{{svc.training.topic2}}</span>
+          <span class="px-3 py-1 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 rounded-full text-sm border border-blue-200 dark:border-blue-800">{{svc.training.topic3}}</span>
+          <span class="px-3 py-1 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 rounded-full text-sm border border-blue-200 dark:border-blue-800">{{svc.training.topic4}}</span>
+          <span class="px-3 py-1 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 rounded-full text-sm border border-blue-200 dark:border-blue-800">{{svc.training.topic5}}</span>
+          <span class="px-3 py-1 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 rounded-full text-sm border border-blue-200 dark:border-blue-800">{{svc.training.topic6}}</span>
+          <span class="px-3 py-1 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 rounded-full text-sm border border-blue-200 dark:border-blue-800">{{svc.training.topic7}}</span>
+          <span class="px-3 py-1 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 rounded-full text-sm border border-blue-200 dark:border-blue-800">{{svc.training.topic8}}</span>
+          <span class="px-3 py-1 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 rounded-full text-sm border border-blue-200 dark:border-blue-800">{{svc.training.topic9}}</span>
+        </div>
+        <p class="mt-3 text-gray-400 dark:text-gray-500" style="font-size: 0.65rem;"><span class="font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">*</span> {{svc.training.topics_disclaimer}}</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- 1:1 Coaching -->
+        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 flex flex-col">
+          <div class="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">{{svc.training.coaching_title}}</div>
+          <div class="flex items-baseline gap-1 mb-1">
+            <span class="text-3xl font-extrabold text-gray-900 dark:text-white">$125</span>
+            <span class="text-gray-500 dark:text-gray-400">{{svc.training.per_hour}}</span>
+          </div>
+          <p class="text-xs text-gray-500 dark:text-gray-500 mb-5">{{svc.training.coaching_minimum}}</p>
+          <ul class="space-y-2.5 text-sm text-gray-700 dark:text-gray-300 flex-grow">
+            <li class="flex items-start gap-2">
+              <svg class="h-4 w-4 text-blue-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>
+              {{svc.training.coaching_feat1}}
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="h-4 w-4 text-blue-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>
+              {{svc.training.coaching_feat2}}
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="h-4 w-4 text-blue-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>
+              {{svc.training.coaching_feat3}}
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="h-4 w-4 text-blue-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>
+              {{svc.training.coaching_feat4}}
+            </li>
+
+          </ul>
+          <a href="{{_base}}/contact" class="mt-6 block text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors text-sm">{{svc.training.btn_book_session}}</a>
+        </div>
+
+        <!-- Group Workshop Half Day -->
+        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 flex flex-col">
+          <div class="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">{{svc.training.half_day_title}}</div>
+          <div class="flex items-baseline gap-1 mb-1">
+            <span class="text-3xl font-extrabold text-gray-900 dark:text-white">$900</span>
+            <span class="text-gray-500 dark:text-gray-400">{{svc.training.flat}}</span>
+          </div>
+          <p class="text-xs text-gray-500 dark:text-gray-500 mb-5">{{svc.training.half_day_details}}</p>
+          <ul class="space-y-2.5 text-sm text-gray-700 dark:text-gray-300 flex-grow">
+            <li class="flex items-start gap-2">
+              <svg class="h-4 w-4 text-blue-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>
+              {{svc.training.half_day_feat1}}
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="h-4 w-4 text-blue-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>
+              {{svc.training.half_day_feat2}}
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="h-4 w-4 text-blue-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>
+              {{svc.training.half_day_feat3}}
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="h-4 w-4 text-blue-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>
+              {{svc.training.half_day_feat4}}
+            </li>
+          </ul>
+          <a href="{{_base}}/contact" class="mt-6 block text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors text-sm">{{svc.training.btn_book_workshop}}</a>
+        </div>
+
+        <!-- Group Workshop Full Day -->
+        <div class="bg-white dark:bg-gray-900 border-2 border-blue-300 dark:border-blue-700 rounded-2xl p-6 flex flex-col">
+          <div class="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">{{svc.training.full_day_title}}</div>
+          <div class="flex items-center justify-between mb-1">
+            <div class="flex items-baseline gap-1">
+              <span class="text-3xl font-extrabold text-gray-900 dark:text-white">$1,600</span>
+              <span class="text-gray-500 dark:text-gray-400">{{svc.training.flat}}</span>
+            </div>
+            <span class="bg-blue-600 text-white text-xs font-semibold px-2.5 py-1 rounded-full">{{svc.training.badge_popular}}</span>
+          </div>
+          <p class="text-xs text-gray-500 dark:text-gray-500 mb-5">{{svc.training.full_day_details}}</p>
+          <ul class="space-y-2.5 text-sm text-gray-700 dark:text-gray-300 flex-grow">
+            <li class="flex items-start gap-2">
+              <svg class="h-4 w-4 text-blue-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>
+              {{svc.training.full_day_feat1}}
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="h-4 w-4 text-blue-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>
+              {{svc.training.full_day_feat2}}
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="h-4 w-4 text-blue-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>
+              {{svc.training.full_day_feat3}}
+            </li>
+          </ul>
+          <a href="{{_base}}/contact" class="mt-6 block text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors text-sm">{{svc.training.btn_book_workshop}}</a>
+        </div>
+      </div>
+      <p class="mt-6 text-sm text-gray-500 dark:text-gray-500">{{svc.training.custom_cta}} <a href="{{_base}}/contact" class="text-blue-600 dark:text-blue-400 hover:underline">{{svc.training.custom_cta_link}}</a></p>
+    </div>
+  </section>
+
+  <div class="border-t border-gray-200 dark:border-gray-800"></div>
+
+  <!-- Review & Analysis -->
+  <section id="review" class="py-20 sm:py-24 bg-gray-50 dark:bg-gray-900/40 scroll-mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-start gap-4 mb-10">
+        <div class="flex-shrink-0 w-12 h-12 bg-indigo-100 dark:bg-indigo-950/60 rounded-xl flex items-center justify-center">
+          <svg class="h-6 w-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+        </div>
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">{{svc.review.heading}}</h2>
+          <p class="mt-2 text-gray-600 dark:text-gray-400 max-w-2xl">{{svc.review.desc}}</p>
+        </div>
+      </div>
+
+      <div class="mb-8 bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 rounded-xl p-5">
+        <p class="text-sm font-semibold text-indigo-800 dark:text-indigo-300 mb-1">{{svc.review.includes_heading}}</p>
+        <div class="grid sm:grid-cols-2 gap-x-8 gap-y-2 mt-3 text-sm text-indigo-900 dark:text-indigo-200">
+          <div class="flex items-start gap-2"><svg class="h-4 w-4 text-indigo-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.review.includes1}}</div>
+          <div class="flex items-start gap-2"><svg class="h-4 w-4 text-indigo-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.review.includes2}}</div>
+          <div class="flex items-start gap-2"><svg class="h-4 w-4 text-indigo-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.review.includes3}}</div>
+          <div class="flex items-start gap-2"><svg class="h-4 w-4 text-indigo-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.review.includes4}}</div>
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-3 gap-6">
+        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 flex flex-col">
+          <div class="text-sm font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider mb-2">{{svc.review.k8s_title}}</div>
+          <div class="flex items-baseline gap-1 mb-1">
+            <span class="text-3xl font-extrabold text-gray-900 dark:text-white">$850</span>
+            <span class="text-gray-500 dark:text-gray-400">{{svc.review.flat}}</span>
+          </div>
+          <p class="text-xs text-gray-500 dark:text-gray-500 mb-5">{{svc.review.k8s_details}}</p>
+          <ul class="space-y-2.5 text-sm text-gray-700 dark:text-gray-300 flex-grow">
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-indigo-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.review.k8s_feat1}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-indigo-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.review.k8s_feat2}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-indigo-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.review.k8s_feat3}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-indigo-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.review.k8s_feat4}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-indigo-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.review.k8s_feat5}}</li>
+          </ul>
+          <a href="{{_base}}/contact" class="mt-6 block text-center bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors text-sm">{{svc.review.btn_request}}</a>
+        </div>
+
+        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 flex flex-col">
+          <div class="text-sm font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider mb-2">{{svc.review.argo_title}}</div>
+          <div class="flex items-baseline gap-1 mb-1">
+            <span class="text-3xl font-extrabold text-gray-900 dark:text-white">$850</span>
+            <span class="text-gray-500 dark:text-gray-400">{{svc.review.flat}}</span>
+          </div>
+          <p class="text-xs text-gray-500 dark:text-gray-500 mb-5">{{svc.review.argo_details}}</p>
+          <ul class="space-y-2.5 text-sm text-gray-700 dark:text-gray-300 flex-grow">
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-indigo-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.review.argo_feat1}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-indigo-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.review.argo_feat2}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-indigo-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.review.argo_feat3}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-indigo-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.review.argo_feat4}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-indigo-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.review.argo_feat5}}</li>
+          </ul>
+          <a href="{{_base}}/contact" class="mt-6 block text-center bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors text-sm">{{svc.review.btn_request}}</a>
+        </div>
+
+        <div class="bg-white dark:bg-gray-900 border-2 border-indigo-300 dark:border-indigo-700 rounded-2xl p-6 flex flex-col">
+          <div class="text-sm font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider mb-2">{{svc.review.full_title}}</div>
+          <div class="flex items-center justify-between mb-1">
+            <div class="flex items-baseline gap-1">
+              <span class="text-3xl font-extrabold text-gray-900 dark:text-white">$1,500</span>
+              <span class="text-gray-500 dark:text-gray-400">{{svc.review.flat}}</span>
+            </div>
+            <span class="bg-indigo-600 text-white text-xs font-semibold px-2.5 py-1 rounded-full">{{svc.review.badge_value}}</span>
+          </div>
+          <p class="text-xs text-gray-500 dark:text-gray-500 mb-5">{{svc.review.full_details}}</p>
+          <ul class="space-y-2.5 text-sm text-gray-700 dark:text-gray-300 flex-grow">
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-indigo-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.review.full_feat1}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-indigo-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.review.full_feat2}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-indigo-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.review.full_feat3}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-indigo-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.review.full_feat4}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-indigo-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.review.full_feat5}}</li>
+          </ul>
+          <a href="{{_base}}/contact" class="mt-6 block text-center bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors text-sm">{{svc.review.btn_request}}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="border-t border-gray-200 dark:border-gray-800"></div>
+
+  <!-- Troubleshooting & Support -->
+  <section id="support" class="py-20 sm:py-24 scroll-mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-start gap-4 mb-10">
+        <div class="flex-shrink-0 w-12 h-12 bg-amber-100 dark:bg-amber-950/60 rounded-xl flex items-center justify-center">
+          <svg class="h-6 w-6 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </div>
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">{{svc.support.heading}}</h2>
+          <p class="mt-2 text-gray-600 dark:text-gray-400 max-w-2xl">{{svc.support.desc}}</p>
+          <p class="mt-3 text-gray-400 dark:text-gray-500" style="font-size: 0.65rem;"><span class="font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">*</span> {{svc.support.disclaimer}}</p>
+        </div>
+      </div>
+
+      <!-- Rate callout -->
+      <div class="mb-10 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-xl p-5 flex flex-wrap items-center gap-6">
+        <div>
+          <p class="text-xs font-semibold text-amber-700 dark:text-amber-400 uppercase tracking-wider mb-1">{{svc.support.rates_label}}</p>
+          <div class="flex items-baseline gap-1">
+            <span class="text-4xl font-extrabold text-gray-900 dark:text-white">$125–$175</span>
+            <span class="text-lg text-gray-500 dark:text-gray-400">{{svc.support.per_hour}}</span>
+          </div>
+        </div>
+        <div class="flex-1 min-w-48 text-sm text-amber-900 dark:text-gray-100 leading-relaxed">
+          {{svc.support.rates_desc}}
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-3 gap-6">
+        <!-- Ad-hoc -->
+        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 flex flex-col">
+          <div class="text-sm font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wider mb-2">{{svc.support.adhoc_title}}</div>
+          <div class="flex items-baseline gap-1 mb-1">
+            <span class="text-3xl font-extrabold text-gray-900 dark:text-white">$175</span>
+            <span class="text-gray-500 dark:text-gray-400">{{svc.support.per_hour}}</span>
+          </div>
+          <p class="text-xs text-gray-500 dark:text-gray-500 mb-5">{{svc.support.adhoc_details}}</p>
+          <ul class="space-y-2.5 text-sm text-gray-700 dark:text-gray-300 flex-grow">
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-amber-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.support.adhoc_feat1}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-amber-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.support.adhoc_feat2}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-amber-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.support.adhoc_feat3}}</li>
+          </ul>
+          <a href="{{_base}}/contact" class="mt-6 block text-center bg-amber-500 hover:bg-amber-600 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors text-sm">{{svc.support.btn_help_now}}</a>
+        </div>
+
+        <!-- Starter Retainer -->
+        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 flex flex-col">
+          <div class="text-sm font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wider mb-2">{{svc.support.starter_title}}</div>
+          <div class="flex items-baseline gap-1 mb-1">
+            <span class="text-3xl font-extrabold text-gray-900 dark:text-white">$1,400</span>
+            <span class="text-gray-500 dark:text-gray-400">{{svc.support.per_month}}</span>
+          </div>
+          <p class="text-xs text-gray-500 dark:text-gray-500 mb-5">{{svc.support.starter_details}}</p>
+          <ul class="space-y-2.5 text-sm text-gray-700 dark:text-gray-300 flex-grow">
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-amber-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.support.starter_feat1}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-amber-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.support.starter_feat2}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-amber-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.support.starter_feat3}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-amber-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.support.starter_feat4}}</li>
+          </ul>
+          <a href="{{_base}}/contact" class="mt-6 block text-center bg-amber-500 hover:bg-amber-600 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors text-sm">{{svc.support.btn_get_started}}</a>
+        </div>
+
+        <!-- Standard Retainer -->
+        <div class="bg-white dark:bg-gray-900 border-2 border-amber-300 dark:border-amber-700 rounded-2xl p-6 flex flex-col">
+          <div class="text-sm font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wider mb-2">{{svc.support.standard_title}}</div>
+          <div class="flex items-center justify-between mb-1">
+            <div class="flex items-baseline gap-1">
+              <span class="text-3xl font-extrabold text-gray-900 dark:text-white">$2,500</span>
+              <span class="text-gray-500 dark:text-gray-400">{{svc.support.per_month}}</span>
+            </div>
+            <span class="bg-amber-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full">{{svc.support.badge_recommended}}</span>
+          </div>
+          <p class="text-xs text-gray-500 dark:text-gray-500 mb-5">{{svc.support.standard_details}}</p>
+          <ul class="space-y-2.5 text-sm text-gray-700 dark:text-gray-300 flex-grow">
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-amber-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.support.standard_feat1}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-amber-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.support.standard_feat2}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-amber-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.support.standard_feat3}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-amber-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.support.standard_feat4}}</li>
+          </ul>
+          <a href="{{_base}}/contact" class="mt-6 block text-center bg-amber-500 hover:bg-amber-600 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors text-sm">{{svc.support.btn_get_started}}</a>
+        </div>
+      </div>
+      <div class="retainer-terms-placeholder"></div>
+    </div>
+  </section>
+
+  <div class="border-t border-gray-200 dark:border-gray-800"></div>
+
+  <!-- Professional Services -->
+  <section id="embedded" class="py-20 sm:py-24 bg-gray-50 dark:bg-gray-900/40 scroll-mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-start gap-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 bg-emerald-100 dark:bg-emerald-950/60 rounded-xl flex items-center justify-center">
+          <svg class="h-6 w-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        </div>
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">{{svc.embedded.heading}}</h2>
+          <p class="mt-2 text-gray-600 dark:text-gray-400 max-w-2xl">{{svc.embedded.desc}}</p>
+        </div>
+      </div>
+
+      <!-- Rate callout -->
+      <div class="mb-10 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 rounded-xl p-5 flex flex-wrap items-center gap-6">
+        <div>
+          <p class="text-xs font-semibold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider mb-1">{{svc.embedded.rates_label}}</p>
+          <div class="flex items-baseline gap-1">
+            <span class="text-4xl font-extrabold text-gray-900 dark:text-white">$85–$125</span>
+            <span class="text-lg text-gray-500 dark:text-gray-400">{{svc.embedded.per_hour}}</span>
+          </div>
+        </div>
+        <div class="flex-1 min-w-48 text-sm text-emerald-900 dark:text-emerald-200 leading-relaxed">
+          {{svc.embedded.rates_desc}}
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-3 gap-6 mb-10">
+        <!-- Starter Retainer -->
+        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 flex flex-col">
+          <div class="text-sm font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-2">{{svc.embedded.starter_title}}</div>
+          <div class="flex items-baseline gap-1 mb-1">
+            <span class="text-3xl font-extrabold text-gray-900 dark:text-white">$1,250</span>
+            <span class="text-gray-500 dark:text-gray-400">{{svc.embedded.per_month}}</span>
+          </div>
+          <p class="text-xs text-gray-500 dark:text-gray-500 mb-5">{{svc.embedded.starter_details}}</p>
+          <ul class="space-y-2.5 text-sm text-gray-700 dark:text-gray-300 flex-grow">
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-emerald-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.embedded.starter_feat1}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-emerald-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.embedded.starter_feat2}}</li>
+          </ul>
+          <a href="{{_base}}/contact" class="mt-6 block text-center bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors text-sm">{{svc.embedded.btn_get_started}}</a>
+        </div>
+
+        <!-- Standard Retainer -->
+        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 flex flex-col">
+          <div class="text-sm font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-2">{{svc.embedded.standard_title}}</div>
+          <div class="flex items-baseline gap-1 mb-1">
+            <span class="text-3xl font-extrabold text-gray-900 dark:text-white">$2,200</span>
+            <span class="text-gray-500 dark:text-gray-400">{{svc.embedded.per_month}}</span>
+          </div>
+          <p class="text-xs text-gray-500 dark:text-gray-500 mb-5">{{svc.embedded.standard_details}}</p>
+          <ul class="space-y-2.5 text-sm text-gray-700 dark:text-gray-300 flex-grow">
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-emerald-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.embedded.standard_feat1}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-emerald-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.embedded.standard_feat2}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-emerald-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.embedded.standard_feat3}}</li>
+          </ul>
+          <a href="{{_base}}/contact" class="mt-6 block text-center bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors text-sm">{{svc.embedded.btn_get_started}}</a>
+        </div>
+
+        <!-- Full Engagement -->
+        <div class="bg-white dark:bg-gray-900 border-2 border-emerald-300 dark:border-emerald-700 rounded-2xl p-6 flex flex-col">
+          <div class="text-sm font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-2">{{svc.embedded.priority_title}}</div>
+          <div class="flex items-center justify-between mb-1">
+            <div class="flex items-baseline gap-1">
+              <span class="text-3xl font-extrabold text-gray-900 dark:text-white">$3,400</span>
+              <span class="text-gray-500 dark:text-gray-400">{{svc.embedded.per_month}}</span>
+            </div>
+            <span class="bg-emerald-600 text-white text-xs font-semibold px-2.5 py-1 rounded-full">{{svc.embedded.badge_value}}</span>
+          </div>
+          <p class="text-xs text-gray-500 dark:text-gray-500 mb-5">{{svc.embedded.priority_details}}</p>
+          <ul class="space-y-2.5 text-sm text-gray-700 dark:text-gray-300 flex-grow">
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-emerald-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.embedded.priority_feat1}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-emerald-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.embedded.priority_feat2}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-emerald-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.embedded.priority_feat3}}</li>
+            <li class="flex items-start gap-2"><svg class="h-4 w-4 text-emerald-500 flex-shrink-0 mt-0.5" ><use href="#icon-check"/></svg>{{svc.embedded.priority_feat4}}</li>
+          </ul>
+          <a href="{{_base}}/contact" class="mt-6 block text-center bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors text-sm">{{svc.embedded.btn_get_started}}</a>
+        </div>
+      </div>
+      <div class="retainer-terms-placeholder"></div>
+    </div>
+  </section>
+
+  <div id="cta-placeholder"
+    data-heading="{{svc.cta.heading}}"
+    data-body="{{svc.cta.body}}"
+    data-variant="simple"></div>
+  <div id="footer-placeholder"></div>
+
+  <!-- components.js must run before Alpine (deferred) so nav x-data is in the DOM at Alpine init time -->
+  <script src="/js/components.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

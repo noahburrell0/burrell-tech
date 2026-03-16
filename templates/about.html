@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="{{_lang}}">
+<head>
+  <!-- Meta -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{about.meta.title}}</title>
+  <meta name="description" content="{{about.meta.description}}">
+  <meta name="robots" content="index, follow">
+  <meta name="keywords" content="{{about.meta.keywords}}">
+  <link rel="canonical" href="{{_canonical}}">
+  <link rel="icon" href="/favicon.ico">
+
+  <!-- Hreflang -->
+{{_hreflang}}
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="profile">
+  <meta property="og:site_name" content="Burrell Technology Services S.A.">
+  <meta property="og:title" content="{{about.meta.og_title}}">
+  <meta property="og:description" content="{{about.meta.og_description}}">
+  <meta property="og:url" content="{{_canonical}}">
+  <meta property="og:image" content="https://burrell.tech/logo.png">
+  <meta property="profile:first_name" content="Noah">
+  <meta property="profile:last_name" content="Burrell">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="{{about.meta.twitter_title}}">
+  <meta name="twitter:description" content="{{about.meta.twitter_description}}">
+  <meta name="twitter:image" content="https://burrell.tech/logo.png">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": "https://burrell.tech/#person",
+    "name": "Noah Burrell",
+    "jobTitle": "{{about.schema.job_title}}",
+    "description": "{{about.schema.description}}",
+    "url": "https://burrell.tech/about",
+    "email": "noah@burrell.tech",
+    "telephone": "+16135811896",
+    "knowsAbout": ["Kubernetes", "Argo CD", "GitOps", "Helm", "Docker", "Linux", "Cloud Native Infrastructure", "DevOps", "RBAC", "Networking", "Secrets Management", "Cluster Administration", "GitHub Actions", "GCP", "Cloudflare"],
+    "worksFor": { "@id": "https://burrell.tech/#organization" },
+    "sameAs": ["https://www.linkedin.com/in/noahburrell/", "https://github.com/noahburrell0"]
+  }
+  </script>
+
+  <!-- Theme (blocking — must run before first paint to prevent flash) -->
+  <script src="/js/theme.js"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/tailwind.css">
+  <link rel="stylesheet" href="/css/custom.css">
+
+  <!-- Scripts -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="/js/analytics.js"></script>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans antialiased">
+
+  <div id="nav-placeholder" data-active-page="about"></div>
+
+  <!-- Page Header -->
+  <section class="bg-gray-50 dark:bg-gray-900/40 border-b border-gray-200 dark:border-gray-800 py-16 sm:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">{{about.hero.heading}}</h1>
+      <p class="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl">{{about.hero.subheading}}</p>
+    </div>
+  </section>
+
+  <!-- Bio -->
+  <section class="py-20 sm:py-24">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-3 gap-12">
+        <div class="lg:col-span-2 space-y-5">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">{{about.bio.greeting}}</h2>
+          <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed italic">
+            {{about.bio.intro}}
+          </p>
+          <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+            {{about.bio.akuity}}
+          </p>
+          <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+            {{about.bio.industry}}
+          </p>
+          <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+            {{about.bio.location}}
+          </p>
+          <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+            {{about.bio.goal}}
+          </p>
+        </div>
+        <div class="space-y-4">
+          <div class="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6">
+            <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">{{about.glance.heading}}</h3>
+            <dl class="space-y-3 text-sm">
+              <div>
+                <dt class="text-gray-500 dark:text-gray-500">{{about.glance.location_label}}</dt>
+                <dd class="font-medium text-gray-900 dark:text-white">{{about.glance.location_value}}</dd>
+              </div>
+              <div>
+                <dt class="text-gray-500 dark:text-gray-500">{{about.glance.timezone_label}}</dt>
+                <dd class="font-medium text-gray-900 dark:text-white">{{about.glance.timezone_value}}</dd>
+              </div>
+              <div>
+                <dt class="text-gray-500 dark:text-gray-500">{{about.glance.delivery_label}}</dt>
+                <dd class="font-medium text-gray-900 dark:text-white">{{about.glance.delivery_value}}</dd>
+              </div>
+              <div>
+                <dt class="text-gray-500 dark:text-gray-500">{{about.glance.experience_label}}</dt>
+                <dd class="font-medium text-gray-900 dark:text-white">{{about.glance.experience_value}}</dd>
+              </div>
+              <div>
+                <dt class="text-gray-500 dark:text-gray-500">{{about.glance.background_label}}</dt>
+                <dd class="font-medium text-gray-900 dark:text-white">{{about.glance.background_value}}</dd>
+              </div>
+              <div>
+                <dt class="text-gray-500 dark:text-gray-500">{{about.glance.contact_label}}</dt>
+                <dd class="font-medium"><a href="mailto:noah@burrell.tech" class="text-blue-600 dark:text-blue-400 hover:underline">noah@burrell.tech</a></dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What I Work On -->
+  <section class="bg-gray-50 dark:bg-gray-900/40 border-y border-gray-200 dark:border-gray-800 py-20 sm:py-24">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-6">{{about.work.heading}}</h2>
+      <div class="max-w-4xl space-y-4 text-gray-600 dark:text-gray-400 leading-relaxed mb-10">
+        <p>{{about.work.p1}}</p>
+        <p>{{about.work.p2}}</p>
+      </div>
+      <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">{{about.work.core_tools_label}}</p>
+      <div class="flex flex-wrap gap-3">
+        <span class="px-4 py-1.5 bg-blue-100 dark:bg-blue-950/50 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium border border-blue-200 dark:border-blue-800">Kubernetes</span>
+        <span class="px-4 py-1.5 bg-blue-100 dark:bg-blue-950/50 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium border border-blue-200 dark:border-blue-800">Argo CD</span>
+        <span class="px-4 py-1.5 bg-blue-100 dark:bg-blue-950/50 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium border border-blue-200 dark:border-blue-800">Kargo</span>
+        <span class="px-4 py-1.5 bg-blue-100 dark:bg-blue-950/50 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium border border-blue-200 dark:border-blue-800">Terraform</span>
+        <span class="px-4 py-1.5 bg-blue-100 dark:bg-blue-950/50 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium border border-blue-200 dark:border-blue-800">GCP</span>
+        <span class="px-4 py-1.5 bg-blue-100 dark:bg-blue-950/50 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium border border-blue-200 dark:border-blue-800">AWS</span>
+        <span class="px-4 py-1.5 bg-blue-100 dark:bg-blue-950/50 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium border border-blue-200 dark:border-blue-800">Cloudflare</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Work Experience -->
+  <section class="py-20 sm:py-24">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-10">{{about.experience.heading}}</h2>
+      <div class="space-y-8">
+
+        <!-- Akuity -->
+        <div class="grid sm:grid-cols-4 gap-4 sm:gap-8">
+          <div class="sm:col-span-1">
+            <p class="text-sm font-semibold text-gray-900 dark:text-white">{{about.experience.akuity.dates}}</p>
+            <p class="text-sm text-gray-500 dark:text-gray-500 mt-1">{{about.experience.akuity.location}}</p>
+          </div>
+          <div class="sm:col-span-3">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{about.experience.akuity.title}}</h3>
+            <p class="text-blue-600 dark:text-blue-400 font-medium text-sm mt-0.5">Akuity</p>
+            <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">{{about.experience.akuity.description}}</p>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-100 dark:border-gray-800"></div>
+
+        <!-- Empire Life -->
+        <div class="grid sm:grid-cols-4 gap-4 sm:gap-8">
+          <div class="sm:col-span-1">
+            <p class="text-sm font-semibold text-gray-900 dark:text-white">{{about.experience.empire.dates}}</p>
+            <p class="text-sm text-gray-500 dark:text-gray-500 mt-1">{{about.experience.empire.location}}</p>
+          </div>
+          <div class="sm:col-span-3">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{about.experience.empire.title}}</h3>
+            <p class="text-blue-600 dark:text-blue-400 font-medium text-sm mt-0.5">The Empire Life Insurance Company</p>
+            <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">{{about.experience.empire.description}}</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div id="cta-placeholder"
+    data-heading="{{about.cta.heading}}"
+    data-body="{{about.cta.body}}"
+    data-variant="full"></div>
+  <div id="footer-placeholder"></div>
+
+  <!-- components.js must run before Alpine (deferred) so nav x-data is in the DOM at Alpine init time -->
+  <script src="/js/components.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>
