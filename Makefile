@@ -19,7 +19,7 @@ i18n:
 	node scripts/build-i18n.js
 
 watch:
-	npm run-script watch
+	node scripts/watch.js
 
 clean:
 	mkdir -p dist
