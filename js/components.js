@@ -16,11 +16,19 @@
  */
 (function () {
   // --- Language detection ---
-  var LANG = /^\/es(\/|$)/.test(window.location.pathname) ? 'es' : 'en';
+  var currentPath = window.location.pathname;
+  var isBlog = /^\/blog(\/|$)/.test(currentPath);
+  var LANG;
+  if (isBlog) {
+    // Blog is English-only, but preserve the user's site language for nav links
+    LANG = localStorage.getItem('lang') || 'en';
+  } else {
+    LANG = /^\/es(\/|$)/.test(currentPath) ? 'es' : 'en';
+    localStorage.setItem('lang', LANG);
+  }
   var BASE = LANG === 'es' ? '/es' : '';
 
   // Compute the equivalent page path in the other language (for the language switcher)
-  var currentPath = window.location.pathname;
   var switchHref, switchLabel;
   if (LANG === 'es') {
     switchHref = currentPath.replace(/^\/es/, '') || '/';
@@ -36,6 +44,7 @@
       nav_home: 'Home',
       nav_services: 'Services',
       nav_about: 'About',
+      nav_blog: 'Blog',
       nav_cta: 'Get in Touch',
       nav_contact_mobile: 'Contact',
       footer_tagline: 'Expert Kubernetes &amp; GitOps consulting.',
@@ -44,6 +53,7 @@
       footer_home: 'Home',
       footer_services: 'Services &amp; Pricing',
       footer_about: 'About',
+      footer_blog: 'Blog',
       footer_contact_link: 'Contact',
       footer_privacy: 'Privacy Policy',
       footer_copyright: 'Burrell Technology Services S.A. All rights reserved.',
@@ -56,12 +66,15 @@
       consent_accept: 'Accept',
       consent_decline: 'Decline',
       cta_contact: 'Get in Touch',
-      cta_services: 'View Services &amp; Pricing'
+      cta_services: 'View Services &amp; Pricing',
+      blog_cta_heading: 'Want to discuss this topic?',
+      blog_cta_body: 'I\'m always happy to chat about Kubernetes, GitOps, and cloud-native infrastructure.'
     },
     es: {
       nav_home: 'Inicio',
       nav_services: 'Servicios',
       nav_about: 'Acerca',
+      nav_blog: 'Blog',
       nav_cta: 'Contacto',
       nav_contact_mobile: 'Contacto',
       footer_tagline: 'Consultor\u00eda experta en Kubernetes y GitOps.',
@@ -70,6 +83,7 @@
       footer_home: 'Inicio',
       footer_services: 'Servicios y precios',
       footer_about: 'Acerca',
+      footer_blog: 'Blog',
       footer_contact_link: 'Contacto',
       footer_privacy: 'Pol\u00edtica de privacidad',
       footer_copyright: 'Burrell Technology Services S.A. Todos los derechos reservados.',
@@ -82,7 +96,9 @@
       consent_accept: 'Aceptar',
       consent_decline: 'Rechazar',
       cta_contact: 'Contacto',
-      cta_services: 'Ver servicios y precios'
+      cta_services: 'Ver servicios y precios',
+      blog_cta_heading: '\u00bfQuieres hablar sobre este tema?',
+      blog_cta_body: 'Siempre estoy dispuesto a conversar sobre Kubernetes, GitOps e infraestructura cloud-native.'
     }
   };
   var T = i18n[LANG];
@@ -131,10 +147,13 @@
             desktopLink('home', BASE + '/', T.nav_home),
             desktopLink('services', BASE + '/services', T.nav_services),
             desktopLink('about', BASE + '/about', T.nav_about),
+            desktopLink('blog', '/blog', T.nav_blog),
             '<a href="' + BASE + '/contact" class="text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">' + T.nav_cta + '</a>',
           '</nav>',
           '<div class="flex items-center gap-2">',
-            '<a href="' + switchHref + '" class="text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors px-1.5 py-1 rounded border border-gray-300 dark:border-gray-700">' + switchLabel + '</a>',
+            (isBlog
+              ? '<button onclick="localStorage.setItem(\'lang\',localStorage.getItem(\'lang\')===\'es\'?\'en\':\'es\');location.reload()" class="text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors px-1.5 py-1 rounded border border-gray-300 dark:border-gray-700 bg-transparent cursor-pointer leading-tight">' + switchLabel + '</button>'
+              : '<a href="' + switchHref + '" class="text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors px-1.5 py-1 rounded border border-gray-300 dark:border-gray-700 leading-tight">' + switchLabel + '</a>'),
             '<button onclick="toggleTheme()" class="p-2 rounded-md text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Toggle theme">',
               '<svg class="block dark:hidden h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>',
               '<svg class="hidden dark:block h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>',
@@ -150,8 +169,11 @@
         mobileLink('home', BASE + '/', T.nav_home),
         mobileLink('services', BASE + '/services', T.nav_services),
         mobileLink('about', BASE + '/about', T.nav_about),
+        mobileLink('blog', '/blog', T.nav_blog),
         mobileLink('contact', BASE + '/contact', T.nav_contact_mobile),
-        '<a href="' + switchHref + '" class="block text-sm font-medium text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white">' + switchLabel + '</a>',
+        (isBlog
+          ? '<button onclick="localStorage.setItem(\'lang\',localStorage.getItem(\'lang\')===\'es\'?\'en\':\'es\');location.reload()" class="block text-sm font-medium text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white bg-transparent cursor-pointer p-0 text-left">' + switchLabel + '</button>'
+          : '<a href="' + switchHref + '" class="block text-sm font-medium text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white">' + switchLabel + '</a>'),
       '</div>',
     '</header>'
   ].join('');
@@ -209,6 +231,7 @@
               '<a href="' + BASE + '/services" class="block hover:text-white transition-colors">' + T.footer_services + '</a>',
               '<a href="' + BASE + '/about" class="block hover:text-white transition-colors">' + T.footer_about + '</a>',
               '<a href="' + BASE + '/contact" class="block hover:text-white transition-colors">' + T.footer_contact_link + '</a>',
+              '<a href="/blog" class="block hover:text-white transition-colors">' + T.footer_blog + '</a>',
               '<a href="' + BASE + '/privacy" class="block hover:text-white transition-colors">' + T.footer_privacy + '</a>',
             '</div>',
           '</div>',
@@ -291,8 +314,9 @@
   // --- CTA Section ---
   var ctaPlaceholder = document.getElementById('cta-placeholder');
   if (ctaPlaceholder) {
-    var ctaHeading = ctaPlaceholder.getAttribute('data-heading') || '';
-    var ctaBody    = ctaPlaceholder.getAttribute('data-body') || '';
+    var ctaI18nKey = ctaPlaceholder.getAttribute('data-i18n') || '';
+    var ctaHeading = ctaI18nKey ? (T[ctaI18nKey + '_heading'] || '') : (ctaPlaceholder.getAttribute('data-heading') || '');
+    var ctaBody    = ctaI18nKey ? (T[ctaI18nKey + '_body'] || '') : (ctaPlaceholder.getAttribute('data-body') || '');
     var ctaVariant = ctaPlaceholder.getAttribute('data-variant') || 'simple';
 
     var ctaBtnWrap = ctaVariant === 'full'

@@ -1,6 +1,7 @@
 /* Smooth scrolling for anchor links */
 html {
   scroll-behavior: smooth;
+  scrollbar-gutter: stable;
 }
 
 /* Prevent flash of unstyled Alpine components */
