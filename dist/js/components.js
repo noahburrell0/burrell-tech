@@ -28,15 +28,17 @@
   }
   var BASE = LANG === 'es' ? '/es' : '';
 
-  // Compute the equivalent page path in the other language (for the language switcher)
-  var switchHref, switchLabel;
+  // Compute hrefs for the language switcher
+  var enHref, esHref;
   if (LANG === 'es') {
-    switchHref = currentPath.replace(/^\/es/, '') || '/';
-    switchLabel = 'EN';
+    enHref = currentPath.replace(/^\/es/, '') || '/';
+    esHref = currentPath;
   } else {
-    switchHref = '/es' + (currentPath === '/' ? '/' : currentPath);
-    switchLabel = 'ES';
+    enHref = currentPath;
+    esHref = '/es' + (currentPath === '/' ? '/' : currentPath);
   }
+  var enUnderline = LANG === 'en' ? ' underline' : '';
+  var esUnderline = LANG === 'es' ? ' underline' : '';
 
   // --- Translations for shared components ---
   var i18n = {
@@ -151,9 +153,15 @@
             '<a href="' + BASE + '/contact" class="text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">' + T.nav_cta + '</a>',
           '</nav>',
           '<div class="flex items-center gap-2">',
-            (isBlog
-              ? '<button onclick="localStorage.setItem(\'lang\',localStorage.getItem(\'lang\')===\'es\'?\'en\':\'es\');location.reload()" class="text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors px-1.5 py-1 rounded border border-gray-300 dark:border-gray-700 bg-transparent cursor-pointer leading-tight">' + switchLabel + '</button>'
-              : '<a href="' + switchHref + '" class="text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors px-1.5 py-1 rounded border border-gray-300 dark:border-gray-700 leading-tight">' + switchLabel + '</a>'),
+            '<span class="hidden md:inline-flex items-center gap-0.5 text-xs font-semibold text-gray-500 dark:text-gray-400 px-1.5 py-1 rounded border border-gray-300 dark:border-gray-700 leading-tight">' +
+              (isBlog
+                ? '<button onclick="localStorage.setItem(\'lang\',\'en\');location.reload()" class="hover:text-gray-900 dark:hover:text-white transition-colors bg-transparent cursor-pointer' + enUnderline + '">English</button>'
+                : '<a href="' + enHref + '" class="hover:text-gray-900 dark:hover:text-white transition-colors' + enUnderline + '">English</a>') +
+              '<span class="text-gray-300 dark:text-gray-600">/</span>' +
+              (isBlog
+                ? '<button onclick="localStorage.setItem(\'lang\',\'es\');location.reload()" class="hover:text-gray-900 dark:hover:text-white transition-colors bg-transparent cursor-pointer' + esUnderline + '">Español</button>'
+                : '<a href="' + esHref + '" class="hover:text-gray-900 dark:hover:text-white transition-colors' + esUnderline + '">Español</a>') +
+            '</span>',
             '<button onclick="toggleTheme()" class="p-2 rounded-md text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Toggle theme">',
               '<svg class="block dark:hidden h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>',
               '<svg class="hidden dark:block h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>',
@@ -171,9 +179,15 @@
         mobileLink('about', BASE + '/about', T.nav_about),
         mobileLink('blog', '/blog', T.nav_blog),
         mobileLink('contact', BASE + '/contact', T.nav_contact_mobile),
-        (isBlog
-          ? '<button onclick="localStorage.setItem(\'lang\',localStorage.getItem(\'lang\')===\'es\'?\'en\':\'es\');location.reload()" class="block text-sm font-medium text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white bg-transparent cursor-pointer p-0 text-left">' + switchLabel + '</button>'
-          : '<a href="' + switchHref + '" class="block text-sm font-medium text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white">' + switchLabel + '</a>'),
+        '<span class="flex items-center gap-1 text-sm font-medium text-gray-500 dark:text-gray-500">' +
+          (isBlog
+            ? '<button onclick="localStorage.setItem(\'lang\',\'en\');location.reload()" class="hover:text-gray-900 dark:hover:text-white transition-colors bg-transparent cursor-pointer p-0' + enUnderline + '">English</button>'
+            : '<a href="' + enHref + '" class="hover:text-gray-900 dark:hover:text-white transition-colors' + enUnderline + '">English</a>') +
+          '<span class="text-gray-300 dark:text-gray-600">/</span>' +
+          (isBlog
+            ? '<button onclick="localStorage.setItem(\'lang\',\'es\');location.reload()" class="hover:text-gray-900 dark:hover:text-white transition-colors bg-transparent cursor-pointer p-0' + esUnderline + '">Español</button>'
+            : '<a href="' + esHref + '" class="hover:text-gray-900 dark:hover:text-white transition-colors' + esUnderline + '">Español</a>') +
+        '</span>',
       '</div>',
     '</header>'
   ].join('');
