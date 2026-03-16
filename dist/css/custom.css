@@ -1,7 +1,18 @@
+/* Smooth cross-fade between pages (Chrome 126+, Safari 18+, graceful fallback) */
+@view-transition {
+  navigation: auto;
+}
+
 /* Smooth scrolling for anchor links */
 html {
   scroll-behavior: smooth;
   scrollbar-gutter: stable;
+  background-color: white;
+}
+
+/* Match html background to theme so page transitions don't flash white */
+html.dark {
+  background-color: #030712;
 }
 
 /* Prevent flash of unstyled Alpine components */
