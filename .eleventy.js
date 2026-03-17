@@ -1,4 +1,7 @@
 module.exports = function (eleventyConfig) {
+  // Copy blog images to dist/blog/images/
+  eleventyConfig.addPassthroughCopy({ 'blog/posts/images': 'blog/images' });
+
   // Posts collection sorted by date descending
   eleventyConfig.addCollection('posts', function (collectionApi) {
     return collectionApi.getFilteredByGlob('blog/posts/*.md').sort(function (a, b) {

@@ -103,7 +103,10 @@
   <section class="py-12 sm:py-16">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-900 dark:prose-pre:bg-gray-800 prose-img:rounded-xl">
-        <p>If you have been working with Kubernetes for any length of time, you have probably experienced the pain of managing deployments manually. Keeping track of what is running where, ensuring your clusters match your intended state, and rolling back when things go wrong can quickly become overwhelming. This is the problem that Argo CD solves.</p>
+        <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); border-radius: 1rem; padding: 3rem 2rem; text-align: center; margin-bottom: 2rem;">
+  <img src="/blog/images/argo-cd-logo.png" alt="Argo CD logo" width="180" style="display: inline-block;">
+</div>
+<p>If you have been working with Kubernetes for any length of time, you have probably experienced the pain of managing deployments manually. Keeping track of what is running where, ensuring your clusters match your intended state, and rolling back when things go wrong can quickly become overwhelming. This is the problem that Argo CD solves.</p>
 <h2>What is Argo CD?</h2>
 <p>Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes. Instead of pushing changes to your cluster with <code>kubectl apply</code> or CI pipelines that run deployment scripts, Argo CD continuously monitors your Git repository and ensures your cluster state matches what is defined there.</p>
 <p>The core principle is simple: <strong>Git is the source of truth.</strong> Every change to your applications and infrastructure goes through Git, giving you a complete audit trail, easy rollbacks, and the ability to reproduce any environment from a single repository.</p>
