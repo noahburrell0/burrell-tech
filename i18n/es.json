@@ -21,11 +21,11 @@
 
   "hero.badge": "Disponible para nuevos proyectos",
   "hero.title": "Consultoría Experta en<br>Kubernetes y GitOps",
-  "hero.subtitle": "Incidentes en producción, cuellos de botella de escalabilidad, dificultades con GitOps. Ayudo a equipos de ingeniería a dominar Kubernetes y Argo CD.",
-  "hero.btn_services": "Ver servicios y precios",
+  "hero.subtitle": "Ayudo a equipos de ingeniería a dominar Kubernetes y Argo CD. Incidentes en producción, cuellos de botella de escalabilidad, dificultades con GitOps.",
+  "hero.btn_services": "Ver servicios y tarifas",
   "hero.btn_contact": "Contacto",
   "hero.check_remote": "100% remoto",
-  "hero.check_experience": "5+ años de experiencia en Kubernetes y Argo CD",
+  "hero.check_experience": "+5 años de experiencia en Kubernetes y Argo CD",
   "hero.check_enterprise": "Experiencia en soporte de Argo CD a escala empresarial",
 
   "services.heading": "Servicios",
