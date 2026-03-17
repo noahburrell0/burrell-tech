@@ -76,21 +76,30 @@
       {% if postList.length %}
       <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {% for post in postList %}
-        <article class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all">
-          <time datetime="{{ post.date | isoDate }}" class="text-sm text-gray-500 dark:text-gray-500">{{ post.date | readableDate }}</time>
-          <h2 class="mt-2 text-lg font-semibold text-gray-900 dark:text-white">
-            <a href="{{ post.url }}" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ post.data.title }}</a>
-          </h2>
-          <p class="mt-2 text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{{ post.data.description }}</p>
-          {% if post.data.tags %}
-          <div class="mt-4 flex flex-wrap gap-2">
-            {% for tag in post.data.tags %}
-              {% if tag != "posts" %}
-              <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">{{ tag }}</span>
-              {% endif %}
-            {% endfor %}
-          </div>
+        <article class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all flex flex-col">
+          {% if post.data.image %}
+          <a href="{{ post.url }}" class="block">
+            <div class="blog-hero" style="border-radius: 0; margin-bottom: 0; padding: 0; height: 160px; display: flex; align-items: center; justify-content: center;">
+              <img src="{{ post.data.image }}" alt="" style="max-height: 100px; max-width: 70%; object-fit: contain;">
+            </div>
+          </a>
           {% endif %}
+          <div class="p-6 pt-5 flex flex-col flex-1">
+            <time datetime="{{ post.date | isoDate }}" class="text-sm text-gray-500 dark:text-gray-500">{{ post.date | readableDate }}</time>
+            <h2 class="mt-2 text-lg font-semibold text-gray-900 dark:text-white">
+              <a href="{{ post.url }}" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ post.data.title }}</a>
+            </h2>
+            <p class="mt-2 text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{{ post.data.description }}</p>
+            {% if post.data.tags %}
+            <div class="mt-auto pt-4 flex flex-wrap gap-2">
+              {% for tag in post.data.tags %}
+                {% if tag != "posts" %}
+                <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">{{ tag }}</span>
+                {% endif %}
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
         </article>
         {% endfor %}
       </div>
