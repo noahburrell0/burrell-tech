@@ -90,15 +90,13 @@
               <a href="{{ post.url }}" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ post.data.title }}</a>
             </h2>
             <p class="mt-2 text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{{ post.data.description }}</p>
-            {% if post.data.tags %}
+            {%- if post.data.tags %}
             <div class="mt-auto pt-4 flex flex-wrap gap-2">
-              {% for tag in post.data.tags %}
-                {% if tag != "posts" %}
+              {%- for tag in post.data.tags %}{% if tag != "posts" %}
                 <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">{{ tag }}</span>
-                {% endif %}
-              {% endfor %}
+              {%- endif %}{% endfor %}
             </div>
-            {% endif %}
+            {%- endif %}
           </div>
         </article>
         {% endfor %}

@@ -24,6 +24,20 @@ module.exports = function (eleventyConfig) {
     return new Date(date).toISOString().split('T')[0];
   });
 
+  // Reading time filter (words per minute)
+  eleventyConfig.addFilter('readingTime', function (content) {
+    var text = (content || '').replace(/<[^>]*>/g, '');
+    var words = text.trim().split(/\s+/).length;
+    var minutes = Math.ceil(words / 225);
+    return minutes + ' min read';
+  });
+
+  // Slug from input path (strips date prefix and extension)
+  eleventyConfig.addFilter('postSlug', function (inputPath) {
+    var basename = inputPath.split('/').pop();
+    return basename.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.md$/, '');
+  });
+
   return {
     dir: {
       input: 'blog',

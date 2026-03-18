@@ -18,15 +18,24 @@
   <meta property="og:title" content="Argo Rollouts: Progressive Delivery for Kubernetes">
   <meta property="og:description" content="A deep dive into Argo Rollouts, the Kubernetes-native progressive delivery controller. Learn how to implement canary deployments, blue-green releases, and automated analysis to safely roll out changes with minimal risk.">
   <meta property="og:url" content="https://burrell.tech/blog/argo-rollouts/">
-  <meta property="og:image" content="https://burrell.tech/logo.png">
+  <meta property="og:image" content="https://burrell.tech/blog/og/argo-rollouts.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="article:published_time" content="2026-03-18">
+  <meta property="article:modified_time" content="2026-03-18">
   <meta property="article:author" content="Noah Burrell">
+  <meta property="article:tag" content="kubernetes">
+  <meta property="article:tag" content="argo-cd">
+  <meta property="article:tag" content="argo-rollouts">
+  <meta property="article:tag" content="gitops">
+  <meta property="article:tag" content="progressive-delivery">
+  <meta property="article:section" content="kubernetes">
 
   <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Argo Rollouts: Progressive Delivery for Kubernetes">
   <meta name="twitter:description" content="A deep dive into Argo Rollouts, the Kubernetes-native progressive delivery controller. Learn how to implement canary deployments, blue-green releases, and automated analysis to safely roll out changes with minimal risk.">
-  <meta name="twitter:image" content="https://burrell.tech/logo.png">
+  <meta name="twitter:image" content="https://burrell.tech/blog/og/argo-rollouts.png">
 
   <!-- Structured Data -->
   <script type="application/ld+json">
@@ -35,8 +44,11 @@
     "@type": "BlogPosting",
     "headline": "Argo Rollouts: Progressive Delivery for Kubernetes",
     "datePublished": "2026-03-18",
+    "dateModified": "2026-03-18",
     "description": "A deep dive into Argo Rollouts, the Kubernetes-native progressive delivery controller. Learn how to implement canary deployments, blue-green releases, and automated analysis to safely roll out changes with minimal risk.",
     "url": "https://burrell.tech/blog/argo-rollouts/",
+    "image": "https://burrell.tech/blog/og/argo-rollouts.png",
+    "timeRequired": "PT12M",
     "author": {
       "@type": "Person",
       "name": "Noah Burrell",
@@ -44,7 +56,8 @@
     },
     "publisher": {
       "@id": "https://burrell.tech/#organization"
-    }
+    },
+    "keywords": "kubernetes, argo-cd, argo-rollouts, gitops, progressive-delivery"
   }
   </script>
 
@@ -74,36 +87,18 @@
       <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Argo Rollouts: Progressive Delivery for Kubernetes</h1>
       <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
         <time datetime="2026-03-18">March 18, 2026</time>
-        <span class="hidden sm:inline">&middot;</span>
+        <span>&middot;</span>
         <span>Noah Burrell</span>
+        <span>&middot;</span>
+        <span>12 min read</span>
       </div>
-      
       <div class="mt-4 flex flex-wrap gap-2">
-        
-          
-        
-          
           <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">kubernetes</span>
-          
-        
-          
           <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">argo-cd</span>
-          
-        
-          
           <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">argo-rollouts</span>
-          
-        
-          
           <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">gitops</span>
-          
-        
-          
           <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">progressive-delivery</span>
-          
-        
       </div>
-      
     </div>
   </section>
 

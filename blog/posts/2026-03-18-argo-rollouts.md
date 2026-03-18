@@ -3,6 +3,7 @@ title: "Argo Rollouts: Progressive Delivery for Kubernetes"
 date: 2026-03-18
 description: "A deep dive into Argo Rollouts, the Kubernetes-native progressive delivery controller. Learn how to implement canary deployments, blue-green releases, and automated analysis to safely roll out changes with minimal risk."
 image: /blog/images/argo-rollouts-hero.svg
+ogBackground: dark
 tags:
   - kubernetes
   - argo-cd

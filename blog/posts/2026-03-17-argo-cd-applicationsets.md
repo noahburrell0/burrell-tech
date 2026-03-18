@@ -3,6 +3,7 @@ title: "Argo CD ApplicationSets: Managing Applications at Scale"
 date: 2026-03-17
 description: "A deep dive into Argo CD ApplicationSets, the powerful controller that automates Application generation across clusters and environments. Learn how generators, templating, and progressive sync help you manage hundreds of applications from a single manifest."
 image: /blog/images/applicationsets-hero.svg
+ogBackground: dark
 tags:
   - kubernetes
   - argo-cd

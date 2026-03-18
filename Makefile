@@ -14,6 +14,8 @@ build:
 	cp node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2 dist/fonts/
 	node scripts/build-i18n.js
 	npx @11ty/eleventy --quiet
+	node scripts/build-og-images.js
+	node scripts/build-sitemap.js
 
 i18n:
 	node scripts/build-i18n.js

@@ -33,7 +33,7 @@ function rebuild(label) {
     console.log('\n[watch] ' + label + ' changed, rebuilding...');
     try {
       execSync(
-        'cp css/custom.css dist/css/ && cp js/*.js dist/js/ && cp static/* dist/ && node scripts/build-i18n.js',
+        'cp css/custom.css dist/css/ && cp js/*.js dist/js/ && cp static/* dist/ && node scripts/build-i18n.js && node scripts/build-og-images.js && node scripts/build-sitemap.js',
         { cwd: ROOT, stdio: 'inherit' }
       );
       console.log('[watch] Done.\n');
