@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Argo Rollouts: Progressive Delivery for Kubernetes | Burrell Technology Services</title>
+  <meta name="description" content="A deep dive into Argo Rollouts, the Kubernetes-native progressive delivery controller. Learn how to implement canary deployments, blue-green releases, and automated analysis to safely roll out changes with minimal risk.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://burrell.tech/blog/argo-rollouts/">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/logo.png" as="image">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Burrell Technology Services S.A.">
+  <meta property="og:title" content="Argo Rollouts: Progressive Delivery for Kubernetes">
+  <meta property="og:description" content="A deep dive into Argo Rollouts, the Kubernetes-native progressive delivery controller. Learn how to implement canary deployments, blue-green releases, and automated analysis to safely roll out changes with minimal risk.">
+  <meta property="og:url" content="https://burrell.tech/blog/argo-rollouts/">
+  <meta property="og:image" content="https://burrell.tech/logo.png">
+  <meta property="article:published_time" content="2026-03-18">
+  <meta property="article:author" content="Noah Burrell">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Argo Rollouts: Progressive Delivery for Kubernetes">
+  <meta name="twitter:description" content="A deep dive into Argo Rollouts, the Kubernetes-native progressive delivery controller. Learn how to implement canary deployments, blue-green releases, and automated analysis to safely roll out changes with minimal risk.">
+  <meta name="twitter:image" content="https://burrell.tech/logo.png">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Argo Rollouts: Progressive Delivery for Kubernetes",
+    "datePublished": "2026-03-18",
+    "description": "A deep dive into Argo Rollouts, the Kubernetes-native progressive delivery controller. Learn how to implement canary deployments, blue-green releases, and automated analysis to safely roll out changes with minimal risk.",
+    "url": "https://burrell.tech/blog/argo-rollouts/",
+    "author": {
+      "@type": "Person",
+      "name": "Noah Burrell",
+      "url": "https://burrell.tech/about"
+    },
+    "publisher": {
+      "@id": "https://burrell.tech/#organization"
+    }
+  }
+  </script>
+
+  <!-- Theme (blocking - must run before first paint to prevent flash) -->
+  <script src="/js/theme.js"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/tailwind.css">
+  <link rel="stylesheet" href="/css/custom.css">
+
+  <!-- Scripts -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="/js/analytics.js"></script>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans antialiased">
+
+  <div id="nav-placeholder" data-active-page="blog"></div>
+
+  <main class="flex-1">
+  <!-- Post Header -->
+  <section class="bg-gray-50 dark:bg-gray-900/40 border-b border-gray-200 dark:border-gray-800 py-16 sm:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <a href="/blog" class="inline-flex items-center gap-1.5 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors mb-6">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        All posts
+      </a>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Argo Rollouts: Progressive Delivery for Kubernetes</h1>
+      <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
+        <time datetime="2026-03-18">March 18, 2026</time>
+        <span class="hidden sm:inline">&middot;</span>
+        <span>Noah Burrell</span>
+      </div>
+      
+      <div class="mt-4 flex flex-wrap gap-2">
+        
+          
+        
+          
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">kubernetes</span>
+          
+        
+          
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">argo-cd</span>
+          
+        
+          
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">argo-rollouts</span>
+          
+        
+          
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">gitops</span>
+          
+        
+          
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">progressive-delivery</span>
+          
+        
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- Post Content -->
+  <section class="py-12 sm:py-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
+        <div class="blog-hero">
+  <img src="/blog/images/argo-rollouts-hero.svg" alt="Argo Rollouts progressive delivery" width="249" style="display: inline-block;">
+</div>
+<p>If you have been following my previous posts on <a href="/blog/argo-cd/">Argo CD</a> and <a href="/blog/kargo/">Kargo</a>, you have a solid foundation for GitOps on Kubernetes. Argo CD ensures your clusters match what is defined in Git, and Kargo orchestrates how changes move between environments. But there is a gap neither of them fills: what happens during a deployment inside a single environment? When a new version of your application is ready, do you flip all traffic at once and hope for the best?</p>
+<p>This is the problem Argo Rollouts solves. It is a Kubernetes controller that replaces the standard Deployment resource with a Rollout resource, giving you canary deployments, blue-green releases, and automated analysis driven by real-time metrics. Instead of deploying a new version to 100% of traffic immediately, you can gradually shift traffic, run automated checks against your monitoring stack, and let the system decide whether to promote or roll back.</p>
+<h2>Why Standard Deployments Fall Short</h2>
+<p>The built-in Kubernetes Deployment controller supports rolling updates, and for many workloads that is sufficient. It creates new pods, waits for them to pass readiness checks, and terminates old pods. The problem is that a rolling update treats readiness as a binary signal. A pod is either ready or it is not. There is no concept of gradually increasing traffic, no integration with your metrics platform, and no automated rollback based on error rates or latency.</p>
+<p>In practice, this means a bad release can propagate across your entire replica set before anyone notices the impact. By the time your alerting fires, every pod is running the broken version. You are now debugging under pressure, racing to roll back manually or push a fix.</p>
+<p>Progressive delivery flips this model. Instead of deploying first and monitoring second, you deploy incrementally and let metrics guide the process. If the new version degrades your success rate or increases latency beyond acceptable thresholds, the rollout is aborted automatically before it reaches the majority of your traffic.</p>
+<h2>Installing Argo Rollouts</h2>
+<p>Argo Rollouts runs alongside your existing Kubernetes setup. It does not replace Argo CD or any other component in your stack. Install it with a single manifest:</p>
+<pre><code class="language-bash">kubectl create namespace argo-rollouts
+kubectl apply -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
+</code></pre>
+<p>You will also want the kubectl plugin for managing rollouts from the command line:</p>
+<pre><code class="language-bash"># Using curl (replace with your OS/arch)
+curl -LO https://github.com/argoproj/argo-rollouts/releases/latest/download/kubectl-argo-rollouts-linux-amd64
+
+chmod +x kubectl-argo-rollouts-linux-amd64
+sudo mv kubectl-argo-rollouts-linux-amd64 /usr/local/bin/kubectl-argo-rollouts
+</code></pre>
+<p>The plugin adds commands like <code>kubectl argo rollouts get rollout</code>, <code>promote</code>, and <code>abort</code> that you will use regularly. There is also a built-in dashboard you can launch with <code>kubectl argo rollouts dashboard</code> that provides a visual view of your rollouts in progress.</p>
+<h2>The Rollout Resource</h2>
+<p>The Rollout resource is the core of Argo Rollouts. It is intentionally similar to a Kubernetes Deployment so that migration is straightforward. In most cases, you can take an existing Deployment, change the <code>apiVersion</code> and <code>kind</code>, and add a <code>strategy</code> section.</p>
+<p>Here is the Rollout from the <a href="https://github.com/argoproj/argo-rollouts/tree/master/docs/getting-started/basic">official getting started guide</a>, which you can apply directly to a cluster with Argo Rollouts installed:</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: rollouts-demo
+spec:
+  replicas: 5
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+      - pause: {}
+      - setWeight: 40
+      - pause: {duration: 10}
+      - setWeight: 60
+      - pause: {duration: 10}
+      - setWeight: 80
+      - pause: {duration: 10}
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: rollouts-demo
+  template:
+    metadata:
+      labels:
+        app: rollouts-demo
+    spec:
+      containers:
+      - name: rollouts-demo
+        image: argoproj/rollouts-demo:blue
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        resources:
+          requests:
+            memory: 32Mi
+            cpu: 5m
+</code></pre>
+<p>You will also need a Service to front the pods:</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Service
+metadata:
+  name: rollouts-demo
+spec:
+  ports:
+  - port: 80
+    targetPort: http
+    protocol: TCP
+    name: http
+  selector:
+    app: rollouts-demo
+</code></pre>
+<p>Apply both manifests, then trigger a rollout by updating the image tag to a different color variant (the demo app ships <code>blue</code>, <code>green</code>, <code>orange</code>, <code>purple</code>, and <code>yellow</code>):</p>
+<pre><code class="language-bash">kubectl argo rollouts set image rollouts-demo rollouts-demo=argoproj/rollouts-demo:green
+</code></pre>
+<p>The controller creates a new ReplicaSet and begins stepping through the canary process. It sends 20% of traffic to the new version and then pauses indefinitely, waiting for you to promote. Run <code>kubectl argo rollouts promote rollouts-demo</code> to advance to the next steps, which ramp through 40%, 60%, and 80% with ten-second pauses between each. At any point you can abort the rollout with <code>kubectl argo rollouts abort rollouts-demo</code>, and the controller scales down the canary ReplicaSet and routes all traffic back to the stable version.</p>
+<h2>Canary Deployments in Detail</h2>
+<p>The canary strategy gives you fine-grained control over how traffic shifts from the stable version to the canary. The <code>steps</code> field accepts several step types that you can combine in any order.</p>
+<p><strong>setWeight</strong> controls the percentage of traffic routed to the canary. Without a traffic management integration (more on that below), Argo Rollouts approximates traffic splitting by adjusting the ratio of canary to stable pods. With a traffic management integration like Istio or NGINX, the weight maps directly to the traffic routing configuration, which gives you precise control independent of replica count.</p>
+<p><strong>pause</strong> halts the rollout for a specified duration, or indefinitely if no duration is set. An indefinite pause requires manual promotion using <code>kubectl argo rollouts promote my-app</code>, which is useful when you want a human to verify the canary before continuing.</p>
+<p><strong>setCanaryScale</strong> lets you decouple replica count from traffic weight. This is helpful when you want to scale up canary pods for load testing without actually routing production traffic to them, or when you want to run the canary at full replica count while still only sending a small percentage of traffic.</p>
+<p>A more realistic canary configuration might look like this:</p>
+<pre><code class="language-yaml">strategy:
+  canary:
+    canaryService: my-app-canary
+    stableService: my-app-stable
+    trafficRouting:
+      nginx:
+        stableIngress: my-app-ingress
+    steps:
+      - setWeight: 5
+      - pause: { duration: 2m }
+      - setWeight: 20
+      - pause: { duration: 5m }
+      - setWeight: 50
+      - pause: { duration: 5m }
+      - setWeight: 80
+      - pause: { duration: 5m }
+</code></pre>
+<p>This configuration uses NGINX for traffic routing, which means the weight percentages are enforced at the ingress level rather than through pod ratios. The <code>canaryService</code> and <code>stableService</code> fields reference Kubernetes Services that the controller manages, routing traffic to the appropriate ReplicaSet.</p>
+<h2>Blue-Green Deployments</h2>
+<p>If you prefer a full cutover approach with a preview period, the blue-green strategy is the right choice. Instead of gradually shifting traffic, blue-green maintains two complete environments. The new version is deployed and exposed through a preview Service for testing, and when you are satisfied, the controller switches the active Service to point at the new version.</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: my-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+        - name: my-app
+          image: my-org/my-app:1.0.0
+          ports:
+            - containerPort: 8080
+  strategy:
+    blueGreen:
+      activeService: my-app-active
+      previewService: my-app-preview
+      autoPromotionEnabled: false
+      scaleDownDelaySeconds: 30
+</code></pre>
+<p>When you update the image, the controller creates a new ReplicaSet and points the preview Service at it. You (or your QA team) can test the new version through the preview Service while production traffic continues flowing to the active Service. When you promote the rollout, the controller switches the active Service to the new ReplicaSet and scales down the old one after the configured delay.</p>
+<p>Setting <code>autoPromotionEnabled: false</code> requires manual promotion, which is a good default for production. For lower environments, you can set it to <code>true</code> or use <code>autoPromotionSeconds</code> to automatically promote after a delay.</p>
+<h2>Automated Analysis</h2>
+<p>The feature that makes Argo Rollouts truly powerful is its analysis framework. Instead of relying on a human to watch dashboards during a rollout, you define success and failure criteria as code, and the controller evaluates them automatically.</p>
+<p>Analysis is built around three resources: <strong>AnalysisTemplate</strong>, <strong>ClusterAnalysisTemplate</strong>, and <strong>AnalysisRun</strong>. Templates define the metrics to query and the conditions for success or failure. An AnalysisRun is an instantiation of a template that the controller creates during a rollout. ClusterAnalysisTemplates work the same way as AnalysisTemplates but are cluster-scoped, so you can reuse them across namespaces.</p>
+<p>Here is an AnalysisTemplate that checks error rate using Prometheus:</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: error-rate
+spec:
+  args:
+    - name: service-name
+  metrics:
+    - name: error-rate
+      interval: 2m
+      count: 5
+      successCondition: result[0] &lt; 0.05
+      failureLimit: 2
+      provider:
+        prometheus:
+          address: http://prometheus.monitoring:9090
+          query: |
+            sum(rate(http_requests_total{service=&quot;NaN&quot;, status=~&quot;5..&quot;}[5m]))
+            /
+            sum(rate(http_requests_total{service=&quot;NaN&quot;}[5m]))
+</code></pre>
+<p>This template queries Prometheus every two minutes for the 5xx error rate of a given service. It requires the error rate to be below 5% and tolerates up to two failures before aborting the rollout. The <code>count: 5</code> field means it takes five measurements total before declaring the analysis successful.</p>
+<p>You wire analysis into your canary strategy in two ways. <strong>Background analysis</strong> runs continuously alongside the rollout steps:</p>
+<pre><code class="language-yaml">strategy:
+  canary:
+    analysis:
+      templates:
+        - templateName: error-rate
+      args:
+        - name: service-name
+          value: my-app
+    steps:
+      - setWeight: 20
+      - pause: { duration: 5m }
+      - setWeight: 50
+      - pause: { duration: 5m }
+      - setWeight: 80
+      - pause: { duration: 5m }
+</code></pre>
+<p>The analysis starts when the rollout begins and runs in the background as the canary progresses through its steps. If the error rate exceeds the threshold at any point, the rollout aborts immediately and traffic shifts back to the stable version.</p>
+<p><strong>Inline analysis</strong> runs at a specific step in the rollout, blocking progression until it completes:</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: guestbook
+spec:
+...
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+      - pause: {duration: 5m}
+      - analysis:
+          templates:
+          - templateName: success-rate
+          args:
+          - name: service-name
+            value: guestbook-svc.default.svc.cluster.local
+      - setWeight: 80
+      - pause: { duration: 5m }
+</code></pre>
+<p>This variant runs the analysis after the canary has been at 20% for five minutes. The rollout will not advance to 80% until the analysis completes successfully. This is useful when you want to gate a major traffic increase on metric validation.</p>
+<p>For blue-green deployments, you can use <code>prePromotionAnalysis</code> and <code>postPromotionAnalysis</code>. Pre-promotion analysis runs while the preview Service is active but before traffic switches. Post-promotion analysis runs after the switch, and if it fails, the controller automatically rolls back by switching the active Service to the previous ReplicaSet.</p>
+<h2>Supported Metric Providers</h2>
+<p>Argo Rollouts integrates with the monitoring tools you are likely already running. Prometheus is the most common, but the controller also supports Datadog, New Relic, CloudWatch, Wavefront, Graphite, InfluxDB, Apache SkyWalking, and generic web-based providers. The web provider is particularly flexible because it lets you query any HTTP endpoint and evaluate the response with success and failure conditions.</p>
+<p>You can also use Kubernetes Jobs as analysis providers. This is useful when your validation logic is more complex than a metric query. For example, you might run a Job that executes an integration test suite against the canary endpoint and reports the result.</p>
+<p>Multiple metrics can be combined in a single AnalysisTemplate, and all of them must pass for the analysis to succeed. This lets you check error rates, latency percentiles, and resource utilization simultaneously.</p>
+<h2>Traffic Management Integrations</h2>
+<p>By default, Argo Rollouts uses replica scaling to approximate traffic splitting. If your canary weight is set to 20% and you have five replicas, the controller runs one canary pod and four stable pods. This is a reasonable approximation, but it lacks precision and does not work well at low traffic percentages.</p>
+<p>For precise traffic control, Argo Rollouts integrates with several ingress controllers and service meshes:</p>
+<p><strong>NGINX Ingress Controller</strong> - The controller creates a shadow Ingress resource with canary annotations that NGINX uses to split traffic. This is the simplest integration if you are already using NGINX.</p>
+<p><strong>Istio</strong> - Argo Rollouts manages VirtualService resources to control traffic splitting. This gives you percentage-based traffic routing, header-based routing for testing specific versions, and the full flexibility of Istio's traffic management capabilities.</p>
+<p><strong>AWS ALB Ingress Controller</strong> - For teams on AWS, the controller manages ALB target group weights to split traffic between stable and canary pods.</p>
+<p><strong>Traefik</strong> - Integration through TraefikService resources for teams using Traefik as their ingress.</p>
+<p><strong>Ambassador/Emissary</strong> - Traffic splitting through Mapping resources.</p>
+<p>These integrations mean you get real traffic splitting at the network level, not just pod ratio approximations. A 5% canary weight means exactly 5% of requests go to the canary, regardless of how many replicas are running.</p>
+<h2>Integration with Argo CD</h2>
+<p>Argo Rollouts works seamlessly alongside Argo CD. Since the Rollout resource lives in your Git repository just like any other Kubernetes manifest, Argo CD manages it the same way it manages Deployments, Services, or ConfigMaps. When you push an image tag update to Git, Argo CD syncs the change to the cluster, and Argo Rollouts takes over from there to execute the canary or blue-green strategy.</p>
+<p>Argo CD also understands the health status of Rollout resources. A Rollout that is mid-canary shows as &quot;Progressing&quot; in the Argo CD UI, and a Rollout that has been aborted shows as &quot;Degraded.&quot; This integration means your GitOps dashboard gives you visibility into progressive delivery status without needing a separate tool.</p>
+<p>If you are using <a href="/blog/kargo/">Kargo for promotion pipelines</a>, the integration is equally smooth. Kargo's promotion steps update the image tag in Git, Argo CD syncs the change, and Argo Rollouts handles the progressive delivery within the target environment. Kargo's verification feature can also use Argo Rollouts AnalysisTemplates, tying promotion verification directly to the same metrics you use for rollout analysis.</p>
+<h2>Migrating from Deployments</h2>
+<p>Converting an existing Deployment to a Rollout is straightforward. The spec is nearly identical. Change the <code>apiVersion</code> from <code>apps/v1</code> to <code>argoproj.io/v1alpha1</code>, change the <code>kind</code> from <code>Deployment</code> to <code>Rollout</code>, and add the <code>strategy</code> section. The pod template, selector, and replica count all stay the same.</p>
+<p>One thing to plan for: the initial migration creates a new ReplicaSet even though the pod spec has not changed. Argo Rollouts provides a workload reference feature that lets a Rollout manage an existing Deployment's ReplicaSets instead, which can make the migration zero-downtime if you need to avoid any pod churn.</p>
+<p>For teams that want to start simple, you can create a Rollout with a basic canary strategy that has a single step (<code>setWeight: 100</code>) and no analysis. This behaves like a standard rolling update but uses the Rollout controller, giving you the option to add progressive delivery steps later without another migration.</p>
+<h2>Getting Started</h2>
+<p>If you have Argo CD running and want to add progressive delivery, here is the path I recommend:</p>
+<ol>
+<li>Install Argo Rollouts in your cluster and the kubectl plugin on your workstation.</li>
+<li>Pick one non-critical service and convert its Deployment to a Rollout with a simple canary strategy (two or three weight steps with pauses).</li>
+<li>Trigger a rollout by updating the image tag and watch it progress through the steps.</li>
+<li>Once you are comfortable with the mechanics, add an AnalysisTemplate that queries your monitoring system for error rates or latency.</li>
+<li>Integrate traffic management with your ingress controller for precise traffic splitting.</li>
+<li>Expand to more services and refine your analysis criteria based on what you learn.</li>
+</ol>
+<p>The <a href="https://argo-rollouts.readthedocs.io/en/stable/">Argo Rollouts documentation</a> has a getting started guide with a sample application that walks through the basics. The kubectl plugin's dashboard (<code>kubectl argo rollouts dashboard</code>) is an excellent way to visualize what is happening during a rollout while you are learning.</p>
+<h2>Wrapping Up</h2>
+<p>Argo Rollouts fills a critical gap in the Kubernetes deployment story. Standard rolling updates give you zero control over traffic distribution and no automated safety net. Argo Rollouts gives you both. Canary deployments let you gradually shift traffic while monitoring real-time metrics. Blue-green deployments give you a full preview environment before cutover. And the analysis framework ties it all together by automating the promote-or-rollback decision based on the data your monitoring stack already collects.</p>
+<p>Combined with Argo CD for GitOps delivery and Kargo for environment promotion, Argo Rollouts completes the pipeline from code commit to safe production deployment. If your team is deploying to Kubernetes and not yet using progressive delivery, this is the missing piece.</p>
+<p>If you need help implementing Argo Rollouts, designing analysis strategies, or integrating progressive delivery into your existing GitOps workflow, <a href="/contact">get in touch</a>.</p>
+
+      </article>
+    </div>
+  </section>
+  </main>
+
+  <div id="cta-placeholder"
+    data-i18n="blog_cta"
+    data-variant="simple"></div>
+  <div id="footer-placeholder"></div>
+
+  <!-- components.js must run before Alpine (deferred) so nav x-data is in the DOM at Alpine init time -->
+  <script src="/js/components.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+  // Rewrite internal links in blog posts to respect stored language preference
+  (function () {
+    var lang = localStorage.getItem('lang');
+    if (lang !== 'es') return;
+    var links = document.querySelectorAll('article a[href]');
+    for (var i = 0; i < links.length; i++) {
+      var href = links[i].getAttribute('href');
+      if (href && href.charAt(0) === '/' && !href.match(/^\/blog(\/|$)/) && !href.match(/^\/(css|js|fonts)\//)) {
+        links[i].setAttribute('href', '/es' + href);
+      }
+    }
+  })();
+  </script>
+</body>
+</html>

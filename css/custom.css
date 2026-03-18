@@ -65,6 +65,14 @@ body {
   border-color: #334155;
 }
 
+/* Code block text color for light mode */
+.prose pre code {
+  color: #1e293b;
+}
+.dark .prose pre code {
+  color: #e2e8f0;
+}
+
 /* Focus visible outline for accessibility */
 :focus-visible {
   outline: 2px solid #2563eb;
