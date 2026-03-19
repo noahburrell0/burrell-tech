@@ -1,6 +1,8 @@
 {% extends "layouts/base.njk" %}
 
 {%- block meta %}
+  <link rel="preload" href="/blog/search-index.json" as="fetch" crossorigin>
+
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Burrell Technology Services S.A.">
