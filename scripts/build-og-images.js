@@ -60,7 +60,12 @@ async function buildOgImage(postFile) {
   );
 
   // Resize the hero image to fill available space while keeping padding
-  var heroBuffer = await sharp(imagePath)
+  // For SVGs, set a high density so they rasterize at a large size before resizing
+  var sharpOpts = {};
+  if (imagePath.match(/\.svg$/i)) {
+    sharpOpts.density = 300;
+  }
+  var heroBuffer = await sharp(imagePath, sharpOpts)
     .resize(MAX_WIDTH, MAX_HEIGHT, { fit: 'inside', withoutEnlargement: true })
     .toBuffer();
 
