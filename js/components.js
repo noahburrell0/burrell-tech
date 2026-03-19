@@ -157,7 +157,7 @@
       '<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">',
         '<div class="flex items-center justify-between h-16">',
           '<a href="' + BASE + '/" class="flex items-center gap-2.5 font-bold text-gray-900 dark:text-white text-base sm:text-lg tracking-tight">',
-            '<img src="/logo.png" alt="Burrell Technology Services home" class="h-8 w-8 rounded-lg">',
+            '<img src="/logo.webp" alt="Burrell Technology Services home" class="h-8 w-8 rounded-lg">',
             'Burrell Technology Services',
           '</a>',
           '<nav class="hidden lg:flex items-center gap-8">',

@@ -35,13 +35,27 @@ async function buildOgImage(postFile) {
   var slug = postFile.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.md$/, '');
   var outPath = path.join(OUT_DIR, slug + '.png');
 
-  // Resolve the hero image path
+  // Resolve the hero image path (frontmatter may reference .webp but source is .png/.svg)
   var imageName = path.basename(data.image);
   var imagePath = path.join(IMAGES_DIR, imageName);
 
+  // If the referenced file doesn't exist, try the original extension
   if (!fs.existsSync(imagePath)) {
-    console.log('  SKIP ' + slug + ' (image not found: ' + imageName + ')');
-    return null;
+    var baseName = imageName.replace(/\.[^.]+$/, '');
+    var candidates = ['.png', '.jpg', '.jpeg', '.svg'];
+    var found = false;
+    for (var c = 0; c < candidates.length; c++) {
+      var tryPath = path.join(IMAGES_DIR, baseName + candidates[c]);
+      if (fs.existsSync(tryPath)) {
+        imagePath = tryPath;
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      console.log('  SKIP ' + slug + ' (image not found: ' + imageName + ')');
+      return null;
+    }
   }
 
   // Select gradient based on ogBackground frontmatter (default: dark)
