@@ -262,7 +262,7 @@
   ].join('');
 
   if (footerPlaceholder) {
-    footerPlaceholder.outerHTML = footerHTML;
+    footerPlaceholder.innerHTML = footerHTML;
   }
 
   // --- Social Links (contact page Connect section) ---
