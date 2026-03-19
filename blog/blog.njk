@@ -2,7 +2,7 @@
 layout: layouts/blog.njk
 pagination:
   data: collections.posts
-  size: 3
+  size: 12
   alias: postList
 permalink: "blog/{% if pagination.pageNumber > 0 %}page/{{ pagination.pageNumber + 1 }}/{% endif %}index.html"
 ---
