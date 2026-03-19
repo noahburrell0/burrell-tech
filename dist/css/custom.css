@@ -11,9 +11,12 @@ body {
   min-height: 100vh;
 }
 
-/* Reserve space for dynamically injected nav to prevent layout shift */
+/* Reserve space for dynamically injected nav/footer to prevent layout shift */
 #nav-placeholder {
   min-height: 64px;
+}
+#footer-placeholder {
+  min-height: 200px;
 }
 
 /* Prevent flash of unstyled Alpine components */
