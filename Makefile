@@ -8,14 +8,9 @@ build:
 	npm install
 	mkdir -p dist/css dist/js dist/fonts
 	npm run-script build
-	cp css/custom.css dist/css/
-	cp js/*.js dist/js/
-	cp static/* dist/
 	cp node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2 dist/fonts/
-	node scripts/build-i18n.js
+	sh scripts/rebuild.sh
 	npx @11ty/eleventy --quiet
-	node scripts/build-og-images.js
-	node scripts/build-sitemap.js
 
 i18n:
 	node scripts/build-i18n.js

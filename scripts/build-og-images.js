@@ -1,9 +1,10 @@
 var fs = require('fs');
 var path = require('path');
 var sharp = require('sharp');
+var shared = require('./lib/shared');
 
-var POSTS_DIR = path.join(__dirname, '..', 'blog', 'posts');
-var IMAGES_DIR = path.join(__dirname, '..', 'blog', 'posts', 'images');
+var POSTS_DIR = shared.POSTS_DIR;
+var IMAGES_DIR = path.join(POSTS_DIR, 'images');
 var OUT_DIR = path.join(__dirname, '..', 'dist', 'blog', 'og');
 
 var WIDTH = 1200;
@@ -25,24 +26,9 @@ var GRADIENTS = {
   ]
 };
 
-function parseFrontmatter(content) {
-  var match = content.match(/^---\n([\s\S]*?)\n---/);
-  if (!match) return {};
-  var data = {};
-  match[1].split('\n').forEach(function (line) {
-    var idx = line.indexOf(':');
-    if (idx > 0) {
-      var key = line.slice(0, idx).trim();
-      var val = line.slice(idx + 1).trim().replace(/^["']|["']$/g, '');
-      data[key] = val;
-    }
-  });
-  return data;
-}
-
 async function buildOgImage(postFile) {
   var content = fs.readFileSync(path.join(POSTS_DIR, postFile), 'utf8');
-  var data = parseFrontmatter(content);
+  var data = shared.parseFrontmatter(content);
 
   if (!data.image) return null;
 

@@ -32,10 +32,7 @@ function rebuild(label) {
   timer = setTimeout(function () {
     console.log('\n[watch] ' + label + ' changed, rebuilding...');
     try {
-      execSync(
-        'cp css/custom.css dist/css/ && cp js/*.js dist/js/ && cp static/* dist/ && node scripts/build-i18n.js && node scripts/build-og-images.js && node scripts/build-sitemap.js',
-        { cwd: ROOT, stdio: 'inherit' }
-      );
+      execSync('sh scripts/rebuild.sh', { cwd: ROOT, stdio: 'inherit' });
       console.log('[watch] Done.\n');
     } catch (e) {
       console.error('[watch] Rebuild failed.\n');

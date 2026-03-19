@@ -1,25 +1,11 @@
 var fs = require('fs');
 var path = require('path');
+var shared = require('./lib/shared');
 
-var POSTS_DIR = path.join(__dirname, '..', 'blog', 'posts');
+var POSTS_DIR = shared.POSTS_DIR;
 var STATIC_SITEMAP = path.join(__dirname, '..', 'static', 'sitemap.xml');
 var OUT_SITEMAP = path.join(__dirname, '..', 'dist', 'sitemap.xml');
-var SITE_URL = 'https://burrell.tech';
-
-function parseFrontmatter(content) {
-  var match = content.match(/^---\n([\s\S]*?)\n---/);
-  if (!match) return {};
-  var data = {};
-  match[1].split('\n').forEach(function (line) {
-    var idx = line.indexOf(':');
-    if (idx > 0) {
-      var key = line.slice(0, idx).trim();
-      var val = line.slice(idx + 1).trim().replace(/^["']|["']$/g, '');
-      data[key] = val;
-    }
-  });
-  return data;
-}
+var SITE_URL = shared.SITE_URL;
 
 function main() {
   // Read the base sitemap
@@ -30,7 +16,7 @@ function main() {
     .filter(function (f) { return f.endsWith('.md'); })
     .map(function (f) {
       var content = fs.readFileSync(path.join(POSTS_DIR, f), 'utf8');
-      var data = parseFrontmatter(content);
+      var data = shared.parseFrontmatter(content);
       var slug = f.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.md$/, '');
       return { slug: slug, date: data.date || '' };
     })

@@ -1,17 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <!-- Meta -->
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blog | Burrell Technology Services</title>
-  <meta name="description" content="Articles on Kubernetes, Argo CD, GitOps, and cloud-native infrastructure by Noah Burrell.">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="{{ site.url }}/blog/">
-  <link rel="icon" href="/favicon.ico">
-  <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/logo.png" as="image">
+{% extends "layouts/base.njk" %}
 
+{%- block meta %}
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Burrell Technology Services S.A.">
@@ -44,74 +33,77 @@
     }
   }
   </script>
+{%- endblock %}
 
-  <!-- Theme (blocking - must run before first paint to prevent flash) -->
-  <script src="/js/theme.js"></script>
-
-  <!-- Styles -->
-  <link rel="stylesheet" href="/css/tailwind.css">
-  <link rel="stylesheet" href="/css/custom.css">
-
-  <!-- Scripts -->
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <script defer src="/js/analytics.js"></script>
-</head>
-<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans antialiased">
-
-  <div id="nav-placeholder" data-active-page="blog"></div>
-
-  <main class="flex-1">
+{%- block body %}
+  <main class="flex-1" data-page-size="{{ pagination.size }}" x-data="blogSearch()" x-cloak>
   <!-- Page Header -->
-  <section class="bg-gray-50 dark:bg-gray-900/40 border-b border-gray-200 dark:border-gray-800 py-16 sm:py-20">
+  <section class="bg-gray-50 dark:bg-gray-900/40 border-b border-gray-200 dark:border-gray-800 pt-16 pb-8 sm:pt-20 sm:pb-10">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Blog</h1>
       <p class="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl">Articles on Kubernetes, Argo CD, GitOps, and cloud-native infrastructure.</p>
+      <div class="mt-8">
+        <div class="relative max-w-md">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" x-model="query" placeholder="Search posts..." class="w-full pl-10 pr-4 py-2.5 text-sm bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500">
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- Posts Grid -->
-  <section class="py-12 sm:py-16">
+  <!-- Posts -->
+  <section class="pt-6 pb-12 sm:pt-8 sm:pb-16">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      {% set postList = collections.posts %}
-      {% if postList.length %}
-      <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        {% for post in postList %}
-        <article class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all flex flex-col">
-          {% if post.data.image %}
-          <a href="{{ post.url }}" class="block">
-            <div class="blog-hero" style="border-radius: 0; margin-bottom: 0; padding: 0; height: 160px; display: flex; align-items: center; justify-content: center;">
-              <img src="{{ post.data.image }}" alt="" style="max-height: 100px; max-width: 70%; object-fit: contain;">
-            </div>
-          </a>
-          {% endif %}
-          <div class="p-6 pt-5 flex flex-col flex-1">
-            <time datetime="{{ post.date | isoDate }}" class="text-sm text-gray-500 dark:text-gray-500">{{ post.date | readableDate }}</time>
-            <h2 class="mt-2 text-lg font-semibold text-gray-900 dark:text-white">
-              <a href="{{ post.url }}" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ post.data.title }}</a>
-            </h2>
-            <p class="mt-2 text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{{ post.data.description }}</p>
-            {%- if post.data.tags %}
-            <div class="mt-auto pt-4 flex flex-wrap gap-2">
-              {%- for tag in post.data.tags %}{% if tag != "posts" %}
-                <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">{{ tag }}</span>
-              {%- endif %}{% endfor %}
-            </div>
-            {%- endif %}
-          </div>
-        </article>
-        {% endfor %}
+
+      <!-- Results count (always reserves space) -->
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-6" :class="query.trim() ? '' : 'invisible'" x-text="results.length + ' result' + (results.length !== 1 ? 's' : '') + ' found'">&nbsp;</p>
+
+      <!-- Paginated content (hidden when searching) -->
+      <div x-show="!query.trim()">
+        {{ content | safe }}
       </div>
-      {% else %}
-      <p class="text-gray-500 dark:text-gray-400">No posts yet. Check back soon!</p>
-      {% endif %}
+
+      <!-- Search results (shown when searching) -->
+      <div x-show="query.trim()">
+        <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <template x-for="post in pagedResults" :key="post.url">
+            <article class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all flex flex-col">
+              <a x-show="post.image" :href="post.url" class="block">
+                <div class="blog-hero blog-hero-card h-[100px] sm:h-[160px]">
+                  <img :src="post.image" alt="" class="max-h-[60px] sm:max-h-[100px]">
+                </div>
+              </a>
+              <div class="p-4 pt-3 sm:p-6 sm:pt-5 flex flex-col flex-1">
+                <time :datetime="post.isoDate" class="text-xs sm:text-sm text-gray-500 dark:text-gray-500" x-text="post.date"></time>
+                <h2 class="mt-1 sm:mt-2 text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
+                  <a :href="post.url" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors" x-text="post.title"></a>
+                </h2>
+                <p class="mt-1 sm:mt-2 text-gray-600 dark:text-gray-400 text-xs sm:text-sm leading-relaxed" x-text="post.description"></p>
+                <div class="mt-auto pt-3 sm:pt-4 flex flex-wrap gap-1.5 sm:gap-2">
+                  <template x-for="tag in post.tags" :key="tag">
+                    <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full" x-text="tag"></span>
+                  </template>
+                </div>
+              </div>
+            </article>
+          </template>
+        </div>
+        <p x-show="results.length === 0" class="text-gray-500 dark:text-gray-400">No posts match your search.</p>
+
+        <!-- Search pagination -->
+        <nav x-show="totalPages > 1" aria-label="Search results pagination" class="mt-12 flex items-center justify-center gap-2">
+          <button @click="searchPage--" :disabled="searchPage === 0" aria-label="Previous page" :class="searchPage === 0 ? 'opacity-50 cursor-default text-gray-300 dark:text-gray-600' : 'cursor-pointer text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'" class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg transition-colors"><svg class="h-5 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
+          <template x-for="p in totalPages" :key="p">
+            <button @click="searchPage = p - 1" :class="searchPage === p - 1 ? 'text-white bg-blue-600' : 'text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'" class="cursor-pointer px-4 py-2 text-sm font-medium rounded-lg transition-colors" x-text="p"></button>
+          </template>
+          <button @click="searchPage++" :disabled="searchPage >= totalPages - 1" aria-label="Next page" :class="searchPage >= totalPages - 1 ? 'opacity-50 cursor-default text-gray-300 dark:text-gray-600' : 'cursor-pointer text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'" class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg transition-colors"><svg class="h-5 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></button>
+        </nav>
+      </div>
     </div>
   </section>
   </main>
+{%- endblock %}
 
-  <div id="footer-placeholder"></div>
-
-  <!-- components.js must run before Alpine (deferred) so nav x-data is in the DOM at Alpine init time -->
-  <script src="/js/components.js"></script>
-  <script src="/js/main.js"></script>
-</body>
-</html>
+{%- block scripts %}
+  <script src="/js/blog-search.js"></script>
+{%- endblock %}

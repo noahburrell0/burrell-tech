@@ -358,19 +358,6 @@ spec:
   <!-- components.js must run before Alpine (deferred) so nav x-data is in the DOM at Alpine init time -->
   <script src="/js/components.js"></script>
   <script src="/js/main.js"></script>
-  <script>
-  // Rewrite internal links in blog posts to respect stored language preference
-  (function () {
-    var lang = localStorage.getItem('lang');
-    if (lang !== 'es') return;
-    var links = document.querySelectorAll('article a[href]');
-    for (var i = 0; i < links.length; i++) {
-      var href = links[i].getAttribute('href');
-      if (href && href.charAt(0) === '/' && !href.match(/^\/blog(\/|$)/) && !href.match(/^\/(css|js|fonts)\//)) {
-        links[i].setAttribute('href', '/es' + href);
-      }
-    }
-  })();
-  </script>
+  <script src="/js/blog-i18n-links.js"></script>
 </body>
 </html>

@@ -48,6 +48,20 @@ body {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
 }
 
+/* Blog card hero thumbnail (overrides .blog-hero defaults for card context) */
+.blog-hero-card {
+  border-radius: 0;
+  margin-bottom: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.blog-hero-card img {
+  max-width: 70%;
+  object-fit: contain;
+}
+
 /* Inline code styling for blog prose */
 .prose :not(pre) > code {
   background-color: #f1f5f9;
