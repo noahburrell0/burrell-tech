@@ -107,7 +107,7 @@
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
         <div class="blog-hero">
-  <img src="/blog/images/argo-rollouts-hero.svg" alt="Argo Rollouts progressive delivery" width="249" style="display: inline-block;">
+  <img src="/blog/images/argo-rollouts-hero.svg" alt="Argo Rollouts progressive delivery" width="200" style="display: inline-block;">
 </div>
 <p>If you have been following my previous posts on <a href="/blog/argo-cd/">Argo CD</a> and <a href="/blog/kargo/">Kargo</a>, you have a solid foundation for GitOps on Kubernetes. Argo CD ensures your clusters match what is defined in Git, and Kargo orchestrates how changes move between environments. But there is a gap neither of them fills: what happens during a deployment inside a single environment? When a new version of your application is ready, do you flip all traffic at once and hope for the best?</p>
 <p>This is the problem Argo Rollouts solves. It is a Kubernetes controller that replaces the standard Deployment resource with a Rollout resource, giving you canary deployments, blue-green releases, and automated analysis driven by real-time metrics. Instead of deploying a new version to 100% of traffic immediately, you can gradually shift traffic, run automated checks against your monitoring stack, and let the system decide whether to promote or roll back.</p>

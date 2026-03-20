@@ -7,8 +7,6 @@ var STATIC_DIR = path.join(__dirname, '..', 'static');
 var OUT_BLOG = path.join(__dirname, '..', 'dist', 'blog', 'images');
 var OUT_ROOT = path.join(__dirname, '..', 'dist');
 
-// Max displayed size on blog cards is 100px (sm:max-h-[100px]); 2x for retina
-var BLOG_IMAGE_MAX = 200;
 // Logo displayed at 32x32 (h-8 w-8); 2x for retina
 var LOGO_MAX = 64;
 
@@ -31,8 +29,7 @@ async function main() {
     } else if (ext === '.png' || ext === '.jpg' || ext === '.jpeg') {
       var outName = file.replace(/\.(png|jpe?g)$/i, '.webp');
       await sharp(src)
-        .resize(BLOG_IMAGE_MAX, BLOG_IMAGE_MAX, { fit: 'inside', withoutEnlargement: true })
-        .webp({ quality: 85 })
+        .webp({ quality: 100, lossless: true })
         .toFile(path.join(OUT_BLOG, outName));
       console.log('  ' + file + ' -> ' + outName);
     }

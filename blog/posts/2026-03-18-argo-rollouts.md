@@ -13,7 +13,7 @@ tags:
 ---
 
 <div class="blog-hero">
-  <img src="/blog/images/argo-rollouts-hero.svg" alt="Argo Rollouts progressive delivery" width="249" style="display: inline-block;">
+  <img src="/blog/images/argo-rollouts-hero.svg" alt="Argo Rollouts progressive delivery" width="200" style="display: inline-block;">
 </div>
 
 If you have been following my previous posts on [Argo CD](/blog/argo-cd/) and [Kargo](/blog/kargo/), you have a solid foundation for GitOps on Kubernetes. Argo CD ensures your clusters match what is defined in Git, and Kargo orchestrates how changes move between environments. But there is a gap neither of them fills: what happens during a deployment inside a single environment? When a new version of your application is ready, do you flip all traffic at once and hope for the best?
