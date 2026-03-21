@@ -49,11 +49,26 @@
         "@type": "Person",
         "@id": "https://burrell.tech/#person",
         "name": "Noah Burrell",
+        "givenName": "Noah",
+        "familyName": "Burrell",
         "jobTitle": "{{schema.person_job_title}}",
         "worksFor": { "@id": "https://burrell.tech/#organization" },
         "url": "https://burrell.tech/about",
+        "image": "https://burrell.tech/logo.webp",
+        "alumniOf": {
+          "@type": "CollegeOrUniversity",
+          "name": "Carleton University",
+          "url": "https://carleton.ca"
+        },
         "knowsAbout": ["Kubernetes", "Argo CD", "GitOps", "Helm", "Docker", "Linux", "Cloud Native Infrastructure", "DevOps", "RBAC", "Networking", "Secrets Management", "Cluster Administration", "GitHub Actions", "GCP", "Cloudflare"],
         "sameAs": ["https://www.linkedin.com/in/noahburrell/", "https://github.com/noahburrell0"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://burrell.tech/#website",
+        "name": "Noah Burrell - Burrell Technology Services",
+        "url": "https://burrell.tech",
+        "publisher": { "@id": "https://burrell.tech/#person" }
       },
       {
         "@type": "ProfessionalService",
