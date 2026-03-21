@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Argo CD Image Updater: Automating Container Image Deployments in GitOps | Burrell Technology Services</title>
+  <meta name="description" content="A deep dive into Argo CD Image Updater, the tool that automatically detects new container image versions and updates your Argo CD applications. Learn how to configure update strategies, write changes back to Git, authenticate with private registries, and close the gap between CI and CD in your GitOps pipeline.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://burrell.tech/blog/argo-cd-image-updater/">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/logo.webp" as="image">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Burrell Technology Services S.A.">
+  <meta property="og:title" content="Argo CD Image Updater: Automating Container Image Deployments in GitOps">
+  <meta property="og:description" content="A deep dive into Argo CD Image Updater, the tool that automatically detects new container image versions and updates your Argo CD applications. Learn how to configure update strategies, write changes back to Git, authenticate with private registries, and close the gap between CI and CD in your GitOps pipeline.">
+  <meta property="og:url" content="https://burrell.tech/blog/argo-cd-image-updater/">
+  <meta property="og:image" content="https://burrell.tech/blog/og/argo-cd-image-updater.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-03-21">
+  <meta property="article:modified_time" content="2026-03-21">
+  <meta property="article:author" content="Noah Burrell">
+  <meta property="article:tag" content="kubernetes">
+  <meta property="article:tag" content="argo-cd">
+  <meta property="article:tag" content="gitops">
+  <meta property="article:tag" content="containers">
+  <meta property="article:tag" content="automation">
+  <meta property="article:section" content="kubernetes">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Argo CD Image Updater: Automating Container Image Deployments in GitOps">
+  <meta name="twitter:description" content="A deep dive into Argo CD Image Updater, the tool that automatically detects new container image versions and updates your Argo CD applications. Learn how to configure update strategies, write changes back to Git, authenticate with private registries, and close the gap between CI and CD in your GitOps pipeline.">
+  <meta name="twitter:image" content="https://burrell.tech/blog/og/argo-cd-image-updater.png">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Argo CD Image Updater: Automating Container Image Deployments in GitOps",
+    "datePublished": "2026-03-21",
+    "dateModified": "2026-03-21",
+    "description": "A deep dive into Argo CD Image Updater, the tool that automatically detects new container image versions and updates your Argo CD applications. Learn how to configure update strategies, write changes back to Git, authenticate with private registries, and close the gap between CI and CD in your GitOps pipeline.",
+    "url": "https://burrell.tech/blog/argo-cd-image-updater/",
+    "image": "https://burrell.tech/blog/og/argo-cd-image-updater.png",
+    "timeRequired": "PT18M",
+    "author": {
+      "@type": "Person",
+      "name": "Noah Burrell",
+      "url": "https://burrell.tech/about"
+    },
+    "publisher": {
+      "@id": "https://burrell.tech/#organization"
+    },
+    "keywords": "kubernetes, argo-cd, gitops, containers, automation"
+  }
+  </script>
+
+  <!-- Theme (blocking - must run before first paint to prevent flash) -->
+  <script src="/js/theme.js"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/tailwind.css">
+  <link rel="stylesheet" href="/css/custom.css">
+
+  <!-- Scripts -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="/js/analytics.js"></script>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans antialiased">
+
+  <div id="nav-placeholder" data-active-page="blog"></div>
+
+  <main class="flex-1">
+  <!-- Post Header -->
+  <section class="bg-gray-50 dark:bg-gray-900/40 border-b border-gray-200 dark:border-gray-800 py-16 sm:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <a href="/blog" class="inline-flex items-center gap-1.5 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors mb-6">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        All posts
+      </a>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Argo CD Image Updater: Automating Container Image Deployments in GitOps</h1>
+      <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
+        <time datetime="2026-03-21">March 21, 2026</time>
+        <span>&middot;</span>
+        <span>Noah Burrell</span>
+        <span>&middot;</span>
+        <span>18 min read</span>
+      </div>
+      <div class="mt-4 flex flex-wrap gap-2">
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">kubernetes</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">argo-cd</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">gitops</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">containers</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">automation</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Post Content -->
+  <section class="py-12 sm:py-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
+        <div class="blog-hero">
+  <img src="/blog/images/argo-cd-logo.webp" alt="Container image update cycle" width="200" style="display: inline-block;">
+</div>
+<p>There is a gap in most GitOps pipelines that nobody likes to talk about. Your CI system builds a new container image, pushes it to a registry, and then... someone has to update a manifest. Maybe it is a developer opening a pull request to bump an image tag in a Helm values file. Maybe it is a CI job that commits the new tag back to a config repo. Either way, you have built an automated delivery pipeline with a manual step wedged right in the middle of it.</p>
+<p>Argo CD Image Updater closes that gap. It watches your container registries for new image versions, evaluates them against constraints you define, and updates your <a href="/blog/argo-cd/">Argo CD</a> applications automatically. The update can happen through the Argo CD API directly or, more commonly in mature setups, by committing the change back to your Git repository so the full GitOps reconciliation loop stays intact.</p>
+<h2>How It Works</h2>
+<p>Argo CD Image Updater runs as a separate controller in your cluster alongside Argo CD. On a configurable interval, it queries container registries for new tags on images your applications use. When it finds a tag that matches your update constraints, it takes action.</p>
+<p>The update flow has three stages. First, the controller discovers which images each application uses and what update rules apply. Second, it queries the relevant container registries for available tags. Third, if a newer qualifying image exists, it updates the application either by calling the Argo CD API to set parameter overrides or by committing the change to Git.</p>
+<p>Starting with v1.0, Argo CD Image Updater uses a dedicated <code>ImageUpdater</code> custom resource to define what to watch and how to update it. Earlier versions relied on annotations placed directly on the Argo CD Application resource. The CRD approach is cleaner, easier to manage at scale, and keeps your Application manifests focused on deployment rather than image update policy.</p>
+<h2>Installation</h2>
+<p>Argo CD Image Updater installs into the same namespace as Argo CD. The quickest path is applying the installation manifests directly:</p>
+<pre><code class="language-bash">kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-image-updater/stable/config/install.yaml
+</code></pre>
+<p>If you prefer Helm, the project provides a chart:</p>
+<pre><code class="language-bash">helm repo add argo https://argoproj.github.io/argo-helm
+helm install argocd-image-updater argo/argocd-image-updater -n argocd
+</code></pre>
+<p>Verify the controller is running:</p>
+<pre><code class="language-bash">kubectl get pods -n argocd -l app.kubernetes.io/name=argocd-image-updater
+</code></pre>
+<p>The controller needs access to the Argo CD API and to whatever container registries your applications pull from. By default, it uses the Argo CD service account for API access and anonymous access for public registries like Docker Hub. Private registries need additional configuration, which we will cover later.</p>
+<h2>The ImageUpdater Resource</h2>
+<p>The core of the v1.0 configuration model is the <code>ImageUpdater</code> CRD. Here is an example that watches an application called <code>my-app</code>, updates its <code>nginx</code> image using semantic versioning, and writes changes back to Git:</p>
+<pre><code class="language-yaml">apiVersion: argocd-image-updater.argoproj.io/v1alpha1
+kind: ImageUpdater
+metadata:
+  name: my-app-updater
+  namespace: argocd
+spec:
+  writeBackConfig:
+    method: git
+    gitConfig:
+      repository: &quot;git@github.com:myorg/my-app-config.git&quot;
+      branch: main
+      writeBackTarget: &quot;helmvalues:/values.yaml&quot;
+  applicationRefs:
+    - namePattern: &quot;my-app&quot;
+      images:
+        - alias: &quot;nginx&quot;
+          imageName: &quot;nginx:1.27.x&quot;
+          commonUpdateSettings:
+            updateStrategy: semver
+          manifestTargets:
+            helm:
+              name: image.repository
+              tag: image.tag
+</code></pre>
+<p>The <code>applicationRefs</code> field defines which Argo CD applications to target. The <code>namePattern</code> supports glob-style wildcards, so you can match multiple applications with a single resource. You can also use <code>labelSelectors</code> with <code>matchLabels</code> and <code>matchExpressions</code> for more fine-grained application selection. Each matched application gets its images checked against the rules defined in the <code>images</code> list. The version constraint is part of the <code>imageName</code> value itself (<code>nginx:1.27.x</code>), which tells the Image Updater to only consider tags within the <code>1.27</code> patch range. The <code>manifestTargets</code> block maps the discovered image to the correct Helm values, and the <code>writeBackConfig</code> at the top tells the Image Updater to commit changes to Git rather than using API overrides.</p>
+<p>A few things to note about the namespace. The <code>ImageUpdater</code> resource must live in the same namespace as the Argo CD applications it targets. The v1.0 release deprecated the <code>spec.namespace</code> field in favor of using <code>metadata.namespace</code> for application discovery. If your applications and your Image Updater resources are in different namespaces, you will need to move the resources to align them.</p>
+<h2>Update Strategies</h2>
+<p>The update strategy is configured through the <code>commonUpdateSettings</code> block, which can be set at three levels: globally in the <code>ImageUpdater</code> spec, per application reference, or per image. Image-level settings override application-level, which override global. There are four strategies, and choosing the right one depends on how your CI system tags images.</p>
+<h3>Semantic Versioning</h3>
+<p>The <code>semver</code> strategy is the default. It treats tags as semantic versions in <code>X.Y.Z</code> format and selects the highest version that satisfies a version constraint. Tags that do not conform to semver are silently ignored, so stray tags like <code>latest</code> or <code>debug-build</code> will never be matched:</p>
+<pre><code class="language-yaml">images:
+  - alias: &quot;api&quot;
+    imageName: &quot;ghcr.io/myorg/api:3.x&quot;
+    commonUpdateSettings:
+      updateStrategy: semver
+</code></pre>
+<p>The version constraint is specified as part of the <code>imageName</code> field, not as a separate property. For example, <code>some/image:1.2.x</code> constrains updates to the <code>1.2</code> patch branch. <code>some/image:1.x</code> allows any minor and patch version within major version 1. Appending <code>-0</code> to the constraint (like <code>2.x-0</code>) enables matching pre-release tags such as <code>v2.0-rc1</code>. If no constraint is specified, the Image Updater simply selects the highest semver tag in the registry.</p>
+<p>The <code>v</code> prefix on tags is handled transparently, so <code>v3.2.1</code> and <code>3.2.1</code> are treated the same. The image you are currently running does not need to follow semver either; only the candidate tags in the registry are evaluated.</p>
+<h3>Newest Build</h3>
+<p>The <code>newest-build</code> strategy selects the image with the most recent build date. An important distinction is that it uses the image's actual build timestamp from the registry metadata, not the date the tag was created or pushed. This is useful when your tags are not semver-compliant, for example when using Git commit SHAs or build timestamps:</p>
+<pre><code class="language-yaml">images:
+  - alias: &quot;worker&quot;
+    imageName: &quot;myregistry.io/worker&quot;
+    commonUpdateSettings:
+      updateStrategy: newest-build
+      allowTags: &quot;regexp:^main-[a-f0-9]{7}$&quot;
+</code></pre>
+<p>The <code>allowTags</code> field is a regex filter (prefixed with <code>regexp:</code>) that restricts which tags are considered. In this example, only tags matching the pattern <code>main-&lt;short-sha&gt;</code> are evaluated. You can also use <code>ignoreTags</code> to exclude specific tags by name, which is useful for filtering out tags like <code>latest</code> or <code>master</code> that you do not want the updater to consider.</p>
+<p>One thing to be aware of is that this strategy performs manifest pulls against the registry to read build dates, and those pulls count toward Docker Hub's rate limits. If you are running against Docker Hub on a free account, keep an eye on your pull budget or use tag filters to limit how many tags get checked.</p>
+<h3>Alphabetical</h3>
+<p>The <code>alphabetical</code> strategy sorts all tags in lexical (alphabetical) order and picks the highest one. This is particularly well suited for calendar versioning schemes that use lexically sortable strings like <code>YYYY-MM-DD</code> or <code>YYYYMMDD</code>:</p>
+<pre><code class="language-yaml">images:
+  - alias: &quot;reports&quot;
+    imageName: &quot;myregistry.io/reports&quot;
+    commonUpdateSettings:
+      updateStrategy: alphabetical
+      allowTags: &quot;regexp:^[0-9]{4}-[0-9]{2}-[0-9]{2}$&quot;
+</code></pre>
+<p>Combined with a tag filter that only matches date strings, this reliably selects the most recent build. The older strategy name <code>name</code> still works but is deprecated in favor of <code>alphabetical</code>.</p>
+<h3>Digest</h3>
+<p>The <code>digest</code> strategy is different from the others. Instead of switching between tags, it tracks the digest of a specific mutable tag. When the registry content behind that tag changes (because someone pushed a new image with the same tag), the updater detects it and triggers an update:</p>
+<pre><code class="language-yaml">images:
+  - alias: &quot;frontend&quot;
+    imageName: &quot;myregistry.io/frontend:latest&quot;
+    commonUpdateSettings:
+      updateStrategy: digest
+</code></pre>
+<p>The tag to track is specified as part of the <code>imageName</code> (in this case <code>latest</code>). This is the only strategy designed for mutable tags; the other three all assume tags are immutable. Use this when your team pushes to a fixed tag like <code>latest</code>, <code>stable</code>, or an environment name like <code>dev</code>, and you want downstream deployments to pick up the change automatically. The application manifest stays pinned to the tag name, but the actual deployed digest gets updated.</p>
+<h2>Write-Back Methods</h2>
+<p>How Argo CD Image Updater applies the update is just as important as how it detects one. The write-back method is configured through the <code>writeBackConfig</code> block on the <code>ImageUpdater</code> resource, and like <code>commonUpdateSettings</code> it can be set at the global spec level or per application reference. There are two methods, and they represent fundamentally different operational models.</p>
+<h3>Argo CD API (Parameter Overrides)</h3>
+<p>The default method is <code>argocd</code>, which updates the application imperatively through the Argo CD API by setting parameter overrides. This is equivalent to running something like <code>argocd app set my-app --helm-set image.tag=v3.2.1</code> manually. The override lives in the Argo CD Application resource, not in Git.</p>
+<pre><code class="language-yaml">spec:
+  writeBackConfig:
+    method: argocd
+</code></pre>
+<p>This is fast and simple, but it breaks a core GitOps principle: Git is no longer the single source of truth for what is running in your cluster. The actual deployed image tag exists only as an Argo CD parameter override, which is not tracked in your config repository. If someone deletes and recreates the Application, the override is lost.</p>
+<p>For development environments and quick iteration, this trade-off is often acceptable. For production, you probably want Git write-back.</p>
+<h3>Git Write-Back</h3>
+<p>The <code>git</code> method commits the image update back to your repository declaratively. When the Image Updater detects a new image version, it clones your repository, writes the updated parameters, commits the change, and pushes it. The commit message includes details about what was updated, making the change fully auditable through Git history. If you manage your Application resources in Git (for example in an app-of-apps setup), this is almost certainly the method you want.</p>
+<p>The <code>gitConfig</code> section within <code>writeBackConfig</code> controls the repository, branch, and where the updated values are written:</p>
+<pre><code class="language-yaml">spec:
+  writeBackConfig:
+    method: git
+    gitConfig:
+      repository: &quot;git@github.com:myorg/frontend-config.git&quot;
+      branch: main
+      writeBackTarget: &quot;helmvalues:/values.yaml&quot;
+</code></pre>
+<p>The <code>writeBackTarget</code> field tells the Image Updater where to write the updated image parameters. For Helm applications, <code>helmvalues:/values.yaml</code> writes the new tag directly into your values file. For Kustomize applications, use <code>kustomization</code> (optionally with a relative or absolute path like <code>kustomization:../../base</code>). If you omit <code>writeBackTarget</code> entirely, the Image Updater writes to a <code>.argocd-source-&lt;appName&gt;.yaml</code> file by default.</p>
+<p>The <code>repository</code> field is only required when your Application's <code>spec.source.repoURL</code> points to a Helm chart repository rather than a Git repo. If your Application already references a Git repository, the Image Updater uses that by default. The <code>branch</code> field defaults to whatever <code>spec.source.targetRevision</code> is set to on the Application. You can also use a <code>base:target</code> format to check out from one branch and push to another, which is useful for creating pull requests instead of pushing directly.</p>
+<h3>Git Authentication</h3>
+<p>By default, the Image Updater reuses the Git credentials already configured in Argo CD. If that does not work for your setup, or if you need a dedicated set of credentials for the Image Updater to push with, you reference a Kubernetes Secret in the <code>method</code> field using the format <code>git:secret:&lt;namespace&gt;/&lt;secret-name&gt;</code>.</p>
+<p>For SSH access, create a secret containing an <code>sshPrivateKey</code> field:</p>
+<pre><code class="language-bash">kubectl -n argocd create secret generic git-creds \
+  --from-file=sshPrivateKey=~/.ssh/id_rsa
+</code></pre>
+<p>For HTTPS access, create a secret with <code>username</code> and <code>password</code> fields (the password is typically a personal access token rather than an actual password):</p>
+<pre><code class="language-bash">kubectl -n argocd create secret generic git-creds \
+  --from-literal=username=someuser \
+  --from-literal=password=ghp_yourpersonalaccesstoken
+</code></pre>
+<p>For GitHub App authentication, provide the app ID, installation ID, and private key:</p>
+<pre><code class="language-bash">kubectl -n argocd create secret generic git-creds \
+  --from-literal=githubAppID=12345 \
+  --from-literal=githubAppInstallationID=67890 \
+  --from-literal=githubAppPrivateKey=&quot;$(cat private-key.pem)&quot;
+</code></pre>
+<p>Then reference the secret in your <code>writeBackConfig</code>:</p>
+<pre><code class="language-yaml">spec:
+  writeBackConfig:
+    method: &quot;git:secret:argocd/git-creds&quot;
+    gitConfig:
+      branch: main
+      writeBackTarget: &quot;helmvalues:/values.yaml&quot;
+</code></pre>
+<p>The Image Updater detects which authentication method to use based on which fields are present in the secret. If the secret contains <code>sshPrivateKey</code>, it uses SSH. If it contains <code>username</code> and <code>password</code>, it uses HTTPS. If it contains <code>githubAppID</code>, it uses GitHub App authentication.</p>
+<h3>Choosing a Write-Back Method</h3>
+<p>The decision usually comes down to environment maturity. Use the <code>argocd</code> method for development and staging environments where speed matters more than audit trails. Use <code>git</code> for production environments where you need full traceability, the ability to roll back through Git history, and confidence that your Git repository reflects reality.</p>
+<h2>Registry Authentication</h2>
+<p>Public registries like Docker Hub work out of the box for public images, but most real workloads pull from private registries. Argo CD Image Updater supports several authentication methods, configured either at the registry level or per image.</p>
+<h3>Registry-Level Credentials</h3>
+<p>The most common approach is to define credentials in the <code>registries.conf</code> configuration, which maps a credential source to a specific registry. The credential reference uses a <code>type:path</code> format that supports four sources:</p>
+<pre><code class="language-yaml">registries:
+  - name: GitHub Container Registry
+    prefix: ghcr.io
+    api_url: https://ghcr.io
+    credentials: secret:argocd/ghcr-creds#creds
+  - name: Docker Hub
+    prefix: docker.io
+    api_url: https://registry-1.docker.io
+    credentials: pullsecret:argocd/dockerhub-secret
+    default: true
+  - name: ECR
+    prefix: 123456789.dkr.ecr.us-east-1.amazonaws.com
+    api_url: https://123456789.dkr.ecr.us-east-1.amazonaws.com
+    credentials: ext:/app/auth/ecr-login.sh
+    credsexpire: 10h
+</code></pre>
+<p>The <code>secret:namespace/name#key</code> format reads a <code>username:password</code> string from a specific key in a generic Kubernetes Secret. The <code>pullsecret:namespace/name</code> format reads from a standard Kubernetes <code>docker-registry</code> secret, the same kind your cluster already uses for <code>imagePullSecrets</code>. If you already have pull secrets for your registries, this is the easiest path since you can reuse them directly without creating a separate credential. You create one the usual way:</p>
+<pre><code class="language-bash">kubectl create -n argocd secret docker-registry dockerhub-secret \
+  --docker-username someuser \
+  --docker-password s0m3p4ssw0rd \
+  --docker-server &quot;https://registry-1.docker.io&quot;
+</code></pre>
+<p>The <code>env:VARIABLE_NAME</code> format reads from an environment variable (value must be <code>username:password</code>). The <code>ext:/path/to/script</code> format runs an external script that returns credentials on stdout, which is particularly useful for cloud provider integrations where tokens need to be refreshed. The <code>credsexpire</code> field tells the Image Updater how long to cache credentials before refreshing them, which is essential for short-lived tokens like those from ECR or Azure.</p>
+<h3>Per-Image Credentials</h3>
+<p>For cases where different images in the same registry need different credentials, you can set a <code>pullSecret</code> in the image's <code>commonUpdateSettings</code>. Per-image credentials are re-read on every update cycle, so they always reflect the current secret value. Registry-level credentials, by contrast, are cached at startup and only refreshed when they expire.</p>
+<h3>Cloud Provider Integration</h3>
+<p>For AWS ECR, the recommended approach is an external credential script combined with <code>credsexpire</code> so tokens are refreshed before they expire. Azure Container Registry supports Workload Identity through a similar pattern, using an external script to retrieve refresh tokens. These integrations mean you do not need to manage static credentials at all if your cluster is configured for cloud-native authentication.</p>
+<h2>Practical Configuration Patterns</h2>
+<h3>Helm Applications</h3>
+<p>For Helm-based applications, you need to tell the Image Updater which Helm values correspond to which container images. This mapping is configured through the <code>manifestTargets.helm</code> block on each image. The <code>name</code> and <code>tag</code> fields specify which Helm value paths to set when an update is applied:</p>
+<pre><code class="language-yaml">images:
+  - alias: &quot;dex&quot;
+    imageName: &quot;quay.io/dexidp/dex:2.x&quot;
+    manifestTargets:
+      helm:
+        name: dex.image.name
+        tag: dex.image.tag
+</code></pre>
+<p>If your chart uses a combined format like <code>image: repo:tag</code> in a single value, you can use <code>spec</code> instead of separate <code>name</code> and <code>tag</code> fields. For charts that store images in a YAML list, you can target a specific index with bracket notation like <code>images[0].name</code> and <code>images[0].tag</code>.</p>
+<h3>Kustomize Applications</h3>
+<p>For Kustomize applications, the Image Updater uses Kustomize's native image transformer. The <code>manifestTargets.kustomize</code> block maps the updated image to the original image reference used in your manifests:</p>
+<pre><code class="language-yaml">images:
+  - alias: &quot;argocd&quot;
+    imageName: &quot;ghcr.io/argoproj/argocd:2.x&quot;
+    manifestTargets:
+      kustomize:
+        name: quay.io/argoproj/argocd
+</code></pre>
+<p>The <code>name</code> field tells the Image Updater which image reference in the Kustomize manifests to override. This is necessary when the image name in the <code>ImageUpdater</code> resource differs from the one in your base manifests.</p>
+<h3>Multi-Container Applications</h3>
+<p>Applications with multiple containers are handled by listing multiple images in the same application reference. Each image gets its own alias, update strategy, and manifest target:</p>
+<pre><code class="language-yaml">applicationRefs:
+  - namePattern: &quot;my-app&quot;
+    images:
+      - alias: &quot;frontend&quot;
+        imageName: &quot;myregistry.io/frontend:1.x&quot;
+        commonUpdateSettings:
+          updateStrategy: semver
+        manifestTargets:
+          helm:
+            name: frontend.image.repository
+            tag: frontend.image.tag
+      - alias: &quot;backend&quot;
+        imageName: &quot;myregistry.io/backend:2.x&quot;
+        commonUpdateSettings:
+          updateStrategy: semver
+        manifestTargets:
+          helm:
+            name: backend.image.repository
+            tag: backend.image.tag
+      - alias: &quot;worker&quot;
+        imageName: &quot;myregistry.io/worker&quot;
+        commonUpdateSettings:
+          updateStrategy: newest-build
+          allowTags: &quot;regexp:^main-[a-f0-9]{7}$&quot;
+        manifestTargets:
+          helm:
+            name: worker.image.repository
+            tag: worker.image.tag
+</code></pre>
+<p>Different images can use different update strategies, version constraints, and tag filters, all within a single <code>ImageUpdater</code> resource.</p>
+<h2>Webhook Support</h2>
+<p>By default, Argo CD Image Updater polls registries on a fixed interval. Webhooks flip that model: registries push notifications when new images are available, reducing the delay between a push and an update from minutes to seconds. Support covers Docker Hub, GitHub Container Registry, Quay.io, and Harbor natively. AWS ECR is supported through EventBridge by transforming ECR push events into the CloudEvents v1.0 format and forwarding them to the webhook endpoint.</p>
+<p>The webhook server is a built-in component that you enable through the <code>argocd-image-updater-config</code> ConfigMap:</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-image-updater-config
+  namespace: argocd
+data:
+  webhook.enable: &quot;true&quot;
+  webhook.port: &quot;8082&quot;
+</code></pre>
+<p>Once enabled, the server exposes two endpoints: <code>/webhook</code> for receiving registry notifications and <code>/healthz</code> for health checks. Registries send notifications to <code>/webhook</code> with a <code>type</code> query parameter identifying the registry:</p>
+<pre><code>https://image-updater.example.com/webhook?type=ghcr.io
+</code></pre>
+<p>The valid type values are <code>docker.io</code>, <code>ghcr.io</code>, <code>harbor</code>, <code>quay.io</code>, and <code>cloudevents</code> (for ECR). You will need to expose the webhook endpoint through an Ingress or Service so your registries can reach it. The project includes ready-made Service and Ingress manifests in <code>manifests/base/networking</code> to help with this.</p>
+<p>To secure the endpoint, configure a shared secret for each registry in the <code>argocd-image-updater-secret</code> Secret:</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Secret
+metadata:
+  name: argocd-image-updater-secret
+  namespace: argocd
+stringData:
+  webhook.docker-secret: &lt;YOUR_SECRET&gt;
+  webhook.ghcr-secret: &lt;YOUR_SECRET&gt;
+  webhook.harbor-secret: &lt;YOUR_SECRET&gt;
+  webhook.quay-secret: &lt;YOUR_SECRET&gt;
+  webhook.cloudevents-secret: &lt;YOUR_SECRET&gt;
+</code></pre>
+<p>GitHub Container Registry and Harbor validate the secret using their built-in webhook signature mechanisms. Docker Hub, Quay, and CloudEvents pass the secret as a query parameter (<code>?secret=your-shared-secret</code>), which is less secure but the only option those platforms support. If you are worried about brute-force attempts, you can set a rate limit with <code>webhook.ratelimit-allowed</code> in the ConfigMap to cap the number of requests accepted per second.</p>
+<h2>Fitting It into Your GitOps Stack</h2>
+<p>Argo CD Image Updater fills a specific role in the GitOps pipeline. Your CI system builds and pushes images. The Image Updater detects the new image and updates your configuration (either through the API or Git). <a href="/blog/argo-cd/">Argo CD</a> reconciles the change to your cluster.</p>
+<p>For <a href="/blog/argo-rollouts/">Argo Rollouts</a> users, the Image Updater works seamlessly because the rollout starts as soon as Argo CD syncs the updated manifest. The Image Updater triggers the change, Argo CD syncs it, and Argo Rollouts manages the progressive delivery.</p>
+<p>The combination of Image Updater with Git write-back and <a href="/blog/argo-cd-notifications/">Argo CD Notifications</a> gives you a fully automated pipeline with complete visibility. New images get detected, changes get committed to Git, Argo CD syncs the deployment, and your team gets notified through Slack or PagerDuty without anyone having to manually update a manifest or watch a dashboard.</p>
+<h2>If You Are Already Using Kargo, You Do Not Need This</h2>
+<p>It is worth being direct about this: if you have already adopted <a href="/blog/kargo/">Kargo</a>, you do not need the Argo CD Image Updater. Kargo's Warehouses already perform container image discovery natively. A Warehouse watches your registries for new tags, evaluates them against semver constraints, and produces Freight that gets promoted through your Stages. That is the same core job the Image Updater does, but Kargo wraps it into a much broader promotion lifecycle that includes multi-environment orchestration, approval gates, and verification steps.</p>
+<p>Kargo also handles the write-back side, and it is considerably more versatile than the Image Updater's approach. Through PromotionTasks, Kargo can update Helm values files, patch Kustomize overlays, run <code>kustomize edit set image</code>, modify arbitrary YAML or JSON files, and commit those changes back to Git as part of a structured promotion pipeline. Kargo's promotion steps can orchestrate complex multi-file updates across different repositories, render Helm charts, run verification steps after the commit, and gate promotions on manual approvals or automated checks. The write-back is just one step in a larger, composable workflow.</p>
+<p>Running both tools side by side is not just unnecessary, it can actively interfere with Kargo. Two controllers polling the same registries and writing changes to the same repositories creates a race condition. The Image Updater could commit an image update to Git at the same time Kargo is promoting Freight through a Stage, leading to conflicting commits, unexpected syncs, or Kargo's verification steps running against changes it did not initiate. Kargo was designed to own the entire flow from artifact discovery through production deployment, so once you adopt it, the Image Updater should be removed entirely rather than left running alongside it.</p>
+<p>Where Argo CD Image Updater still makes sense is in teams that use Argo CD without Kargo. If your deployment model is straightforward, you deploy to one or two environments, and you do not need Kargo's promotion pipelines, the Image Updater is a lightweight way to automate image updates without taking on the additional complexity of a full orchestration layer. It does one thing well and stays out of your way.</p>
+<p>The decision comes down to scope. If you need automated image detection and nothing more, the Image Updater is the right fit. If you need to manage how those images flow through dev, staging, and production with controls at each step, Kargo is the better tool, and it already covers both the image discovery and the Git write-back with far more flexibility.</p>
+<h2>Tips for Running in Production</h2>
+<p><strong>Use tag filters aggressively.</strong> Without <code>allowTags</code> or <code>ignoreTags</code>, the Image Updater considers every tag in your repository. This slows down the update check and can lead to unexpected matches. Always filter to the tag pattern your CI system produces.</p>
+<p><strong>Set appropriate check intervals.</strong> The default reconciliation interval is two minutes. For development environments the default is fine, but for production you might want to increase it to reduce registry API calls, especially if you are running against rate-limited registries like Docker Hub. You can change it through the <code>argocd-image-updater-config</code> ConfigMap using the <code>interval</code> key and a value such as <code>10m</code>.</p>
+<p><strong>Monitor the controller logs.</strong> The Image Updater logs every check it performs and every update it applies. Watching these logs during initial rollout helps catch misconfigured constraints or authentication issues before they cause problems.</p>
+<p><strong>Pin your constraint ranges.</strong> A broad constraint like <code>imageName: &quot;myimage&quot;</code> with no version constraint means the Image Updater will jump to any new version the moment it appears, including major version bumps. Use constraints like <code>1.2.x</code> to limit updates to patch versions within a specific minor release, or <code>1.x</code> to allow minor updates within a major version. Update the constraint explicitly when you are ready for a larger version jump.</p>
+<p><strong>Combine with Argo CD sync windows.</strong> If you are using Git write-back, Argo CD will sync the change as soon as it detects the commit. Use <a href="https://argo-cd.readthedocs.io/en/stable/user-guide/sync_windows/">sync windows</a> to prevent automatic image updates from deploying during maintenance periods or outside business hours.</p>
+<h2>Wrapping Up</h2>
+<p>Argo CD Image Updater removes the last manual step from many GitOps pipelines. Instead of relying on developers or CI jobs to update image tags in manifests, the controller watches your registries and handles it automatically. The CRD-based configuration in v1.0 and later makes it straightforward to manage at scale, and the Git write-back method ensures your repository stays the single source of truth.</p>
+<p>Combined with <a href="/blog/argo-cd/">Argo CD</a> for delivery, <a href="/blog/argo-rollouts/">Argo Rollouts</a> for progressive delivery, and <a href="/blog/argo-cd-notifications/">Argo CD Notifications</a> for alerting, you have a fully automated pipeline from image build to production deployment, with every step tracked in Git and visible to your team.</p>
+<p>If you need help setting up automated image updates, designing version constraints, or integrating the Image Updater into your existing GitOps workflow, <a href="/contact">get in touch</a>.</p>
+
+      </article>
+    </div>
+  </section>
+  </main>
+
+  <div id="cta-placeholder"
+    data-i18n="blog_cta"
+    data-variant="simple"></div>
+  <div id="footer-placeholder"></div>
+
+  <!-- components.js must run before Alpine (deferred) so nav x-data is in the DOM at Alpine init time -->
+  <script src="/js/components.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="/js/blog-i18n-links.js"></script>
+  <script src="/js/code-copy.js"></script>
+</body>
+</html>
