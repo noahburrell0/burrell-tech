@@ -37,9 +37,6 @@
     enHref = currentPath;
     esHref = '/es' + (currentPath === '/' ? '/' : currentPath);
   }
-  var enUnderline = LANG === 'en' ? ' underline' : '';
-  var esUnderline = LANG === 'es' ? ' underline' : '';
-
   // --- Translations for shared components ---
   var i18n = {
     en: {
@@ -123,17 +120,18 @@
   var SVG_PHONE    = '<svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>';
 
   // --- Language switcher helper ---
-  function langSwitcher(extraClasses) {
-    var cls = extraClasses || '';
-    function langOption(lang, label, href, underline) {
+  function langSwitcher() {
+    var enClass = LANG === 'en' ? 'underline hover:text-white transition-colors' : 'hover:text-white transition-colors';
+    var esClass = LANG === 'es' ? 'underline hover:text-white transition-colors' : 'hover:text-white transition-colors';
+    function langOption(lang, label, href, cls) {
       if (isBlog) {
-        return '<button onclick="localStorage.setItem(\'lang\',\'' + lang + '\');location.reload()" class="hover:text-gray-900 dark:hover:text-white transition-colors bg-transparent cursor-pointer' + cls + underline + '">' + label + '</button>';
+        return '<button onclick="localStorage.setItem(\'lang\',\'' + lang + '\');location.reload()" class="bg-transparent cursor-pointer ' + cls + '">' + label + '</button>';
       }
-      return '<a href="' + href + '" class="hover:text-gray-900 dark:hover:text-white transition-colors' + underline + '">' + label + '</a>';
+      return '<a href="' + href + '" class="' + cls + '">' + label + '</a>';
     }
-    return langOption('en', 'English', enHref, enUnderline) +
-      '<span class="text-gray-300 dark:text-gray-600">/</span>' +
-      langOption('es', 'Espa\u00f1ol', esHref, esUnderline);
+    return langOption('en', 'English', enHref, enClass) +
+      '<span class="text-gray-600">/</span>' +
+      langOption('es', 'Espa\u00f1ol', esHref, esClass);
   }
 
   // --- Navigation ---
@@ -168,9 +166,6 @@
             '<a href="' + BASE + '/contact" class="text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">' + T.nav_cta + '</a>',
           '</nav>',
           '<div class="flex items-center gap-2">',
-            '<span class="hidden lg:inline-flex items-center gap-0.5 text-xs font-semibold text-gray-500 dark:text-gray-400 px-1.5 py-1 rounded border border-gray-300 dark:border-gray-700 leading-tight">' +
-              langSwitcher('') +
-            '</span>',
             '<button onclick="toggleTheme()" class="p-2 rounded-md text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Toggle theme">',
               '<svg class="block dark:hidden h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>',
               '<svg class="hidden dark:block h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>',
@@ -188,9 +183,6 @@
         mobileLink('about', BASE + '/about', T.nav_about),
         mobileLink('blog', '/blog', T.nav_blog),
         mobileLink('contact', BASE + '/contact', T.nav_contact_mobile),
-        '<span class="flex items-center gap-1 text-sm font-medium text-gray-500 dark:text-gray-500">' +
-          langSwitcher(' p-0') +
-        '</span>',
       '</div>',
     '</header>'
   ].join('');
@@ -208,7 +200,7 @@
         '<div class="grid sm:grid-cols-3 gap-8">',
 
           // Col 1: Brand + socials
-          '<div>',
+          '<div class="flex flex-col">',
             '<p class="text-white font-semibold">Burrell Technology Services S.A.</p>',
             '<p class="mt-2 text-sm leading-relaxed">' + T.footer_tagline + '</p>',
             '<div class="mt-4 flex items-center gap-4">',
@@ -218,6 +210,9 @@
               '<a href="' + GITHUB_URL + '" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" aria-label="GitHub">',
                 SVG_GITHUB,
               '</a>',
+            '</div>',
+            '<div class="mt-3 sm:mt-auto flex items-center gap-1 text-sm">' +
+              langSwitcher('') +
             '</div>',
           '</div>',
 
