@@ -35,6 +35,16 @@ async function main() {
     }
   }
 
+  // Convert headshot (displayed at ~192px on about page; keep high quality)
+  var headshotSrc = path.join(STATIC_DIR, 'headshot.png');
+  if (fs.existsSync(headshotSrc)) {
+    await sharp(headshotSrc)
+      .resize(384, 384, { fit: 'inside', withoutEnlargement: true })
+      .webp({ quality: 90 })
+      .toFile(path.join(OUT_ROOT, 'headshot.webp'));
+    console.log('  headshot.png -> headshot.webp');
+  }
+
   // Convert static logo
   var logoSrc = path.join(STATIC_DIR, 'logo.png');
   if (fs.existsSync(logoSrc)) {
