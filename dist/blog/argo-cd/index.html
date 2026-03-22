@@ -135,7 +135,7 @@ kubectl apply -n argocd -f \
 <p>Then open <code>https://localhost:8080</code> in your browser and log in with the username <code>admin</code> and the password you retrieved above.</p>
 <h2>Deploying Your First Application</h2>
 <p>Argo CD uses the concept of an <strong>Application</strong> to represent a deployed set of Kubernetes resources. An Application ties together a Git repository (the source) and a target cluster and namespace (the destination).</p>
-<p>Here is a minimal Application manifest using the official <a href="https://github.com/argoproj/argocd-example-apps">argocd-example-apps</a> repository which can be applied directly to your cluster:</p>
+<p>Here is a minimal Application manifest using the official <a href="https://github.com/argoproj/argocd-example-apps" target="_blank" rel="noopener">argocd-example-apps</a> repository which can be applied directly to your cluster:</p>
 <pre><code class="language-bash">kubectl apply -f - &lt;&lt;EOF
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -189,7 +189,7 @@ EOF
 <li><strong>Secrets management</strong> strategies for handling sensitive data in a GitOps workflow</li>
 <li><strong>Multi-cluster deployments</strong> and the patterns that make them manageable</li>
 </ul>
-<p>If you are looking for hands-on help adopting Argo CD or GitOps practices in your organization, <a href="/contact">get in touch</a>. I offer training, architecture reviews, and embedded support to help teams get the most out of their Kubernetes platform.</p>
+<p>If you are looking for hands-on help adopting Argo CD or GitOps practices in your organization, <a href="/contact" target="_blank" rel="noopener">get in touch</a>. I offer training, architecture reviews, and embedded support to help teams get the most out of their Kubernetes platform.</p>
 
       </article>
     </div>

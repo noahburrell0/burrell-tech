@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Migrating from NGINX Ingress to Envoy Gateway: A Practical Guide | Burrell Technology Services</title>
+  <meta name="description" content="A detailed walkthrough of migrating 16+ services from NGINX Ingress Controller to Envoy Gateway using the Kubernetes Gateway API. Covers HTTPRoute patterns, SecurityPolicy, BackendTrafficPolicy, TLS backends, custom error pages, and the real-world problems you will hit along the way.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://burrell.tech/blog/nginx-to-gateway-api/">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/logo.webp" as="image">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Burrell Technology Services S.A.">
+  <meta property="og:title" content="Migrating from NGINX Ingress to Envoy Gateway: A Practical Guide">
+  <meta property="og:description" content="A detailed walkthrough of migrating 16+ services from NGINX Ingress Controller to Envoy Gateway using the Kubernetes Gateway API. Covers HTTPRoute patterns, SecurityPolicy, BackendTrafficPolicy, TLS backends, custom error pages, and the real-world problems you will hit along the way.">
+  <meta property="og:url" content="https://burrell.tech/blog/nginx-to-gateway-api/">
+  <meta property="og:image" content="https://burrell.tech/blog/og/nginx-to-gateway-api.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-03-22">
+  <meta property="article:modified_time" content="2026-03-22">
+  <meta property="article:author" content="Noah Burrell">
+  <meta property="article:tag" content="kubernetes">
+  <meta property="article:tag" content="gateway-api">
+  <meta property="article:tag" content="envoy">
+  <meta property="article:tag" content="gitops">
+  <meta property="article:tag" content="networking">
+  <meta property="article:section" content="kubernetes">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Migrating from NGINX Ingress to Envoy Gateway: A Practical Guide">
+  <meta name="twitter:description" content="A detailed walkthrough of migrating 16+ services from NGINX Ingress Controller to Envoy Gateway using the Kubernetes Gateway API. Covers HTTPRoute patterns, SecurityPolicy, BackendTrafficPolicy, TLS backends, custom error pages, and the real-world problems you will hit along the way.">
+  <meta name="twitter:image" content="https://burrell.tech/blog/og/nginx-to-gateway-api.png">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Migrating from NGINX Ingress to Envoy Gateway: A Practical Guide",
+    "datePublished": "2026-03-22",
+    "dateModified": "2026-03-22",
+    "description": "A detailed walkthrough of migrating 16+ services from NGINX Ingress Controller to Envoy Gateway using the Kubernetes Gateway API. Covers HTTPRoute patterns, SecurityPolicy, BackendTrafficPolicy, TLS backends, custom error pages, and the real-world problems you will hit along the way.",
+    "url": "https://burrell.tech/blog/nginx-to-gateway-api/",
+    "image": "https://burrell.tech/blog/og/nginx-to-gateway-api.png",
+    "timeRequired": "PT13M",
+    "author": {
+      "@type": "Person",
+      "name": "Noah Burrell",
+      "url": "https://burrell.tech/about"
+    },
+    "publisher": {
+      "@id": "https://burrell.tech/#organization"
+    },
+    "keywords": "kubernetes, gateway-api, envoy, gitops, networking"
+  }
+  </script>
+
+  <!-- Theme (blocking - must run before first paint to prevent flash) -->
+  <script src="/js/theme.js"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/tailwind.css">
+  <link rel="stylesheet" href="/css/custom.css">
+
+  <!-- Scripts -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="/js/analytics.js"></script>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans antialiased">
+
+  <div id="nav-placeholder" data-active-page="blog"></div>
+
+  <main class="flex-1">
+  <!-- Post Header -->
+  <section class="bg-gray-50 dark:bg-gray-900/40 border-b border-gray-200 dark:border-gray-800 py-16 sm:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <a href="/blog" class="inline-flex items-center gap-1.5 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors mb-6">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        All posts
+      </a>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Migrating from NGINX Ingress to Envoy Gateway: A Practical Guide</h1>
+      <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
+        <time datetime="2026-03-22">March 22, 2026</time>
+        <span>&middot;</span>
+        <span>Noah Burrell</span>
+        <span>&middot;</span>
+        <span>13 min read</span>
+      </div>
+      <div class="mt-4 flex flex-wrap gap-2">
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">kubernetes</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">gateway-api</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">envoy</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">gitops</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">networking</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Post Content -->
+  <section class="py-12 sm:py-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
+        <div class="blog-hero">
+  <img src="/blog/images/gateway-api-migration-hero.svg" alt="NGINX Ingress to Gateway API migration" width="500" style="display: inline-block;">
+</div>
+<p>The Kubernetes Gateway API has been GA since 2023, and the ecosystem around it has matured enough that running it in production is no longer an early-adopter move. I recently migrated my homelab cluster from NGINX Ingress Controller to Envoy Gateway, covering 16+ services across four ArgoCD projects. This post walks through what the migration actually looked like with topics spanning the resource patterns that replace NGINX annotations, the problems I hit, and what I would do differently in a production environment.</p>
+<p>The cluster runs Talos Linux managed via Omni, with ArgoCD handling GitOps reconciliation, Longhorn for distributed storage, MetalLB for load balancing, cert-manager for TLS, and external-dns for Cloudflare DNS management. The entire cluster configuration is public in <a href="https://github.com/noahburrell0/k8s/tree/4a388132e508527326479bd18f4146c5c1347142/" target="_blank" rel="noopener">my GitOps repository</a>, so every resource referenced in this post has a full working example you can browse. If your stack looks anything like this, most of what follows should loosely translate.</p>
+<h2>Why Move Off NGINX Ingress</h2>
+<p>The most pressing reason is that the project is being retired. In November 2025, Kubernetes SIG Network and the Security Response Committee <a href="https://kubernetes.io/blog/2025/11/11/ingress-nginx-retirement/" target="_blank" rel="noopener">announced the retirement of ingress-nginx</a>. Maintenance halts completely in March 2026, after which there will be no further releases, no bugfixes, and no security patches. Existing deployments will keep running, but you are on your own when the next CVE drops. The recommended migration path is the Gateway API.</p>
+<p>Beyond the retirement, the operational reasons to move were already stacking up. Every behavior you want to control with NGINX Ingress is an annotation on the Ingress resource. SSL redirects, IP whitelisting, CORS, timeouts, proxy body size, backend protocols, custom headers. A complex service might have ten or more annotations, all unvalidated strings in the <code>nginx.ingress.kubernetes.io/*</code> namespace. There is no schema telling you that you typo'd <code>whitelist-source-rnage</code> until the traffic policy silently does not apply. Security policy, traffic management, and routing are all co-mingled on a single resource, which makes it hard to manage them independently or reuse policies across services.</p>
+<p>The Gateway API fixes this by separating concerns into distinct resource types. Routing lives in HTTPRoute. Security lives in SecurityPolicy. Traffic management lives in BackendTrafficPolicy and ClientTrafficPolicy. TLS termination lives on the Gateway itself. Each resource has a typed CRD with schema validation, and policies attach to routes by reference rather than being embedded in annotations. It is more verbose, but it is explicit and composable in ways that annotations never were.</p>
+<h2>The Foundation: A Shared Gateway</h2>
+<p>The core of the new architecture is a single shared Gateway resource with two listeners (HTTP and HTTPS), backed by an EnvoyProxy configuration that merges multiple Gateways into a single Envoy deployment:</p>
+<pre><code class="language-yaml">apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: envoy-proxy-config
+spec:
+  mergeGateways: true
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyService:
+        annotations:
+          metallb.io/loadBalancerIPs: &quot;172.19.0.254&quot;
+
+---
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: envoy
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+  parametersRef:
+    group: gateway.envoyproxy.io
+    kind: EnvoyProxy
+    name: envoy-proxy-config
+    namespace: envoy-gateway-system
+
+---
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: envoy
+spec:
+  gatewayClassName: envoy
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: https
+      protocol: HTTPS
+      port: 443
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: envoy-wildcard-tls
+      allowedRoutes:
+        namespaces:
+          from: All
+</code></pre>
+<p>A few design decisions here worth calling out. A single wildcard certificate from cert-manager covers <code>burrell.tech</code>, <code>*.burrell.tech</code>, <code>*.home.burrell.tech</code>, <code>*.k8s.burrell.tech</code>, and <code>*.hass.burrell.tech</code>. This eliminated per-service TLS configuration entirely. And <code>allowedRoutes.namespaces.from: All</code> lets HTTPRoutes in any namespace attach to this Gateway, so each application can live in its own namespace while sharing the gateway infrastructure.</p>
+<p>The <code>mergeGateways: true</code> setting is an Envoy Gateway-specific feature that lets multiple Gateway resources across namespaces share a single underlying Envoy deployment and LoadBalancer IP. Without it, each Gateway provisions its own LoadBalancer, which eats MetalLB IPs and adds operational overhead. This is useful to have because I have multiple Gateways living across the cluster, but my home internet package only has 1 IP address. As a result, I can only forward ports 80 and 443 to one Gateway IP address. Sure, I could have put a reverse proxy in front of the Gateways, but who needs that extra overhead?</p>
+<h2>Mapping NGINX Annotations to Gateway API Resources</h2>
+<p>Before diving into the patterns, here is the translation table. Every NGINX annotation I was using maps to a specific Gateway API resource type:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>NGINX Function</th>
+<th>Gateway API Equivalent</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>force-ssl-redirect</code> / <code>ssl-redirect</code> (Annotation)</td>
+<td>Separate HTTPRoute on <code>sectionName: http</code> with <code>RequestRedirect</code> filter</td>
+<td><a href="https://github.com/noahburrell0/k8s/blob/4a388132e508527326479bd18f4146c5c1347142/configs/internal/bazarr/configs/gateway.yaml#L23-L39" target="_blank" rel="noopener">Link</a></td>
+</tr>
+<tr>
+<td><code>whitelist-source-range</code> (Annotation)</td>
+<td><code>SecurityPolicy</code> with <code>authorization.rules[].principal.clientCIDRs</code></td>
+<td><a href="https://github.com/noahburrell0/k8s/blob/4a388132e508527326479bd18f4146c5c1347142/configs/internal/bazarr/configs/gateway.yaml#L43-L60" target="_blank" rel="noopener">Link</a></td>
+</tr>
+<tr>
+<td><code>enable-cors</code> / <code>cors-allow-*</code> (Annotation)</td>
+<td><code>SecurityPolicy</code> with <code>cors</code> block</td>
+<td><a href="https://github.com/noahburrell0/k8s/blob/4a388132e508527326479bd18f4146c5c1347142/configs/external/contact-api/deploy.yaml#L99-L116" target="_blank" rel="noopener">Link</a></td>
+</tr>
+<tr>
+<td><code>proxy-read-timeout</code> / <code>proxy-send-timeout</code> (Annotation)</td>
+<td><code>BackendTrafficPolicy</code> with <code>timeout.http</code></td>
+<td><a href="https://github.com/noahburrell0/k8s/blob/4a388132e508527326479bd18f4146c5c1347142/configs/external/seafile/configs/gateway.yaml#L54-L68" target="_blank" rel="noopener">Link</a></td>
+</tr>
+<tr>
+<td><code>proxy-body-size</code> (Annotation)</td>
+<td>Not needed (Envoy has no default body size limit)</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td><code>custom-http-errors</code> (Annotation)</td>
+<td><code>BackendTrafficPolicy</code> with <code>responseOverride</code></td>
+<td><a href="https://github.com/noahburrell0/k8s/blob/4a388132e508527326479bd18f4146c5c1347142/configs/external/main-site/manifests/gateway.yaml#L48-L279" target="_blank" rel="noopener">Link</a></td>
+</tr>
+<tr>
+<td><code>backend-protocol: &quot;HTTPS&quot;</code> (Annotation)</td>
+<td><code>Backend</code> CRD with TLS configuration</td>
+<td><a href="https://github.com/noahburrell0/k8s/blob/4a388132e508527326479bd18f4146c5c1347142/configs/setup/argocd/overlay/argocd-gateway.yaml#L1-L61" target="_blank" rel="noopener">Link</a></td>
+</tr>
+<tr>
+<td><code>permanent-redirect</code> (Annotation)</td>
+<td>HTTPRoute <code>rules[].filters</code> with <code>RequestRedirect</code></td>
+<td><a href="https://github.com/noahburrell0/k8s/blob/4a388132e508527326479bd18f4146c5c1347142/configs/external/seafile/configs/gateway.yaml#L1-L30" target="_blank" rel="noopener">Link</a></td>
+</tr>
+<tr>
+<td><code>X-Real-IP</code> (Default NGINX Header)</td>
+<td><code>ClientTrafficPolicy</code> with <code>headers.earlyRequestHeaders</code></td>
+<td><a href="https://github.com/noahburrell0/k8s/blob/4a388132e508527326479bd18f4146c5c1347142/configs/setup/envoy-gateway/gateway.yaml#L42-L55" target="_blank" rel="noopener">Link</a></td>
+</tr>
+<tr>
+<td>Path-Based Routing Rules</td>
+<td>HTTPRoute <code>rules[].matches[].path</code></td>
+<td><a href="https://github.com/noahburrell0/k8s/blob/4a388132e508527326479bd18f4146c5c1347142/configs/external/harbor/configs/gateway.yaml#L1-L38" target="_blank" rel="noopener">Link</a></td>
+</tr>
+</tbody>
+</table>
+</div><h2>HTTPRoute Patterns</h2>
+<h3>Basic Routing with HTTP-to-HTTPS Redirect</h3>
+<p>Every service needs two HTTPRoutes: one for the actual HTTPS routing and one for the HTTP-to-HTTPS redirect. With NGINX this was a single annotation. With Gateway API it is explicit:</p>
+<pre><code class="language-yaml">apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: bazarr
+spec:
+  parentRefs:
+    - name: envoy
+      namespace: envoy-gateway-system
+      sectionName: https
+  hostnames:
+    - bazarr.home.burrell.tech
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: bazarr
+          port: 6767
+
+---
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: bazarr-redirect
+spec:
+  parentRefs:
+    - name: envoy
+      namespace: envoy-gateway-system
+      sectionName: http
+  hostnames:
+    - bazarr.home.burrell.tech
+  rules:
+    - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            statusCode: 301
+</code></pre>
+<p>The <code>sectionName</code> field is critical and I will come back to this in the gotchas section. The main route binds to <code>sectionName: https</code> so it only handles TLS traffic. The redirect route binds to <code>sectionName: http</code> and issues a 301 to the HTTPS scheme. This pattern was replicated for every service.</p>
+<h3>Path-Based Multi-Backend Routing</h3>
+<p>Harbor required routing different URL paths to different backend services. A single HTTPRoute handles this with multiple rules, and Gateway API evaluates them in specificity order:</p>
+<pre><code class="language-yaml">apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: harbor
+spec:
+  parentRefs:
+    - name: envoy
+      namespace: envoy-gateway-system
+      sectionName: https
+  hostnames:
+    - registry.burrell.tech
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api/
+        - path:
+            type: PathPrefix
+            value: /service/
+        - path:
+            type: PathPrefix
+            value: /v2/
+        - path:
+            type: PathPrefix
+            value: /chartrepo/
+        - path:
+            type: PathPrefix
+            value: /c/
+      backendRefs:
+        - name: harbor-core
+          port: 80
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: harbor-portal
+          port: 80
+</code></pre>
+<p>The API, registry, and chart paths all route to <code>harbor-core</code>, while the catch-all <code>/</code> routes to <code>harbor-portal</code> for the web UI.</p>
+<h3>Path Rewriting and Redirects</h3>
+<p>Seafile needed a login path redirect to SSO. This is expressed as a route rule with a <code>RequestRedirect</code> filter, where the more specific path takes precedence:</p>
+<pre><code class="language-yaml">rules:
+  - matches:
+      - path:
+          type: PathPrefix
+          value: /accounts/login/
+    filters:
+      - type: RequestRedirect
+        requestRedirect:
+          path:
+            type: ReplaceFullPath
+            replaceFullPath: /sso/?next=/
+          statusCode: 301
+  - matches:
+      - path:
+          type: PathPrefix
+          value: /
+    backendRefs:
+      - name: seafile
+        port: 80
+</code></pre>
+<h2>Security and Traffic Policies</h2>
+<h3>IP Whitelisting with SecurityPolicy</h3>
+<p>The <code>whitelist-source-range</code> annotation is replaced with a SecurityPolicy that targets the HTTPRoute by reference:</p>
+<pre><code class="language-yaml">apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: bazarr-whitelist
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: bazarr
+  authorization:
+    defaultAction: Deny
+    rules:
+      - name: allow-private
+        action: Allow
+        principal:
+          clientCIDRs:
+            - 192.168.0.0/16
+            - 172.16.0.0/12
+</code></pre>
+<p>This was applied to all internal services. A SecurityPolicy can also target multiple HTTPRoutes simultaneously, which I used for MinIO where a single policy covered both the API and console routes:</p>
+<pre><code class="language-yaml">spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: minio-api
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: minio-console
+</code></pre>
+<p>The key behavioral difference from NGINX is that a SecurityPolicy is its own resource with its own lifecycle. You can manage, version, and reuse policies independently of the routes they protect.</p>
+<h3>CORS with SecurityPolicy</h3>
+<p>The Contact API needed CORS headers to accept POST requests from the main website. With NGINX, this required three annotations: <code>nginx.ingress.kubernetes.io/enable-cors: &quot;true&quot;</code> to turn on CORS handling, <code>nginx.ingress.kubernetes.io/cors-allow-origin</code> to specify which origins are permitted, and <code>nginx.ingress.kubernetes.io/cors-allow-methods</code> to control which HTTP methods are accepted. With Envoy Gateway, all three collapse into a single typed <code>cors</code> block on a SecurityPolicy.</p>
+<pre><code class="language-yaml">apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: contact-api-cors
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: contact-api
+  cors:
+    allowOrigins:
+      - &quot;https://burrell.tech&quot;
+      - &quot;https://www.burrell.tech&quot;
+      - &quot;http://localhost:8080&quot;
+    allowMethods:
+      - POST
+</code></pre>
+<h3>Timeout Configuration with BackendTrafficPolicy</h3>
+<p>Seafile's large file transfers were hitting Envoy's default timeouts after the migration. A BackendTrafficPolicy resolved this:</p>
+<pre><code class="language-yaml">apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: BackendTrafficPolicy
+metadata:
+  name: seafile-timeout
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: seafile
+  timeout:
+    http:
+      connectionIdleTimeout: 1800s
+      maxConnectionDuration: 1800s
+    tcp:
+      connectTimeout: 60s
+</code></pre>
+<p>The 30-minute timeout was tuned upward from an initial 600 seconds based on real-world sync patterns with the Seafile desktop client.</p>
+<h3>Client Header Injection with ClientTrafficPolicy</h3>
+<p>Several applications, notably Paperless-ngx, required the real client IP. With NGINX this happened implicitly. With Envoy Gateway, a ClientTrafficPolicy applied at the Gateway level injects the header for all routes:</p>
+<pre><code class="language-yaml">apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: ClientTrafficPolicy
+metadata:
+  name: envoy-client-headers
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: envoy
+  headers:
+    earlyRequestHeaders:
+      set:
+        - name: X-Real-IP
+          value: &quot;%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%&quot;
+</code></pre>
+<h2>TLS Backend Routing</h2>
+<p>ArgoCD's server runs with TLS enabled internally, which previously required the <code>backend-protocol: &quot;HTTPS&quot;</code> annotation. The Gateway API solution uses the Envoy Gateway Backend CRD:</p>
+<pre><code class="language-yaml">apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: Backend
+metadata:
+  name: argocd-server
+spec:
+  endpoints:
+    - fqdn:
+        hostname: argocd-server.argocd.svc.cluster.local
+        port: 443
+  tls:
+    insecureSkipVerify: true
+</code></pre>
+<p>The HTTPRoute then references this Backend instead of a Kubernetes Service:</p>
+<pre><code class="language-yaml">backendRefs:
+  - group: gateway.envoyproxy.io
+    kind: Backend
+    name: argocd-server
+</code></pre>
+<p>This requires enabling the Backend extension API in the Envoy Gateway Helm values:</p>
+<pre><code class="language-yaml">config:
+  envoyGateway:
+    extensionApis:
+      enableBackend: true
+</code></pre>
+<h2>Custom Error Pages</h2>
+<p>This was the most complex piece of the migration. This website uses <code>tarampampam/error-pages</code> for styled error pages. Under NGINX, the <code>custom-http-errors</code> annotation intercepted error responses and served the custom page. With Envoy Gateway, the equivalent is <code>responseOverride</code> on a BackendTrafficPolicy:</p>
+<pre><code class="language-yaml">apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: BackendTrafficPolicy
+metadata:
+  name: main-site-error-pages
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: main-site
+  responseOverride:
+    - match:
+        statusCodes:
+          - type: Value
+            value: 404
+      redirect:
+        hostname: errors.k8s.burrell.tech
+        path:
+          type: ReplaceFullPath
+          replaceFullPath: /404.html
+        statusCode: 302
+</code></pre>
+<p>A dedicated HTTPRoute exposes the error-pages service at <code>errors.k8s.burrell.tech</code>, and the <code>responseOverride</code> performs an internal redirect when the main backend returns a matching status code. This covers all 20 codes the error-pages service supports.</p>
+<p>A couple of things to be aware of. The <code>responseOverride</code> with <code>redirect</code> type had a critical bug fix in Envoy Gateway v1.7.0, so make sure you are on at least that version. And there is a behavioral difference from NGINX where the internal redirect returns the error page with HTTP 200 (the status from the error-pages service), not the original error code. NGINX preserved the original status code. This is a known limitation of the redirect-based approach in Envoy Gateway's current implementation.</p>
+<h2>The Gotchas</h2>
+<p>Every migration has them. Here are the ones that cost me time.</p>
+<h3>sectionName Is Not Optional</h3>
+<p>This was the most impactful issue. After the initial deployment, HTTP-to-HTTPS redirects failed for most services. Accessing <code>http://service.example.com</code> served the application directly over HTTP instead of redirecting.</p>
+<p>The root cause: the main HTTPRoutes did not specify a <code>sectionName</code> in their <code>parentRefs</code>. Without <code>sectionName</code>, an HTTPRoute attaches to all listeners on the Gateway, both HTTP and HTTPS. The main route matched on port 80 and port 443, taking precedence over the redirect route on the HTTP listener.</p>
+<p>One service appeared to work because its main route used an <code>Exact</code> path match. Requests to other paths on port 80 fell through to the redirect route, masking the issue during early testing.</p>
+<p>The fix was adding <code>sectionName: https</code> to every main HTTPRoute. This had to be applied across all routes. The lesson: when your Gateway has multiple listeners, <code>sectionName</code> is not optional. Its omission silently causes routes to bind to all listeners, producing subtle bugs that are hard to diagnose.</p>
+<h3>Helm Charts That Derive Config from Ingress</h3>
+<p>After disabling the NGINX Ingress for Paperless-ngx and deploying the Gateway API HTTPRoute, the application returned HTTP 403 with &quot;CSRF verification failed&quot; on all form submissions. The Paperless Helm chart automatically derived its <code>PAPERLESS_URL</code> environment variable from the Ingress host configuration. When the Ingress was removed, the variable was unset, and Paperless could not validate CSRF tokens.</p>
+<p>The fix was explicitly setting the environment variable in the Helm values:</p>
+<pre><code class="language-yaml">env:
+  PAPERLESS_URL: https://paperless.burrell.tech
+</code></pre>
+<p>Check your Helm chart templates for variables derived from Ingress resources before you remove those Ingress resources. The failure mode is not always obviously related to the migration.</p>
+<h3>Cloudflare Flexible SSL Creates Redirect Loops</h3>
+<p>One service was accessible internally but produced <code>ERR_TOO_MANY_REDIRECTS</code> from the public internet. The redirect loop came from an interaction between Cloudflare's &quot;Flexible&quot; SSL mode and the HTTP-to-HTTPS redirect. Cloudflare connects to the origin over HTTP, the origin redirects to HTTPS, Cloudflare follows the redirect but connects over HTTP again. Infinite loop.</p>
+<p>The fix was ensuring the domain's SSL/TLS mode in Cloudflare was set to &quot;Full (strict)&quot; so Cloudflare connects to the origin over HTTPS.</p>
+<h3>Harbor TLS Namespace Mismatch</h3>
+<p>Harbor's Helm chart generates its own internal NGINX deployment and expects to handle TLS termination. The chart's Gateway API support referenced the wildcard TLS secret, but that secret lived in <code>envoy-gateway-system</code> while Harbor was in its own namespace. The solution was disabling TLS in Harbor's Helm values entirely (<code>expose.tls.enabled: false</code>) and letting TLS terminate at the Envoy Gateway level, then creating a custom HTTPRoute outside the chart.</p>
+<h3>Seafile Timeout Tuning</h3>
+<p>After migration, the Seafile desktop client reported 504 Gateway Timeout errors on large file operations. Envoy's default connection timeout is far shorter than what Seafile's sync operations require. The BackendTrafficPolicy needed 1800-second timeouts for both HTTP idle and max connection duration. My initial 600-second timeout was not enough, and this took a round of real-world testing to get right.</p>
+<h2>What I Would Do Differently in Production</h2>
+<p>This migration was performed on a homelab with a single operator and no SLA. A production environment would need a different approach.</p>
+<p>Run both the ingress and gateway controllers simultaneously. Both can coexist because they watch different resource types. Create HTTPRoutes for each service while keeping the Ingress resources in place, then shift traffic incrementally using DNS weighted routing or load balancer traffic splitting. Start with 5%, monitor, increase. Do not remove Ingress resources until 100% of traffic has been on the Gateway API path with stable metrics for days to weeks.</p>
+<p>Lower DNS TTLs before the migration to enable fast rollback. Keep Ingress resources in version control even after HTTPRoutes are deployed. Consider a feature flag in your Helm values that controls whether Ingress or HTTPRoute resources are rendered, allowing instant rollback without deleting anything.</p>
+<p>Deploy synthetic monitoring that continuously verifies each endpoint through both the NGINX and Envoy paths during the parallel running period. Envoy exposes rich Prometheus metrics natively, so compare request rates, error rates, and latency distributions between the two paths.</p>
+<p>Audit every SecurityPolicy against current security requirements, not just the NGINX annotations. The migration is an opportunity to tighten access controls rather than just replicating what existed before.</p>
+<h2>Final State</h2>
+<p>After the migration, the cluster has zero Ingress resources and no NGINX Ingress Controller. The resource inventory includes multiple Gateways (merged into a single Envoy deployment), roughly 20 main HTTPRoutes with an equal number of redirect HTTPRoutes, 11 SecurityPolicies, 2 BackendTrafficPolicies, 1 ClientTrafficPolicy, and 1 Backend custom resource. Everything is managed through ArgoCD and versioned in Git. You can browse the complete post-migration state in <a href="https://github.com/noahburrell0/k8s/tree/4a388132e508527326479bd18f4146c5c1347142/" target="_blank" rel="noopener">my GitOps repository</a> if you want to see how all of these resources fit together in a real cluster.</p>
+<p>For brevity, this post focused on the routing and policy migration. There were also changes to the supporting infrastructure that I did not cover here. cert-manager needed updated Certificate resources to provide TLS secrets in the right namespace and format for the Gateway. external-dns was reconfigured to use the DNSEndpoint CRD source instead of reading from Ingress resources. MetalLB required coordination to assign the correct LoadBalancer IP to the new Envoy service. And k8s-gateway, which handles split-horizon DNS for internal resolution, needed adjustments to work with the new Gateway setup. All of the configuration for these components is in <a href="https://github.com/noahburrell0/k8s/tree/4a388132e508527326479bd18f4146c5c1347142/" target="_blank" rel="noopener">the repository</a> if you want to see how they were adapted.</p>
+<p>The separation of concerns is the biggest win. Routing, security, traffic management, and TLS are all independent resources that can be managed by different teams or at different cadences. Schema validation catches configuration errors at apply time rather than silently ignoring them at runtime. And because Gateway API is a vendor-neutral standard, moving to a different implementation in the future (Istio, Cilium, Kong) would mean swapping the GatewayClass and implementation-specific policies, not rewriting every route.</p>
+<p>If you are running NGINX Ingress and have been watching the Gateway API from the sidelines, now is a reasonable time to make the move. The spec is stable, the implementations are mature, and the operational model is a meaningful improvement over annotation-driven configuration.</p>
+<p>If you are planning a migration like this for your organization, <a href="/contact" target="_blank" rel="noopener">get in touch</a>. I work with teams to design and implement all kinds of changes just like this on Kubernetes.</p>
+
+      </article>
+    </div>
+  </section>
+  </main>
+
+  <div id="cta-placeholder"
+    data-i18n="blog_cta"
+    data-variant="simple"></div>
+  <div id="footer-placeholder"></div>
+
+  <!-- components.js must run before Alpine (deferred) so nav x-data is in the DOM at Alpine init time -->
+  <script src="/js/components.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="/js/blog-i18n-links.js"></script>
+  <script src="/js/code-copy.js"></script>
+</body>
+</html>

@@ -1,4 +1,30 @@
+var markdownIt = require('markdown-it');
+
 module.exports = function (eleventyConfig) {
+  // Customize Markdown: open links in new tab
+  var md = markdownIt({ html: true, linkify: true });
+  var defaultRender = md.renderer.rules.link_open || function (tokens, idx, options, env, self) {
+    return self.renderToken(tokens, idx, options);
+  };
+  md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
+    tokens[idx].attrSet('target', '_blank');
+    tokens[idx].attrSet('rel', 'noopener');
+    return defaultRender(tokens, idx, options, env, self);
+  };
+  // Wrap tables in a scrollable div
+  var defaultTableOpen = md.renderer.rules.table_open || function (tokens, idx, options, env, self) {
+    return self.renderToken(tokens, idx, options);
+  };
+  md.renderer.rules.table_open = function (tokens, idx, options, env, self) {
+    return '<div class="table-wrap">' + defaultTableOpen(tokens, idx, options, env, self);
+  };
+  var defaultTableClose = md.renderer.rules.table_close || function (tokens, idx, options, env, self) {
+    return self.renderToken(tokens, idx, options);
+  };
+  md.renderer.rules.table_close = function (tokens, idx, options, env, self) {
+    return defaultTableClose(tokens, idx, options, env, self) + '</div>';
+  };
+  eleventyConfig.setLibrary('md', md);
   // Posts collection sorted by date descending
   eleventyConfig.addCollection('posts', function (collectionApi) {
     return collectionApi.getFilteredByGlob('blog/posts/*.md').sort(function (a, b) {

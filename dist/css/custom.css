@@ -70,6 +70,19 @@ body {
   object-fit: contain;
 }
 
+/* Make tables horizontally scrollable on mobile */
+.prose .table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.prose .table-wrap table {
+  display: table;
+  min-width: 100%;
+}
+.prose table {
+  font-size: 0.8rem;
+}
+
 /* Inline code styling for blog prose */
 .prose :not(pre) > code {
   background-color: #f1f5f9;

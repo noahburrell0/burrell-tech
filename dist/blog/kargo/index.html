@@ -107,8 +107,8 @@
         <div class="blog-hero">
   <img src="/blog/images/kargo-logo.webp" alt="Kargo logo" width="180" style="display: inline-block;">
 </div>
-<p>If you read my <a href="/blog/argo-cd/">previous post on Argo CD</a>, you know that GitOps gives us a powerful model for deploying applications to Kubernetes. Git becomes the source of truth, Argo CD continuously reconciles your cluster state, and every change is auditable through commit history. But once you have that foundation in place, a harder question emerges: how do you safely promote changes from one environment to the next?</p>
-<p>This is the problem Kargo solves. Built by the same team behind the Argo project at <a href="https://akuity.io">Akuity</a>, Kargo is a Kubernetes-native platform that brings structured promotion pipelines to GitOps workflows. It does not replace Argo CD. Instead, it sits on top of it, orchestrating how changes flow through your environments.</p>
+<p>If you read my <a href="/blog/argo-cd/" target="_blank" rel="noopener">previous post on Argo CD</a>, you know that GitOps gives us a powerful model for deploying applications to Kubernetes. Git becomes the source of truth, Argo CD continuously reconciles your cluster state, and every change is auditable through commit history. But once you have that foundation in place, a harder question emerges: how do you safely promote changes from one environment to the next?</p>
+<p>This is the problem Kargo solves. Built by the same team behind the Argo project at <a href="https://akuity.io" target="_blank" rel="noopener">Akuity</a>, Kargo is a Kubernetes-native platform that brings structured promotion pipelines to GitOps workflows. It does not replace Argo CD. Instead, it sits on top of it, orchestrating how changes flow through your environments.</p>
 <h2>The Promotion Gap in GitOps</h2>
 <p>Traditional GitOps tooling handles the last mile well. Argo CD ensures that whatever is defined in Git gets deployed to your cluster. But it has no opinion about how changes should move between environments. In practice, teams end up building custom CI scripts, writing fragile shell pipelines, or relying on manual pull requests to bump image tags from staging to production.</p>
 <p>These approaches work at small scale, but they create problems as your organization grows. Promotion logic gets scattered across CI pipelines, approval workflows are informal at best, and there is no unified view of what version is running where or what is waiting to be promoted. Kargo addresses all of this by making promotion a first-class concept.</p>
@@ -198,8 +198,8 @@ spec:
 <p>The quickest way to try Kargo locally is with their quickstart script, which sets up a local Kubernetes cluster with both Argo CD and Kargo pre-configured. You will need <strong>Kind</strong> and <strong>Helm</strong> v3.13.1 or later installed.</p>
 <pre><code class="language-bash">curl -L https://raw.githubusercontent.com/akuity/kargo/main/hack/quickstart/kind.sh | sh
 </code></pre>
-<p>This gives you Argo CD at <code>http://localhost:31080</code> and Kargo at <code>http://localhost:31081</code>, both with <code>admin</code> as the password. From there, you can follow the <a href="https://docs.kargo.io/quickstart">quickstart guide</a> to set up your first promotion pipeline using a fork of the demo repository.</p>
-<p>For production installations, Kargo provides Helm charts with extensive configuration options. The <a href="https://docs.kargo.io/">installation documentation</a> covers both basic and advanced setups, including integration with existing Argo CD instances.</p>
+<p>This gives you Argo CD at <code>http://localhost:31080</code> and Kargo at <code>http://localhost:31081</code>, both with <code>admin</code> as the password. From there, you can follow the <a href="https://docs.kargo.io/quickstart" target="_blank" rel="noopener">quickstart guide</a> to set up your first promotion pipeline using a fork of the demo repository.</p>
+<p>For production installations, Kargo provides Helm charts with extensive configuration options. The <a href="https://docs.kargo.io/" target="_blank" rel="noopener">installation documentation</a> covers both basic and advanced setups, including integration with existing Argo CD instances.</p>
 <h2>Warehouse Subscription Strategies</h2>
 <p>One of Kargo's more powerful features is the flexibility of its Warehouse subscriptions. Depending on how you tag and release artifacts, you can choose from several selection strategies.</p>
 <p>For container images, the <code>SemVer</code> strategy is the default and usually the best choice. It selects images based on semantic version constraints, so a constraint of <code>^1.29.0</code> will match <code>1.29.1</code> and <code>1.30.0</code> but not <code>2.0.0</code>. If your images use date-based or lexicographic tags, the <code>Lexical</code> and <code>NewestBuild</code> strategies are available as alternatives.</p>
@@ -222,7 +222,7 @@ spec:
 <h2>Getting Started</h2>
 <p>If you have an existing Argo CD setup and want to add structured promotions, here is the path I recommend:</p>
 <ol>
-<li>Start with the <a href="https://docs.kargo.io/quickstart">Kargo quickstart</a> to understand the concepts in a local environment.</li>
+<li>Start with the <a href="https://docs.kargo.io/quickstart" target="_blank" rel="noopener">Kargo quickstart</a> to understand the concepts in a local environment.</li>
 <li>Identify one application with a simple pipeline (dev, staging, production) as your first candidate.</li>
 <li>Create a Warehouse that watches the artifacts for that application.</li>
 <li>Define Stages for each environment with appropriate promotion templates.</li>
@@ -232,7 +232,7 @@ spec:
 <p>Kargo fits naturally into an existing GitOps workflow. It does not require you to change how Argo CD deploys applications. It simply adds the orchestration layer that handles how changes move between environments.</p>
 <h2>What's Next</h2>
 <p>Kargo is under active development and the community continues to add features. In future posts I plan to explore more advanced topics like multi-artifact Freight, complex pipeline topologies with fan-in and fan-out patterns, and integration with Argo Rollouts for progressive delivery within a single Stage.</p>
-<p>If you are looking for help adopting Kargo or building promotion pipelines for your organization, <a href="/contact">get in touch</a>. I work with teams to design and implement GitOps workflows that scale.</p>
+<p>If you are looking for help adopting Kargo or building promotion pipelines for your organization, <a href="/contact" target="_blank" rel="noopener">get in touch</a>. I work with teams to design and implement GitOps workflows that scale.</p>
 
       </article>
     </div>
