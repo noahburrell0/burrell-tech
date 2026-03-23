@@ -49,7 +49,7 @@ async function main() {
   var authBgSrc = path.join(STATIC_DIR, 'auth-background.png');
   if (fs.existsSync(authBgSrc)) {
     await sharp(authBgSrc)
-      .webp({ quality: 90 })
+      .webp({ quality: 100, lossless: true })
       .toFile(path.join(OUT_ROOT, 'auth-background.webp'));
     console.log('  auth-background.png -> auth-background.webp');
   }
