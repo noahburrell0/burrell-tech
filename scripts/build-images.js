@@ -45,6 +45,15 @@ async function main() {
     console.log('  headshot.png -> headshot.webp');
   }
 
+  // Convert auth background
+  var authBgSrc = path.join(STATIC_DIR, 'auth-background.png');
+  if (fs.existsSync(authBgSrc)) {
+    await sharp(authBgSrc)
+      .webp({ quality: 90 })
+      .toFile(path.join(OUT_ROOT, 'auth-background.webp'));
+    console.log('  auth-background.png -> auth-background.webp');
+  }
+
   // Convert static logo
   var logoSrc = path.join(STATIC_DIR, 'logo.png');
   if (fs.existsSync(logoSrc)) {
