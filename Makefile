@@ -2,7 +2,7 @@ PORT      ?= 8080
 CONTAINER  = burrell-tech-dev
 SITE_DIR   = $(shell pwd)/dist
 
-.PHONY: start stop build watch i18n clean
+.PHONY: start stop build images all watch i18n clean
 
 build:
 	npm install
@@ -11,6 +11,13 @@ build:
 	cp node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2 dist/fonts/
 	sh scripts/rebuild.sh
 	npx @11ty/eleventy --quiet
+
+images:
+	mkdir -p dist/blog/images
+	node scripts/build-images.js
+	node scripts/build-og-images.js
+
+all: build images
 
 i18n:
 	node scripts/build-i18n.js
