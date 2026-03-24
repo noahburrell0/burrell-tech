@@ -100,6 +100,18 @@ body {
   border-color: #334155;
 }
 
+/* Mermaid diagrams: reset code block styling */
+pre.mermaid {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  display: flex;
+  justify-content: center;
+}
+pre.mermaid .code-copy-btn {
+  display: none;
+}
+
 /* Code block text color for light mode */
 .prose pre code {
   color: #1e293b;
