@@ -43,7 +43,7 @@
   </url>
   <url>
     <loc>https://burrell.tech/blog/</loc>
-    <changefreq>weekly</changefreq>
+    <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
@@ -85,6 +85,18 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://burrell.tech/privacy"/>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://burrell.tech/blog/kargo-webhooks/</loc>
+    <lastmod>2026-03-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://burrell.tech/blog/k8s-in-place-pod-resize/</loc>
+    <lastmod>2026-03-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://burrell.tech/blog/kargo-verification/</loc>

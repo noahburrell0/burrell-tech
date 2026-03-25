@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kargo Webhook Receivers: Event-Driven Artifact Discovery for GitOps Pipelines | Burrell Technology Services</title>
+  <meta name="description" content="A practical guide to configuring Kargo webhook receivers for event-driven artifact discovery. Replace polling with push-based notifications from GitHub, GitLab, Docker Hub, and more to reduce latency and registry load in your promotion pipelines.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://burrell.tech/blog/kargo-webhooks/">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/logo.webp" as="image">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Burrell Technology Services S.A.">
+  <meta property="og:title" content="Kargo Webhook Receivers: Event-Driven Artifact Discovery for GitOps Pipelines">
+  <meta property="og:description" content="A practical guide to configuring Kargo webhook receivers for event-driven artifact discovery. Replace polling with push-based notifications from GitHub, GitLab, Docker Hub, and more to reduce latency and registry load in your promotion pipelines.">
+  <meta property="og:url" content="https://burrell.tech/blog/kargo-webhooks/">
+  <meta property="og:image" content="https://burrell.tech/blog/og/kargo-webhooks.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-03-25">
+  <meta property="article:modified_time" content="2026-03-25">
+  <meta property="article:author" content="Noah Burrell">
+  <meta property="article:tag" content="kubernetes">
+  <meta property="article:tag" content="kargo">
+  <meta property="article:tag" content="gitops">
+  <meta property="article:tag" content="webhooks">
+  <meta property="article:tag" content="automation">
+  <meta property="article:section" content="kubernetes">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Kargo Webhook Receivers: Event-Driven Artifact Discovery for GitOps Pipelines">
+  <meta name="twitter:description" content="A practical guide to configuring Kargo webhook receivers for event-driven artifact discovery. Replace polling with push-based notifications from GitHub, GitLab, Docker Hub, and more to reduce latency and registry load in your promotion pipelines.">
+  <meta name="twitter:image" content="https://burrell.tech/blog/og/kargo-webhooks.png">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Kargo Webhook Receivers: Event-Driven Artifact Discovery for GitOps Pipelines",
+    "datePublished": "2026-03-25",
+    "dateModified": "2026-03-25",
+    "description": "A practical guide to configuring Kargo webhook receivers for event-driven artifact discovery. Replace polling with push-based notifications from GitHub, GitLab, Docker Hub, and more to reduce latency and registry load in your promotion pipelines.",
+    "url": "https://burrell.tech/blog/kargo-webhooks/",
+    "image": "https://burrell.tech/blog/og/kargo-webhooks.png",
+    "timeRequired": "PT9M",
+    "author": {
+      "@type": "Person",
+      "name": "Noah Burrell",
+      "url": "https://burrell.tech/about"
+    },
+    "publisher": {
+      "@id": "https://burrell.tech/#organization"
+    },
+    "keywords": "kubernetes, kargo, gitops, webhooks, automation"
+  }
+  </script>
+
+  <!-- Theme (blocking - must run before first paint to prevent flash) -->
+  <script src="/js/theme.js"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/tailwind.css">
+  <link rel="stylesheet" href="/css/custom.css">
+
+  <!-- Scripts -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="/js/analytics.js"></script>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans antialiased">
+
+  <div id="nav-placeholder" data-active-page="blog"></div>
+
+  <main class="flex-1">
+  <!-- Post Header -->
+  <section class="bg-gray-50 dark:bg-gray-900/40 border-b border-gray-200 dark:border-gray-800 py-16 sm:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <a href="/blog" class="inline-flex items-center gap-1.5 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors mb-6">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        All posts
+      </a>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Kargo Webhook Receivers: Event-Driven Artifact Discovery for GitOps Pipelines</h1>
+      <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
+        <time datetime="2026-03-25">March 25, 2026</time>
+        <span>&middot;</span>
+        <span>Noah Burrell</span>
+        <span>&middot;</span>
+        <span>9 min read</span>
+      </div>
+      <div class="mt-4 flex flex-wrap gap-2">
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">kubernetes</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">kargo</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">gitops</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">webhooks</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">automation</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Post Content -->
+  <section class="py-12 sm:py-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
+        <div class="blog-hero">
+  <img src="/blog/images/webhook.svg" alt="Kargo webhook receivers for event-driven artifact discovery" width="200" style="display: inline-block;">
+</div>
+<p>In my previous posts on <a href="/blog/kargo/" target="_blank" rel="noopener">Kargo</a> and <a href="/blog/kargo-verification/" target="_blank" rel="noopener">Kargo verification</a>, I covered how Warehouses discover new artifacts and how verification gates protect your promotion pipelines. One thing I glossed over was how Warehouses actually detect that a new artifact exists. By default, they poll. And polling, while simple, introduces a trade-off between resource consumption and discovery latency that gets worse as your deployment infrastructure grows.</p>
+<p>Kargo v1.6 introduced webhook receivers that flip this model, and v1.7 refined them with smarter payload filtering and additional platform support. Instead of Warehouses periodically asking registries and Git hosts whether anything has changed, those platforms push notifications to Kargo the moment a new artifact lands. The result is near-instant discovery with less load on your registries and fewer wasted API calls.</p>
+<h2>The Polling Problem</h2>
+<p>A Warehouse configured with default settings runs its discovery process on an interval. The controller also enforces a system-wide minimum interval to prevent any single Warehouse from overwhelming external registries. This means you are always making a trade-off. Set the interval too high and your pipelines react slowly to new artifacts. Set it too low and you burn through API rate limits, especially with container registries like Docker Hub that impose strict quotas.</p>
+<p>The problem compounds with scale. If you have 50 Warehouses across 10 projects, all polling their respective registries, that is a steady stream of API calls regardless of whether anything has actually changed. Most of the time, the answer is &quot;no, nothing new,&quot; and those calls are wasted. Worse, tuning the global interval to be kinder to your registries increases the average time between an artifact being published and Kargo noticing it. For teams that care about deployment velocity, that delay adds up.</p>
+<p>Webhooks address this by adding a push-based notification layer. The registry or Git host tells Kargo when something has changed, triggering immediate discovery instead of waiting for the next polling cycle.</p>
+<h2>How Webhook Receivers Work</h2>
+<p>The architecture is straightforward. You configure a webhook receiver in Kargo, which generates a unique URL. You register that URL with your Git hosting platform or container registry as a webhook endpoint. When an event occurs (a push to a branch, a new image tag), the platform sends an HTTP POST to Kargo's webhook endpoint. Kargo's receiver extracts the repository URL from the payload, finds every Warehouse in the relevant scope that subscribes to that repository, and triggers each one to run its discovery process immediately.</p>
+<p>The receiver does not create Freight directly. It simply tells the appropriate Warehouses to check for new artifacts right now instead of waiting for their next polling cycle. The Warehouse's existing subscription filters, including semantic version constraints and commit selectors, still apply.</p>
+<p>In the initial v1.6 release, any webhook event for a repository would trigger discovery on every subscribing Warehouse, even if the tag or reference in the payload would ultimately be ignored. Version 1.7 improved this significantly: receivers now inspect the tag, version, or reference extracted from the payload and skip triggering a Warehouse if that artifact would not match the Warehouse's subscription criteria. This means a push of a <code>latest</code> tag will not cause unnecessary discovery on a Warehouse that only subscribes to semantic version tags, which cuts down on wasted work in busy repositories.</p>
+<p>Kargo supports webhook receivers for GitHub, GitLab, Bitbucket, Docker Hub, Quay, Harbor, GHCR, Azure, Gitea, Artifactory, and a generic receiver that handles any inbound POST request.</p>
+<h2>Configuring Webhook Receivers</h2>
+<p>Webhook receivers can be configured at two levels: per-project using a <code>ProjectConfig</code> resource, or cluster-wide using a <code>ClusterConfig</code> resource. Both approaches follow the same pattern: create a Secret containing a shared secret for request validation, then reference it from the receiver configuration.</p>
+<h3>Project-Level Receivers with ProjectConfig</h3>
+<p>For a project-scoped receiver, you create a Kubernetes Secret in the project's namespace and a <code>ProjectConfig</code> that references it. Here is a complete example for a GitHub webhook receiver:</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Secret
+metadata:
+  name: github-webhook-secret
+  namespace: my-project
+  labels:
+    kargo.akuity.io/cred-type: generic
+data:
+  secret: &lt;base64-encoded-secret&gt;
+---
+apiVersion: kargo.akuity.io/v1alpha1
+kind: ProjectConfig
+metadata:
+  name: my-project
+  namespace: my-project
+spec:
+  webhookReceivers:
+    - name: github-receiver
+      github:
+        secretRef:
+          name: github-webhook-secret
+</code></pre>
+<p>Generate the shared secret with a command like this:</p>
+<pre><code class="language-bash">secret=$(openssl rand -base64 48 | tr -d '=+/' | head -c 32)
+echo &quot;Secret: $secret&quot;
+echo &quot;Encoded: $(echo -n $secret | base64)&quot;
+</code></pre>
+<p>After applying these resources, Kargo generates a unique webhook URL and writes it to the <code>ProjectConfig</code> status. Retrieve it with:</p>
+<pre><code class="language-bash">kubectl get projectconfigs my-project \
+  -n my-project \
+  -o=jsonpath='{.status.webhookReceivers}'
+</code></pre>
+<p>A project-level receiver only triggers Warehouses within that project. If a Warehouse in <code>my-project</code> subscribes to <code>https://github.com/my-org/deploy-config.git</code> and a push event arrives for that repository, only that Warehouse runs discovery. Warehouses in other projects are unaffected.</p>
+<h3>Cluster-Level Receivers with ClusterConfig</h3>
+<p>When you have many projects subscribing to repositories from the same Git hosting provider, configuring a receiver in every project is tedious. A <code>ClusterConfig</code> receiver handles webhook requests across all projects from a single configuration:</p>
+<pre><code class="language-yaml">apiVersion: kargo.akuity.io/v1alpha1
+kind: ClusterConfig
+metadata:
+  name: cluster
+spec:
+  webhookReceivers:
+    - name: org-github-receiver
+      github:
+        secretRef:
+          name: github-org-secret
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: github-org-secret
+  namespace: kargo-system-resources
+  labels:
+    kargo.akuity.io/cred-type: generic
+data:
+  secret: &lt;base64-encoded-secret&gt;
+</code></pre>
+<p>Note that the Secret for a <code>ClusterConfig</code> lives in the cluster secrets namespace, which defaults to <code>kargo-system-resources</code>. When a webhook arrives, Kargo scans all projects for Warehouses subscribing to the repository in the payload and triggers discovery for each match.</p>
+<p>This is the approach I would recommend for platform teams managing a GitHub or GitLab organization. Configure one <code>ClusterConfig</code> receiver, register it as an organization-level webhook, and every project benefits automatically without any per-project configuration.</p>
+<h2>Platform-Specific Setup</h2>
+<p>Each platform has its own quirks for webhook registration. Here are the ones I use most frequently.</p>
+<h3>GitHub</h3>
+<p>GitHub supports webhook registration at the repository level, organization level, or through a GitHub App. For most teams, the organization-level webhook is the sweet spot. Navigate to <code>https://github.com/organizations/&lt;your-org&gt;/settings/hooks</code> and create a new webhook with the URL from your <code>ProjectConfig</code> or <code>ClusterConfig</code> status. Set the content type to <code>application/json</code>, paste the shared secret you generated, and select the events you want to trigger on.</p>
+<p>For Git repositories, select &quot;Just the push event.&quot; If you also use GHCR for container images within the same organization, select &quot;Pushes&quot; and &quot;Packages&quot; individually instead. The receiver handles <code>ping</code>, <code>push</code>, and <code>package</code> event types.</p>
+<p>One thing to be aware of with GHCR: package events are only delivered for container images that are explicitly associated with a Git repository. Check GitHub's documentation on connecting a repository to a package if your images are not triggering webhooks.</p>
+<h3>Docker Hub</h3>
+<p>Docker Hub's webhook system is simpler but also more limited. Navigate to your repository on Docker Hub, open the Webhooks tab, and add the URL from Kargo. Docker Hub does not sign webhook payloads the way GitHub does. Instead, the shared secret is incorporated into the generated URL itself, making the URL effectively a bearer token. Keep it confidential.</p>
+<p>Docker Hub webhooks fire whenever an image is pushed to the repository. There is no event filtering on the Docker Hub side, so every push sends a notification to Kargo. With v1.7's payload filtering, the receiver will skip triggering a Warehouse if the pushed tag would not match that Warehouse's subscription criteria.</p>
+<h3>GitLab</h3>
+<p>GitLab webhooks are configured under your project's Settings &gt; Webhooks page, or at the group level for broader coverage. Add the URL from Kargo, paste the shared secret as the &quot;Secret token,&quot; and enable the &quot;Push events&quot; trigger. For container registry events, you may also want to enable &quot;Tag push events&quot; depending on your workflow.</p>
+<p>GitLab webhooks support SSL verification, which you should leave enabled if your Kargo installation uses a valid TLS certificate. If you are running Kargo behind a self-signed certificate in a development environment, you may need to disable this temporarily for testing.</p>
+<h2>Combining Webhooks with Existing Pipelines</h2>
+<p>Webhooks do not change how the rest of your Kargo pipeline works. They only change the trigger mechanism for Warehouse discovery. Your Stages, verification, soak times, and PromotionTasks all function exactly as before. The difference is that the pipeline reacts faster because the Warehouse detects new artifacts within seconds of them being published rather than waiting for the next polling cycle.</p>
+<p>Here is how a typical end-to-end flow looks with webhooks enabled:</p>
+<ol>
+<li>A CI pipeline builds a new container image and pushes it to GHCR.</li>
+<li>GitHub sends a <code>package</code> event to the Kargo webhook receiver.</li>
+<li>The receiver identifies the repository URL and queries for matching Warehouses.</li>
+<li>The matching Warehouse runs discovery, finds the new image tag, and creates Freight.</li>
+<li>If the first Stage in the pipeline has automatic promotion enabled, the Freight is promoted immediately.</li>
+<li>Verification and soak times proceed as configured.</li>
+</ol>
+<p>The entire path from image push to initial promotion can happen in under a minute, compared to several minutes or longer with polling depending on your interval configuration.</p>
+<h2>A Note on Polling Intervals</h2>
+<p>Webhooks do not replace polling entirely. If a webhook delivery fails or the receiver is temporarily unavailable, you will not learn about new artifacts until the next polling cycle. Kargo's polling continues to run on its configured interval as a fallback. Think of webhooks as an optimization that provides faster notification under normal conditions, not as a replacement for the underlying discovery mechanism. That said, once you have reliable webhook delivery in place, you can safely increase the polling interval on your Warehouses (via <code>spec.interval</code>) or raise the system-wide minimum interval. This reduces the load on both external registries and the Kargo controller while still maintaining a safety net for missed webhook deliveries.</p>
+<h2>Practical Recommendations</h2>
+<p><strong>Start with a ClusterConfig.</strong> A single <code>ClusterConfig</code> can define multiple receivers covering your Git hosts and container registries in one resource. Organization-level webhooks on the sender side mean every project benefits automatically without per-project setup. Use <code>ProjectConfig</code> receivers when individual teams need control over their own webhook configuration without cluster admin access.</p>
+<p><strong>Generate strong shared secrets.</strong> The <code>openssl rand</code> command shown earlier produces a 32-character random string. Do not reuse secrets across receivers, and store them in your secrets management system alongside your other credentials.</p>
+<p><strong>Monitor webhook deliveries on the sender side.</strong> GitHub, GitLab, and Docker Hub all provide webhook delivery logs. If your pipeline stops reacting to new artifacts, check these logs first. A failed delivery usually points to a network issue or a misconfigured secret rather than a Kargo bug.</p>
+<p><strong>Do not set excessively long polling intervals.</strong> Polling always runs as a fallback regardless of webhook configuration. It is tempting to push the interval as high as possible once webhooks are working, but webhooks are best-effort delivery. A reasonable polling interval is your guarantee that artifacts are eventually discovered even if a webhook is lost.</p>
+<h2>What's Next</h2>
+<p>The Kargo team has been shipping features at an aggressive pace. If you are not already using <a href="/blog/kargo-verification/" target="_blank" rel="noopener">verification and soak times</a>, those are the natural next step for hardening your promotion pipelines. For broader context on how Kargo fits into a GitOps workflow alongside Argo CD, check out <a href="/blog/kargo/" target="_blank" rel="noopener">my introduction to Kargo</a> and the <a href="/blog/argo-cd/" target="_blank" rel="noopener">Argo CD deep dive</a>.</p>
+<p>The <a href="https://docs.kargo.io/" target="_blank" rel="noopener">Kargo documentation</a> covers every supported webhook receiver platform including Artifactory, Azure, Harbor, and the generic receiver for platforms that are not directly supported. For help designing promotion pipelines for your team, <a href="/contact" target="_blank" rel="noopener">get in touch</a>.</p>
+
+      </article>
+    </div>
+  </section>
+  </main>
+
+  <div id="cta-placeholder"
+    data-i18n="blog_cta"
+    data-variant="simple"></div>
+  <div id="footer-placeholder"></div>
+
+  <!-- components.js must run before Alpine (deferred) so nav x-data is in the DOM at Alpine init time -->
+  <script src="/js/components.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="/js/blog-i18n-links.js"></script>
+  <script src="/js/code-copy.js"></script>
+  <script src="/js/mermaid.js" type="module"></script>
+</body>
+</html>
