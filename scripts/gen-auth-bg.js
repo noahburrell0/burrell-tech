@@ -4,7 +4,7 @@ var sharp = require('sharp');
 
 var SIZE = 2500;
 var CENTER_X = 850;
-var CENTER_Y = Math.round(SIZE * 0.42);
+var CENTER_Y = Math.round(SIZE * 0.5);
 var OUT = path.join(__dirname, '..', 'static', 'auth-background.png');
 
 // Colors
@@ -81,7 +81,11 @@ async function main() {
   var logoBase64 = 'data:image/png;base64,' + logoPng.toString('base64');
 
   // Build SVG overlay with geometry, logo, and text
-  var textTop = CENTER_Y + LOGO_H / 2 + 70;
+  // Center the full block (logo + gap + title + gap + tagline) vertically
+  var blockHeight = LOGO_H + 70 + 48 + 56 + 26;
+  var blockTop = Math.round(SIZE / 2 - blockHeight / 2);
+  var logoY = blockTop;
+  var textTop = logoY + LOGO_H + 70;
   var svg = [
     '<svg width="' + SIZE + '" height="' + SIZE + '" xmlns="http://www.w3.org/2000/svg">',
 
@@ -129,7 +133,7 @@ async function main() {
     '<circle cx="' + (CENTER_X + 280) + '" cy="' + (CENTER_Y - 570) + '" r="270" fill="none" stroke="rgba(37,99,235,0.03)" stroke-width="2" stroke-dasharray="15,24"/>',
 
     // Logo (no glow filter)
-    '<image href="' + logoBase64 + '" x="' + (CENTER_X - LOGO_W / 2) + '" y="' + (CENTER_Y - LOGO_H / 2) + '" width="' + LOGO_W + '" height="' + LOGO_H + '"/>',
+    '<image href="' + logoBase64 + '" x="' + (CENTER_X - LOGO_W / 2) + '" y="' + logoY + '" width="' + LOGO_W + '" height="' + LOGO_H + '"/>',
 
     // Company name
     '<text x="' + CENTER_X + '" y="' + textTop + '" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="48" font-weight="700" fill="white" opacity="0.95">Burrell Technology Services</text>',
