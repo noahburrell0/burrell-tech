@@ -83,7 +83,7 @@ async function main() {
   // Build SVG overlay with geometry, logo, and text
   // Center the full block (logo + gap + title + gap + tagline) vertically
   var blockHeight = LOGO_H + 70 + 48 + 56 + 26;
-  var blockTop = Math.round(SIZE / 2 - blockHeight / 2) + 140;
+  var blockTop = Math.round(SIZE / 2 - blockHeight / 2);
   var logoY = blockTop;
   var textTop = logoY + LOGO_H + 70;
   var svg = [
