@@ -7,8 +7,8 @@ var STATIC_DIR = path.join(__dirname, '..', 'static');
 var OUT_BLOG = path.join(__dirname, '..', 'dist', 'blog', 'images');
 var OUT_ROOT = path.join(__dirname, '..', 'dist');
 
-// Logo displayed at 32x32 (h-8 w-8); 2x for retina
-var LOGO_MAX = 64;
+// Logo displayed at h-10 (40px) with auto width; 2x for retina
+var LOGO_MAX_HEIGHT = 80;
 
 async function main() {
   fs.mkdirSync(OUT_BLOG, { recursive: true });
@@ -54,14 +54,60 @@ async function main() {
     console.log('  auth-background.png -> auth-background.webp');
   }
 
-  // Convert static logo
-  var logoSrc = path.join(STATIC_DIR, 'logo.png');
+  // Convert static logo and generate favicon
+  var logoSrc = path.join(STATIC_DIR, 'logo.svg');
   if (fs.existsSync(logoSrc)) {
-    await sharp(logoSrc)
-      .resize(LOGO_MAX, LOGO_MAX, { fit: 'inside', withoutEnlargement: true })
+    await sharp(logoSrc, { density: 72 })
+      .resize({ height: LOGO_MAX_HEIGHT, withoutEnlargement: true })
       .webp({ quality: 90 })
       .toFile(path.join(OUT_ROOT, 'logo.webp'));
-    console.log('  logo.png -> logo.webp');
+    console.log('  logo.svg -> logo.webp');
+
+    // Generate favicon.ico (32x32 + 64x64) from dedicated favicon SVG
+    var faviconSrc = path.join(STATIC_DIR, 'favicon.svg');
+    var faviconSizes = [32, 64];
+    var pngBuffers = [];
+
+    for (var s = 0; s < faviconSizes.length; s++) {
+      var size = faviconSizes[s];
+      var pngBuf = await sharp(faviconSrc, { density: 72 })
+        .resize(size, size, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+        .png()
+        .toBuffer();
+      pngBuffers.push({ size: size, data: pngBuf });
+    }
+
+    // ICO format: header + directory entries + PNG data
+    var imageCount = pngBuffers.length;
+    var headerSize = 6;
+    var entrySize = 16;
+    var dataOffset = headerSize + entrySize * imageCount;
+
+    var header = Buffer.alloc(headerSize);
+    header.writeUInt16LE(0, 0);      // reserved
+    header.writeUInt16LE(1, 2);      // ICO type
+    header.writeUInt16LE(imageCount, 4);
+
+    var entries = [];
+    var offset = dataOffset;
+    for (var s = 0; s < pngBuffers.length; s++) {
+      var entry = Buffer.alloc(entrySize);
+      var dim = pngBuffers[s].size === 256 ? 0 : pngBuffers[s].size;
+      entry.writeUInt8(dim, 0);          // width
+      entry.writeUInt8(dim, 1);          // height
+      entry.writeUInt8(0, 2);            // color palette
+      entry.writeUInt8(0, 3);            // reserved
+      entry.writeUInt16LE(1, 4);         // color planes
+      entry.writeUInt16LE(32, 6);        // bits per pixel
+      entry.writeUInt32LE(pngBuffers[s].data.length, 8);
+      entry.writeUInt32LE(offset, 12);
+      entries.push(entry);
+      offset += pngBuffers[s].data.length;
+    }
+
+    var ico = Buffer.concat([header].concat(entries).concat(pngBuffers.map(function (p) { return p.data; })));
+    fs.writeFileSync(path.join(OUT_ROOT, 'favicon.ico'), ico);
+    console.log('  logo.svg -> favicon.ico (32x32 + 64x64)');
   }
 
   console.log('Image conversion complete');
