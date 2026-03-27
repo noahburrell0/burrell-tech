@@ -109,14 +109,14 @@
 </div>
 <p>If you read my <a href="/blog/argo-cd/" target="_blank" rel="noopener">previous post on Argo CD</a>, you know that GitOps gives us a powerful model for deploying applications to Kubernetes. Git becomes the source of truth, Argo CD continuously reconciles your cluster state, and every change is auditable through commit history. But once you have that foundation in place, a harder question emerges: how do you safely promote changes from one environment to the next?</p>
 <p>This is the problem Kargo solves. Built by the same team behind the Argo project at <a href="https://akuity.io" target="_blank" rel="noopener">Akuity</a>, Kargo is a Kubernetes-native platform that brings structured promotion pipelines to GitOps workflows. It does not replace Argo CD. Instead, it sits on top of it, orchestrating how changes flow through your environments.</p>
-<h2>The Promotion Gap in GitOps</h2>
+<h2 id="the-promotion-gap-in-gitops" tabindex="-1">The Promotion Gap in GitOps</h2>
 <p>Traditional GitOps tooling handles the last mile well. Argo CD ensures that whatever is defined in Git gets deployed to your cluster. But it has no opinion about how changes should move between environments. In practice, teams end up building custom CI scripts, writing fragile shell pipelines, or relying on manual pull requests to bump image tags from staging to production.</p>
 <p>These approaches work at small scale, but they create problems as your organization grows. Promotion logic gets scattered across CI pipelines, approval workflows are informal at best, and there is no unified view of what version is running where or what is waiting to be promoted. Kargo addresses all of this by making promotion a first-class concept.</p>
-<h2>Core Concepts</h2>
+<h2 id="core-concepts" tabindex="-1">Core Concepts</h2>
 <p>Kargo introduces a small set of Kubernetes custom resources that model the promotion lifecycle. Understanding these is key to working with the tool effectively.</p>
-<h3>Projects</h3>
+<h3 id="projects" tabindex="-1">Projects</h3>
 <p>A Project is the top-level organizational unit. Each Project maps to a Kubernetes namespace and provides tenancy boundaries, RBAC controls, and policy definitions. If you are managing multiple applications or teams, Projects keep everything cleanly separated.</p>
-<h3>Warehouses</h3>
+<h3 id="warehouses" tabindex="-1">Warehouses</h3>
 <p>A Warehouse watches for new artifact versions and packages them into units that can be promoted. You configure a Warehouse with one or more subscriptions to container image registries, Git repositories, or Helm chart repositories. When a new version appears, the Warehouse creates a new piece of Freight.</p>
 <p>Here is an example Warehouse that monitors an Nginx container image:</p>
 <pre><code class="language-yaml">apiVersion: kargo.akuity.io/v1alpha1
@@ -132,10 +132,10 @@ spec:
         constraint: ^1.29.0
 </code></pre>
 <p>Warehouses can subscribe to multiple sources simultaneously. For instance, you might watch a container image and a Git repository at the same time, so that Freight captures both the new image tag and the latest configuration commit as a single promotable unit.</p>
-<h3>Freight</h3>
+<h3 id="freight" tabindex="-1">Freight</h3>
 <p>Freight is the central abstraction in Kargo. Think of it as a shipping container that groups together a specific set of artifact versions. A single piece of Freight might reference a container image at version <code>1.29.1</code> alongside a Git commit hash and a Helm chart version. These artifacts travel together through your promotion pipeline, ensuring that related changes are always promoted as a unit.</p>
 <p>Freight is created automatically by Warehouses when new artifact versions are detected. Once created, Freight flows through Stages in the order defined by your pipeline.</p>
-<h3>Stages</h3>
+<h3 id="stages" tabindex="-1">Stages</h3>
 <p>Stages are promotion targets. Each Stage represents something whose desired state needs to be updated, typically an environment like test, UAT, or production. Stages are connected in a directed acyclic graph that defines the promotion flow.</p>
 <p>A Stage specifies three things: what Freight it accepts (and from where), how to perform the promotion (a promotion template), and optionally how to verify that the promotion succeeded.</p>
 <pre><code class="language-yaml">apiVersion: kargo.akuity.io/v1alpha1
@@ -183,7 +183,7 @@ spec:
               - name: my-app-uat
 </code></pre>
 <p>This Stage accepts Freight that has already passed through the <code>test</code> Stage. The promotion template clones a Git repository, updates the image tag using Kustomize, commits the change, pushes it, and then tells Argo CD to sync the application. Every step is declarative and versioned alongside the rest of your configuration.</p>
-<h2>How It All Fits Together</h2>
+<h2 id="how-it-all-fits-together" tabindex="-1">How It All Fits Together</h2>
 <p>The typical Kargo pipeline follows a straightforward flow:</p>
 <ol>
 <li><strong>Warehouse detects a new artifact</strong> - A new container image is pushed to your registry, or a new commit lands on a monitored branch.</li>
@@ -194,17 +194,17 @@ spec:
 <li><strong>Freight becomes available downstream</strong> - Once verified in the current Stage, the Freight becomes eligible for promotion to the next Stage in the pipeline.</li>
 </ol>
 <p>This continues until the Freight reaches your final Stage, typically production. At every point you have full visibility into what version is where, what is waiting to be promoted, and the complete history of every promotion that has occurred.</p>
-<h2>Installing Kargo</h2>
+<h2 id="installing-kargo" tabindex="-1">Installing Kargo</h2>
 <p>The quickest way to try Kargo locally is with their quickstart script, which sets up a local Kubernetes cluster with both Argo CD and Kargo pre-configured. You will need <strong>Kind</strong> and <strong>Helm</strong> v3.13.1 or later installed.</p>
 <pre><code class="language-bash">curl -L https://raw.githubusercontent.com/akuity/kargo/main/hack/quickstart/kind.sh | sh
 </code></pre>
 <p>This gives you Argo CD at <code>http://localhost:31080</code> and Kargo at <code>http://localhost:31081</code>, both with <code>admin</code> as the password. From there, you can follow the <a href="https://docs.kargo.io/quickstart" target="_blank" rel="noopener">quickstart guide</a> to set up your first promotion pipeline using a fork of the demo repository.</p>
 <p>For production installations, Kargo provides Helm charts with extensive configuration options. The <a href="https://docs.kargo.io/" target="_blank" rel="noopener">installation documentation</a> covers both basic and advanced setups, including integration with existing Argo CD instances.</p>
-<h2>Warehouse Subscription Strategies</h2>
+<h2 id="warehouse-subscription-strategies" tabindex="-1">Warehouse Subscription Strategies</h2>
 <p>One of Kargo's more powerful features is the flexibility of its Warehouse subscriptions. Depending on how you tag and release artifacts, you can choose from several selection strategies.</p>
 <p>For container images, the <code>SemVer</code> strategy is the default and usually the best choice. It selects images based on semantic version constraints, so a constraint of <code>^1.29.0</code> will match <code>1.29.1</code> and <code>1.30.0</code> but not <code>2.0.0</code>. If your images use date-based or lexicographic tags, the <code>Lexical</code> and <code>NewestBuild</code> strategies are available as alternatives.</p>
 <p>Git repository subscriptions offer similar flexibility. The default <code>NewestFromBranch</code> strategy watches for new commits on a specified branch, while <code>SemVer</code> looks for tagged commits matching a version constraint. For monorepos, you can use <code>includePaths</code> and <code>excludePaths</code> to scope which directory changes trigger new Freight.</p>
-<h2>Auto-Promotion vs Manual Promotion</h2>
+<h2 id="auto-promotion-vs-manual-promotion" tabindex="-1">Auto-Promotion vs Manual Promotion</h2>
 <p>Kargo supports both automated and manual promotion workflows. The auto-promotion policy on a Stage determines the behavior:</p>
 <ul>
 <li><strong>NewestFreight</strong> (default) continuously promotes the newest verified Freight as soon as it becomes available. This is ideal for lower environments like dev or test where you want changes flowing through quickly.</li>
@@ -214,12 +214,12 @@ spec:
 <pre><code class="language-bash">kargo promote --project my-project --freight &lt;freight-id&gt; --stage production
 </code></pre>
 <p>The Kargo dashboard provides a visual pipeline view where you can drag Freight between Stages, making manual promotions intuitive even for team members who are not comfortable with the CLI.</p>
-<h2>Verification</h2>
+<h2 id="verification" tabindex="-1">Verification</h2>
 <p>Promotion is only half the story. You also need to know whether a promotion actually succeeded. Kargo supports optional verification processes that run after a promotion completes. These can invoke Argo Rollouts analysis runs, run custom test suites, or perform any validation logic you define.</p>
 <p>If verification fails, the Freight is not marked as verified in that Stage, which means it will not be eligible for promotion to downstream Stages. This provides a natural quality gate that prevents broken changes from propagating through your pipeline.</p>
-<h2>Reusable Promotion Steps with PromotionTasks</h2>
+<h2 id="reusable-promotion-steps-with-promotiontasks" tabindex="-1">Reusable Promotion Steps with PromotionTasks</h2>
 <p>As your pipeline grows, you will notice that promotion templates across Stages often share the same sequence of steps with minor variations (different environment paths, different Argo CD application names). Kargo addresses this with PromotionTasks, which let you define reusable promotion step sequences that can be parameterized and referenced from multiple Stages. This keeps your configuration DRY and makes it easier to update promotion logic across your entire pipeline.</p>
-<h2>Getting Started</h2>
+<h2 id="getting-started" tabindex="-1">Getting Started</h2>
 <p>If you have an existing Argo CD setup and want to add structured promotions, here is the path I recommend:</p>
 <ol>
 <li>Start with the <a href="https://docs.kargo.io/quickstart" target="_blank" rel="noopener">Kargo quickstart</a> to understand the concepts in a local environment.</li>
@@ -230,7 +230,7 @@ spec:
 <li>Add verification as you gain confidence.</li>
 </ol>
 <p>Kargo fits naturally into an existing GitOps workflow. It does not require you to change how Argo CD deploys applications. It simply adds the orchestration layer that handles how changes move between environments.</p>
-<h2>What's Next</h2>
+<h2 id="what's-next" tabindex="-1">What's Next</h2>
 <p>Kargo is under active development and the community continues to add features. In future posts I plan to explore more advanced topics like multi-artifact Freight, complex pipeline topologies with fan-in and fan-out patterns, and integration with Argo Rollouts for progressive delivery within a single Stage.</p>
 <p>If you are looking for help adopting Kargo or building promotion pipelines for your organization, <a href="/contact" target="_blank" rel="noopener">get in touch</a>. I work with teams to design and implement GitOps workflows that scale.</p>
 
@@ -249,6 +249,7 @@ spec:
   <script src="/js/main.js"></script>
   <script src="/js/blog-i18n-links.js"></script>
   <script src="/js/code-copy.js"></script>
+  <script src="/js/toc.js"></script>
   <script src="/js/mermaid.js" type="module"></script>
 </body>
 </html>

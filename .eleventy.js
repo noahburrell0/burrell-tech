@@ -1,8 +1,10 @@
 var markdownIt = require('markdown-it');
+var markdownItAnchor = require('markdown-it-anchor');
 
 module.exports = function (eleventyConfig) {
   // Customize Markdown: open links in new tab
   var md = markdownIt({ html: true, linkify: true });
+  md.use(markdownItAnchor, { permalink: false });
   var defaultRender = md.renderer.rules.link_open || function (tokens, idx, options, env, self) {
     return self.renderToken(tokens, idx, options);
   };

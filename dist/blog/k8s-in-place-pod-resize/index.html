@@ -107,12 +107,12 @@
 </div>
 <p>Since Kubernetes 1.0, CPU and memory requests and limits on a pod have been immutable. If your application needed more memory, the only option was to delete the pod and create a new one with higher resource values. For stateless web servers behind a Deployment, that is fine. For stateful workloads, long-running batch jobs, or latency-sensitive services that cannot tolerate restarts, it has always been a painful limitation.</p>
 <p>In-Place Pod Resize changes this. The feature makes CPU and memory requests and limits mutable on running pods, allowing Kubernetes to adjust the underlying cgroup allocations without killing the container. It shipped as alpha in v1.27, graduated to beta in v1.33, and reached General Availability in v1.35 (December 2025). If you are running Kubernetes 1.33 or later, you can start using it today.</p>
-<h2>How It Works</h2>
+<h2 id="how-it-works" tabindex="-1">How It Works</h2>
 <p>The core idea is straightforward: Kubernetes now distinguishes between what you want a pod to have (desired resources) and what it actually has right now (actual resources). Before this feature, those two values were always identical because resources were set at pod creation and never changed. Now they can diverge temporarily while a resize is in progress.</p>
 <p>When you update a pod's <code>spec.containers[*].resources</code> fields, the kubelet detects the change and attempts to apply the new resource values to the running container's cgroup. If the resize succeeds, the container keeps running with its new resource allocation. If the node does not have enough capacity, the resize is deferred until resources become available.</p>
 <p>Three resource states are tracked:</p>
 <p><strong>Desired</strong> is what you specify in the pod spec, the target state you want the container to reach. <strong>Allocated</strong> is what the kubelet has committed to the pod on the node. This may differ from desired if the node is temporarily out of capacity. <strong>Actuated</strong> is what the container runtime has actually applied to the running container. Once a resize completes successfully, all three values converge.</p>
-<h2>Resizing a Running Pod</h2>
+<h2 id="resizing-a-running-pod" tabindex="-1">Resizing a Running Pod</h2>
 <p>The resize operation uses the pod's <code>resize</code> subresource. With kubectl v1.32 or later, you edit the pod with the <code>--subresource resize</code> flag:</p>
 <pre><code class="language-bash">kubectl edit pod my-app --subresource resize
 </code></pre>
@@ -138,7 +138,7 @@
 }'
 </code></pre>
 <p>After submitting the patch, the kubelet picks up the change during its next sync loop. For CPU changes, the cgroup CPU shares and quota are updated immediately and the container continues running without interruption. Memory behaves similarly for increases, with the cgroup memory limit being raised in place.</p>
-<h2>Resize Policies</h2>
+<h2 id="resize-policies" tabindex="-1">Resize Policies</h2>
 <p>Not every resource change can happen without a container restart. Kubernetes lets you declare resize policies per container that control this behavior:</p>
 <pre><code class="language-yaml">apiVersion: v1
 kind: Pod
@@ -163,7 +163,7 @@ spec:
 </code></pre>
 <p>The <code>NotRequired</code> policy tells Kubernetes to apply the change in place without restarting the container. This works well for CPU, where cgroup limits can be adjusted transparently. The <code>RestartContainer</code> policy tells Kubernetes to restart the container after applying the new resources. Some applications need this for memory changes because they allocate memory pools at startup and will not use additional memory without reinitializing.</p>
 <p>If you do not specify a resize policy, the default is <code>NotRequired</code> for both CPU and memory. For most applications, CPU resizes work seamlessly without restarts. Memory resizes without restarts also work for applications that allocate memory dynamically, but applications with fixed memory pools (like JVMs with a fixed heap) may need <code>RestartContainer</code> for memory.</p>
-<h2>Tracking Resize Status</h2>
+<h2 id="tracking-resize-status" tabindex="-1">Tracking Resize Status</h2>
 <p>Two pod conditions tell you what is happening with a resize:</p>
 <p><strong>PodResizePending</strong> means the kubelet has accepted the resize request but cannot apply it yet. The reason field tells you why. <code>Deferred</code> means the node is temporarily short on resources and the kubelet will retry when capacity frees up. <code>Infeasible</code> means the resize cannot happen on this node at all, perhaps because the requested resources exceed what the node can ever provide.</p>
 <p><strong>PodResizeInProgress</strong> means the kubelet is actively applying the resize. If something goes wrong during the operation, the reason is set to <code>Error</code> with details in the condition message.</p>
@@ -171,14 +171,14 @@ spec:
 <pre><code class="language-bash">kubectl get pod my-app -o jsonpath='{.status.conditions}' | jq '.[] | select(.type | startswith(&quot;PodResize&quot;))'
 </code></pre>
 <p>Once the resize completes, both conditions are removed from the pod's status and <code>status.containerStatuses[*].resources</code> reflects the new values.</p>
-<h2>Memory Limit Decreases</h2>
+<h2 id="memory-limit-decreases" tabindex="-1">Memory Limit Decreases</h2>
 <p>One of the significant improvements in the GA release is that memory limit decreases are now allowed. During the beta phase, you could only increase memory limits. Decreasing them was blocked because lowering the cgroup memory limit below the container's current memory usage would trigger an OOM kill.</p>
 <p>The GA implementation adds a safety check: the kubelet compares the container's current memory usage against the new desired limit before applying the change. If usage is below the new limit, the resize proceeds. If usage is too high, the resize is deferred until usage drops. This check is best-effort, not a guarantee, since memory usage can spike between the check and the cgroup update. In practice, this works well for applications whose memory usage varies over time, but you should be cautious about aggressive memory reductions on workloads with unpredictable allocation patterns.</p>
-<h2>Deferred Resize Prioritization</h2>
+<h2 id="deferred-resize-prioritization" tabindex="-1">Deferred Resize Prioritization</h2>
 <p>When multiple pods on a node have pending resizes and the node cannot satisfy them all, the kubelet prioritizes based on three criteria in order:</p>
 <p>First, <strong>PriorityClass</strong>: pods with higher priority classes get their resizes applied first. Second, <strong>QoS class</strong>: Guaranteed pods take precedence over Burstable, which take precedence over BestEffort. Third, <strong>duration deferred</strong>: among pods with equal priority and QoS, those that have been waiting the longest go first.</p>
 <p>This prioritization matters in clusters where nodes are running close to capacity. A resize request for a critical production pod will not be blocked behind resize requests from lower-priority workloads.</p>
-<h2>Vertical Pod Autoscaler Integration</h2>
+<h2 id="vertical-pod-autoscaler-integration" tabindex="-1">Vertical Pod Autoscaler Integration</h2>
 <p>The real power of in-place pod resize comes when you combine it with the Vertical Pod Autoscaler (VPA). VPA has historically been limited by the fact that applying its recommendations required restarting pods. With in-place resize, VPA can now adjust resources on running pods transparently.</p>
 <p>VPA's <code>InPlaceOrRecreate</code> update mode graduated to beta alongside the in-place resize feature. When configured with this mode, VPA first attempts to resize pods in place. If the in-place resize fails (because the node lacks capacity or the resize is infeasible), VPA falls back to the traditional evict-and-recreate approach.</p>
 <pre><code class="language-yaml">apiVersion: autoscaling.k8s.io/v1
@@ -206,22 +206,22 @@ spec:
       - memory
 </code></pre>
 <p>With this configuration, VPA monitors your pod's resource usage, calculates optimal resource values, and applies them via in-place resize. The pod keeps running throughout. If you have ever avoided VPA because you could not tolerate the restarts, this is the configuration you have been waiting for.</p>
-<h3>CPU Startup Boost</h3>
+<h3 id="cpu-startup-boost" tabindex="-1">CPU Startup Boost</h3>
 <p>A related VPA enhancement worth knowing about is the CPU Startup Boost pattern. Many applications, particularly JVM-based services, need significantly more CPU during startup for class loading and JIT compilation than they need during steady-state operation. Traditionally, you would either over-provision CPU (wasting resources during steady state) or under-provision it (accepting slow startups).</p>
 <p>With in-place resize, VPA can implement a startup boost: request extra CPU when the pod starts, then automatically scale it back down once the application reaches steady state. The pod starts fast without permanently reserving extra CPU capacity on the node.</p>
-<h2>Practical Patterns</h2>
-<h3>Stateful Workloads</h3>
+<h2 id="practical-patterns" tabindex="-1">Practical Patterns</h2>
+<h3 id="stateful-workloads" tabindex="-1">Stateful Workloads</h3>
 <p>Databases and stateful services benefit the most from in-place resize. A PostgreSQL pod that needs more memory during a period of heavy query load can have its limits increased without losing active connections or triggering a failover. The resize happens at the cgroup level while the database process continues serving queries.</p>
-<h3>Batch Processing</h3>
+<h3 id="batch-processing" tabindex="-1">Batch Processing</h3>
 <p>Long-running batch jobs that encounter unexpectedly large data sets no longer need to be killed and restarted with higher resource limits. You can resize the pod mid-job, let it finish with the additional resources, and then let VPA scale it back down for the next run.</p>
-<h3>Game Servers and Session-Based Workloads</h3>
+<h3 id="game-servers-and-session-based-workloads" tabindex="-1">Game Servers and Session-Based Workloads</h3>
 <p>Game servers and other session-based applications that cannot tolerate disconnections are a natural fit. As player counts shift, the pod's resources can be adjusted in place. Players stay connected, and the server gets the resources it needs.</p>
-<h3>Development and Debugging</h3>
+<h3 id="development-and-debugging" tabindex="-1">Development and Debugging</h3>
 <p>When you are debugging a memory issue in a running pod, you can temporarily increase its memory limit to prevent OOM kills while you investigate. Once the issue is resolved, resize back down. No more losing the reproduction state because the pod was killed and restarted.</p>
-<h2>Limitations to Keep in Mind</h2>
+<h2 id="limitations-to-keep-in-mind" tabindex="-1">Limitations to Keep in Mind</h2>
 <p>The feature has a few constraints worth knowing about. First, only CPU and memory are resizable. Ephemeral storage, GPU, and other resource types remain immutable. Second, the memory decrease safety check is best-effort. The kubelet checks current usage before applying a decrease, but there is a small window where a concurrent allocation spike could still trigger an OOM kill. Third, pod-level resources (as opposed to container-level) only have alpha support for in-place resize in v1.35, so if you are using the pod-level resource feature gate, resize support is still experimental.</p>
 <p>Additionally, resizes are not atomic across containers within a pod. If you resize multiple containers simultaneously, each container's resize is applied independently. One container might succeed while another is deferred due to node capacity. For most workloads this is not an issue, but it is worth being aware of if you have tightly coupled containers that need to be resized in lockstep.</p>
-<h2>Getting Started</h2>
+<h2 id="getting-started" tabindex="-1">Getting Started</h2>
 <p>If you are running Kubernetes 1.35 or later, in-place pod resize is available out of the box with no feature gates to enable. For clusters on 1.33 or 1.34, the feature is beta and enabled by default, but check your cluster configuration to confirm.</p>
 <p>Start by identifying workloads where pod restarts are currently painful. Stateful services, long-running batch jobs, and anything with slow startup times are good candidates. Add resize policies to your pod specs, deploy VPA with <code>InPlaceOrRecreate</code> mode, and let the system handle resource adjustments automatically.</p>
 <p>The combination of in-place resize with VPA closes a gap that has existed since Kubernetes launched. Horizontal scaling with HPA handles load-based scaling by adding or removing pod replicas. Vertical scaling with VPA and in-place resize now handles resource-based scaling by adjusting individual pod allocations without downtime. Together, they give you a complete autoscaling story where pods get the right amount of resources at the right time, without sacrificing availability.</p>
@@ -242,6 +242,7 @@ spec:
   <script src="/js/main.js"></script>
   <script src="/js/blog-i18n-links.js"></script>
   <script src="/js/code-copy.js"></script>
+  <script src="/js/toc.js"></script>
   <script src="/js/mermaid.js" type="module"></script>
 </body>
 </html>

@@ -27,6 +27,7 @@
     "tailwindcss": "^4.2.1"
   },
   "dependencies": {
-    "@fontsource-variable/inter": "^5.2.8"
+    "@fontsource-variable/inter": "^5.2.8",
+    "markdown-it-anchor": "^9.2.0"
   }
 }

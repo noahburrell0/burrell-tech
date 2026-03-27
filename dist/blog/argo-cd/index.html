@@ -106,10 +106,10 @@
   <img src="/blog/images/argo-cd-logo.webp" alt="Argo CD logo" width="180" style="display: inline-block;">
 </div>
 <p>If you have been working with Kubernetes for any length of time, you have probably experienced the pain of managing deployments manually. Keeping track of what is running where, ensuring your clusters match your intended state, and rolling back when things go wrong can quickly become overwhelming. This is the problem that Argo CD solves.</p>
-<h2>What is Argo CD?</h2>
+<h2 id="what-is-argo-cd%3F" tabindex="-1">What is Argo CD?</h2>
 <p>Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes. Instead of pushing changes to your cluster with <code>kubectl apply</code> or CI pipelines that run deployment scripts, Argo CD continuously monitors your Git repository and ensures your cluster state matches what is defined there.</p>
 <p>The core principle is simple: <strong>Git is the source of truth.</strong> Every change to your applications and infrastructure goes through Git, giving you a complete audit trail, easy rollbacks, and the ability to reproduce any environment from a single repository.</p>
-<h2>Why GitOps?</h2>
+<h2 id="why-gitops%3F" tabindex="-1">Why GitOps?</h2>
 <p>Before diving into the setup, it is worth understanding why GitOps has gained so much traction:</p>
 <ul>
 <li><strong>Auditability</strong> - Every change is a Git commit. You always know who changed what, when, and why.</li>
@@ -118,7 +118,7 @@
 <li><strong>Self-healing</strong> - Configure Argo CD to automatically sync, and it will correct any manual changes or drift in your cluster.</li>
 <li><strong>Developer experience</strong> - Developers use the tools they already know (Git, pull requests, code review) to deploy applications.</li>
 </ul>
-<h2>Installing Argo CD</h2>
+<h2 id="installing-argo-cd" tabindex="-1">Installing Argo CD</h2>
 <p>Getting Argo CD running in your cluster takes just a few commands:</p>
 <pre><code class="language-bash">kubectl create namespace argocd
 
@@ -133,7 +133,7 @@ kubectl apply -n argocd -f \
 <pre><code class="language-bash">kubectl port-forward svc/argocd-server -n argocd 8080:443
 </code></pre>
 <p>Then open <code>https://localhost:8080</code> in your browser and log in with the username <code>admin</code> and the password you retrieved above.</p>
-<h2>Deploying Your First Application</h2>
+<h2 id="deploying-your-first-application" tabindex="-1">Deploying Your First Application</h2>
 <p>Argo CD uses the concept of an <strong>Application</strong> to represent a deployed set of Kubernetes resources. An Application ties together a Git repository (the source) and a target cluster and namespace (the destination).</p>
 <p>Here is a minimal Application manifest using the official <a href="https://github.com/argoproj/argocd-example-apps" target="_blank" rel="noopener">argocd-example-apps</a> repository which can be applied directly to your cluster:</p>
 <pre><code class="language-bash">kubectl apply -f - &lt;&lt;EOF
@@ -158,10 +158,10 @@ spec:
 EOF
 </code></pre>
 <p>Argo CD will immediately detect the new Application, clone the repository, render the manifests from the specified path, and sync them to the target namespace. Within seconds you should see your application appear in the Argo CD UI with a green &quot;Synced&quot; and &quot;Healthy&quot; status.</p>
-<h2>Key Concepts to Understand</h2>
-<h3>Projects</h3>
+<h2 id="key-concepts-to-understand" tabindex="-1">Key Concepts to Understand</h2>
+<h3 id="projects" tabindex="-1">Projects</h3>
 <p>Projects provide a logical grouping of applications. They let you restrict which repositories, clusters, and namespaces an application can use. The <code>default</code> project is permissive, but for production environments you should define dedicated projects with tighter controls.</p>
-<h3>Sync Policies</h3>
+<h3 id="sync-policies" tabindex="-1">Sync Policies</h3>
 <p>The <code>syncPolicy</code> section controls how Argo CD handles changes:</p>
 <ul>
 <li><strong>Automated sync</strong> - Argo CD automatically applies changes when it detects drift between Git and the cluster.</li>
@@ -169,19 +169,19 @@ EOF
 <li><strong>Self-heal</strong> - If someone manually changes a resource in the cluster, Argo CD reverts it to match Git.</li>
 </ul>
 <p>For teams just starting out, I recommend enabling automated sync but leaving both prune and self-heal off. When you are new to Argo CD and Kubernetes, it can be confusing to have resources unexpectedly deleted or manual changes reverted before you understand why. Once your team is comfortable with the GitOps workflow and treats Git as the sole source of truth, enabling prune and self-heal is a natural next step.</p>
-<h3>Health Checks</h3>
+<h3 id="health-checks" tabindex="-1">Health Checks</h3>
 <p>Argo CD understands the health of Kubernetes resources. A Deployment is not considered healthy until its pods are running and passing readiness checks. This means the Argo CD UI gives you an accurate picture of your application's actual state, not just whether manifests were applied successfully.</p>
-<h2>Best Practices</h2>
+<h2 id="best-practices" tabindex="-1">Best Practices</h2>
 <p>After working with Argo CD across many environments, here are the patterns I have seen work well:</p>
-<h3>Separate your application code from your deployment manifests</h3>
+<h3 id="separate-your-application-code-from-your-deployment-manifests" tabindex="-1">Separate your application code from your deployment manifests</h3>
 <p>Keep your Kubernetes manifests in a dedicated repository (or at least a dedicated directory) separate from your application source code. This decouples the deployment lifecycle from the development lifecycle. Your CI pipeline builds and publishes a container image, then updates the image tag in the manifests repository. Argo CD picks up the change and deploys it.</p>
-<h3>Use Kustomize or Helm for environment management</h3>
+<h3 id="use-kustomize-or-helm-for-environment-management" tabindex="-1">Use Kustomize or Helm for environment management</h3>
 <p>Rather than duplicating manifests for each environment, use Kustomize overlays or Helm values files to manage differences between staging and production. Argo CD has native support for both.</p>
-<h3>Start with the App of Apps pattern</h3>
+<h3 id="start-with-the-app-of-apps-pattern" tabindex="-1">Start with the App of Apps pattern</h3>
 <p>As the number of applications grows, managing individual Application manifests becomes tedious. The App of Apps pattern uses one Argo CD Application to manage a directory of other Application manifests. Add a new service by committing a YAML file, and Argo CD takes care of the rest.</p>
-<h3>Implement RBAC early</h3>
+<h3 id="implement-rbac-early" tabindex="-1">Implement RBAC early</h3>
 <p>Argo CD has a built-in RBAC system that integrates with SSO providers. Define roles that match your team structure from the start. Developers might only need read access and the ability to sync their own applications, while platform engineers manage the broader configuration.</p>
-<h2>What's Next</h2>
+<h2 id="what's-next" tabindex="-1">What's Next</h2>
 <p>This guide covers the fundamentals, but Argo CD has much more to offer. In future posts I plan to explore:</p>
 <ul>
 <li><strong>ApplicationSets</strong> for templating applications across multiple clusters and environments</li>
@@ -206,6 +206,7 @@ EOF
   <script src="/js/main.js"></script>
   <script src="/js/blog-i18n-links.js"></script>
   <script src="/js/code-copy.js"></script>
+  <script src="/js/toc.js"></script>
   <script src="/js/mermaid.js" type="module"></script>
 </body>
 </html>

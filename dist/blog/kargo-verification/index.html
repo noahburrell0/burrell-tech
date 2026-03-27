@@ -111,12 +111,12 @@
 </div>
 <p>In my <a href="/blog/kargo/" target="_blank" rel="noopener">introduction to Kargo</a>, I covered the fundamentals: Warehouses detect new artifacts, Freight packages them into promotable units, and Stages define how changes flow through your environments. If you followed along, you have the building blocks for a basic promotion pipeline. But a production pipeline needs more than just the ability to push changes forward. It needs quality gates that prevent bad releases from reaching users, time-based controls that let deployments bake before moving downstream, and reusable promotion logic that does not require copy-pasting YAML across every Stage.</p>
 <p>This post covers the three features that turn a basic Kargo pipeline into a production-grade one: verification with AnalysisTemplates, soak time requirements, and PromotionTasks for reusable promotion workflows. These features shipped across Kargo v1.0 through v1.4 and are all stable enough for production use.</p>
-<h2>Post-Promotion Verification</h2>
+<h2 id="post-promotion-verification" tabindex="-1">Post-Promotion Verification</h2>
 <p>The simplest Kargo pipeline promotes Freight through Stages without checking whether the promotion actually worked. Argo CD will eventually reconcile the desired state and report health status, but that only tells you whether the Kubernetes resources are running. It does not tell you whether the application is behaving correctly. Verification closes that gap.</p>
-<h3>How Verification Works</h3>
+<h3 id="how-verification-works" tabindex="-1">How Verification Works</h3>
 <p>After a successful Promotion, a Stage enters the <strong>Verifying</strong> phase. Kargo spawns an AnalysisRun based on the AnalysisTemplates referenced in the Stage's <code>spec.verification</code> field. The AnalysisRun executes whatever checks you have defined, whether that is running integration tests in a Job, querying Prometheus for error rates, or hitting a health endpoint. When the AnalysisRun completes successfully, the Freight is marked as verified in that Stage and becomes eligible for promotion downstream. If it fails, the Freight stays unverified and cannot move forward.</p>
 <p>One important constraint: while a Stage is verifying, no other Promotions to that Stage will execute. This prevents a race condition where a new version could overwrite the one being tested. Verification must complete (or be manually aborted) before the Stage accepts new work.</p>
-<h3>Implicit vs Explicit Verification</h3>
+<h3 id="implicit-vs-explicit-verification" tabindex="-1">Implicit vs Explicit Verification</h3>
 <p>If your Stage references Argo CD Applications but does not define any <code>spec.verification</code>, Kargo still performs a lightweight check. It waits for the referenced Applications to reach a Healthy state before marking the Freight as verified. This is implicit verification, and it provides a baseline safety net. The Application must finish syncing and all its resources (Deployments, StatefulSets, Jobs) must report healthy before the pipeline moves on.</p>
 <p>Explicit verification gives you much more control. You define AnalysisTemplates that run specific tests against the deployed application. Here is a minimal example that runs a containerized integration test:</p>
 <pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
@@ -142,7 +142,7 @@ spec:
           backoffLimit: 1
 </code></pre>
 <p>This template tells Kargo to run a Job that executes your integration test suite against the application's in-cluster service URL. If the Job exits with a zero status code, verification passes. If it fails, the Freight is not verified.</p>
-<h3>Referencing AnalysisTemplates from a Stage</h3>
+<h3 id="referencing-analysistemplates-from-a-stage" tabindex="-1">Referencing AnalysisTemplates from a Stage</h3>
 <p>To wire this up, add a <code>verification</code> block to your Stage spec:</p>
 <pre><code class="language-yaml">apiVersion: kargo.akuity.io/v1alpha1
 kind: Stage
@@ -188,7 +188,7 @@ spec:
       - name: integration-test
 </code></pre>
 <p>After the promotion steps complete and Argo CD syncs the application, Kargo spawns the AnalysisRun. You can monitor its progress in the Kargo UI under the Stage's Verifications tab.</p>
-<h3>Querying Monitoring Systems</h3>
+<h3 id="querying-monitoring-systems" tabindex="-1">Querying Monitoring Systems</h3>
 <p>Job-based metrics are the most flexible option, but Kargo also supports querying monitoring systems directly through Argo Rollouts metric providers. If you run Prometheus, you can define an AnalysisTemplate that checks error rates after a promotion:</p>
 <pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
 kind: AnalysisTemplate
@@ -217,7 +217,7 @@ spec:
     - name: error-rate-check
 </code></pre>
 <p>Both AnalysisRuns must succeed for the Freight to be marked as verified.</p>
-<h3>Passing Dynamic Values to AnalysisTemplates</h3>
+<h3 id="passing-dynamic-values-to-analysistemplates" tabindex="-1">Passing Dynamic Values to AnalysisTemplates</h3>
 <p>Your verification often needs context about the specific Freight being verified. Kargo supports passing arguments from the Stage to the AnalysisTemplate using expressions:</p>
 <pre><code class="language-yaml">verification:
   analysisTemplates:
@@ -257,7 +257,7 @@ spec:
           backoffLimit: 0
 </code></pre>
 <p>This lets your test suite know exactly which version it is testing, which is useful for reporting and for tests that need to validate version-specific behavior.</p>
-<h3>ClusterAnalysisTemplates for Shared Verification</h3>
+<h3 id="clusteranalysistemplates-for-shared-verification" tabindex="-1">ClusterAnalysisTemplates for Shared Verification</h3>
 <p>If you have verification logic that applies across multiple projects, use a ClusterAnalysisTemplate instead. These are cluster-scoped resources that any Stage in any project can reference:</p>
 <pre><code class="language-yaml">verification:
   analysisTemplates:
@@ -265,10 +265,10 @@ spec:
       kind: ClusterAnalysisTemplate
 </code></pre>
 <p>This is particularly useful for organization-wide security scans, compliance checks, or baseline health validations that every application must pass before promotion.</p>
-<h2>Soak Times</h2>
+<h2 id="soak-times" tabindex="-1">Soak Times</h2>
 <p>Verification tells you whether a deployment is working immediately after promotion. But some problems only surface after the application has been running under real traffic for a while. Memory leaks, connection pool exhaustion, and slow cache invalidation are all examples of issues that pass initial health checks but cause incidents hours later.</p>
 <p>Soak times address this by requiring Freight to remain in a Stage for a minimum duration before it becomes eligible for downstream promotion. Even if verification passes immediately, the Freight cannot move forward until the soak period expires.</p>
-<h3>Configuring Soak Times</h3>
+<h3 id="configuring-soak-times" tabindex="-1">Configuring Soak Times</h3>
 <p>Soak times are configured on the downstream Stage's <code>requestedFreight</code> field, not on the upstream Stage itself. This makes sense because the downstream Stage is the one imposing the requirement:</p>
 <pre><code class="language-yaml">apiVersion: kargo.akuity.io/v1alpha1
 kind: Stage
@@ -287,7 +287,7 @@ spec:
 </code></pre>
 <p>With this configuration, Freight promoted to UAT must remain there for at least two hours before it can be promoted to production. The soak timer starts when the Freight is successfully verified in the upstream Stage. If verification takes 15 minutes and the soak time is 2 hours, the total wait is 2 hours and 15 minutes.</p>
 <p>Valid duration formats include <code>180s</code>, <code>30m</code>, <code>48h</code>, or combinations. Both automated and manual promotions respect soak times, so even an operator manually promoting Freight will be blocked until the period elapses. The one exception is manually approving Freight for a Stage, which bypasses both verification and soak time requirements. This is your escape hatch for emergencies.</p>
-<h3>Combining Verification and Soak Times</h3>
+<h3 id="combining-verification-and-soak-times" tabindex="-1">Combining Verification and Soak Times</h3>
 <p>The real power comes from combining these features. Consider a three-stage pipeline:</p>
 <pre><code class="language-mermaid">sequenceDiagram
   participant W@{ &quot;type&quot; : &quot;collections&quot; } as New Freight 
@@ -307,10 +307,10 @@ spec:
 </code></pre>
 <p>When a new image arrives, it flows immediately to dev. Once Argo CD reports the dev application as healthy (implicit verification), it becomes eligible for staging. In staging, Kargo runs integration tests and Prometheus checks. If those pass, the soak timer starts. The Freight must remain healthy in staging for a full hour before it can be promoted to production. When someone manually triggers the production promotion, the same verification suite runs against the production deployment.</p>
 <p>This layered approach catches different classes of failures at each stage. Compilation and startup errors are caught in dev. Integration issues are caught by verification in staging. Time-dependent issues surface during the soak period. And the production verification confirms the deployment is healthy in the final environment.</p>
-<h2>PromotionTasks: Reusable Promotion Workflows</h2>
+<h2 id="promotiontasks%3A-reusable-promotion-workflows" tabindex="-1">PromotionTasks: Reusable Promotion Workflows</h2>
 <p>If you look at promotion templates across multiple Stages, you will notice a pattern: the sequence of steps is usually identical, with only a few values changing between environments. The dev Stage clones the same repo, runs the same Kustomize commands, and pushes to the same branch as the production Stage. The only differences are the environment path and the Argo CD application name.</p>
 <p>Copy-pasting this YAML across every Stage creates a maintenance burden. When you need to add a step (say, running a linter before commit), you have to update every Stage individually. PromotionTasks solve this by letting you define a reusable sequence of promotion steps that accepts parameters.</p>
-<h3>Defining a PromotionTask</h3>
+<h3 id="defining-a-promotiontask" tabindex="-1">Defining a PromotionTask</h3>
 <p>A PromotionTask is a namespaced Kubernetes resource that declares variables and steps:</p>
 <pre><code class="language-yaml">apiVersion: kargo.akuity.io/v1alpha1
 kind: PromotionTask
@@ -360,7 +360,7 @@ spec:
           - name: ${{ vars.argocdApp }}
 </code></pre>
 <p>The <code>vars</code> field declares the parameters. Variables without a default value must have a value provided when the PromotionTask is referenced in a Stage, while those with a <code>value</code> field have a default that can be optionally overridden by the stage. Steps reference variables using the <code>$</code> syntax.</p>
-<h3>Using a PromotionTask in a Stage</h3>
+<h3 id="using-a-promotiontask-in-a-stage" tabindex="-1">Using a PromotionTask in a Stage</h3>
 <p>Instead of listing individual steps in the Stage's promotion template, you reference the task:</p>
 <pre><code class="language-yaml">apiVersion: kargo.akuity.io/v1alpha1
 kind: Stage
@@ -392,7 +392,7 @@ spec:
       - name: integration-test
 </code></pre>
 <p>The promotion logic is now defined in one place. If you need to add a step, you update the PromotionTask and every Stage that references it picks up the change.</p>
-<h3>ClusterPromotionTasks for Cross-Project Reuse</h3>
+<h3 id="clusterpromotiontasks-for-cross-project-reuse" tabindex="-1">ClusterPromotionTasks for Cross-Project Reuse</h3>
 <p>If your organization has a standard promotion workflow that applies across multiple projects, use a ClusterPromotionTask. The syntax is identical to a PromotionTask but the resource is cluster-scoped:</p>
 <pre><code class="language-yaml">apiVersion: kargo.akuity.io/v1alpha1
 kind: ClusterPromotionTask
@@ -427,7 +427,7 @@ spec:
         value: my-app-uat
 </code></pre>
 <p>This is powerful for platform teams that want to provide a standardized promotion workflow while still letting application teams customize the specifics through variables.</p>
-<h3>Task Outputs and Chaining</h3>
+<h3 id="task-outputs-and-chaining" tabindex="-1">Task Outputs and Chaining</h3>
 <p>PromotionTask steps can reference outputs from preceding steps within the same task using <code>task.outputs</code>. A common pattern is opening a pull request and then waiting for it to merge:</p>
 <pre><code class="language-yaml">steps:
   - uses: git-open-pr
@@ -444,14 +444,14 @@ spec:
 </code></pre>
 <p>Tasks can also expose outputs to the parent promotion template using the <code>compose-output</code> step. This lets you chain multiple PromotionTasks together, with downstream tasks consuming outputs from upstream ones.</p>
 <p>One constraint to keep in mind: PromotionTask steps cannot reference other PromotionTasks. This prevents circular dependencies and keeps the execution model straightforward. If you need composition, structure it at the promotion template level by sequencing multiple task references.</p>
-<h2>Operational Tips</h2>
+<h2 id="operational-tips" tabindex="-1">Operational Tips</h2>
 <p>A few things I have learned from running these pipelines:</p>
 <p><strong>Start without verification and add it incrementally.</strong> Get the basic promotion flow working first. Add implicit Argo CD health checks, then soak times, then explicit AnalysisTemplates. Each layer builds on the previous one.</p>
 <p><strong>Keep AnalysisTemplate Jobs fast.</strong> Verification blocks the entire Stage from accepting new Promotions. If your integration test suite takes 30 minutes, that is 30 minutes where no other version can be promoted to that Stage. Consider running a targeted smoke test for verification and leaving the full suite for CI.</p>
 <p><strong>Use ClusterAnalysisTemplates for cross-cutting concerns.</strong> Security scans, compliance checks, and baseline health validations are good candidates for cluster-scoped templates. Application-specific tests should stay in project-scoped AnalysisTemplates.</p>
 <p><strong>Set soak times based on your observability window.</strong> If your monitoring dashboards need 15 minutes of traffic to show meaningful trends, a 15-minute soak is the minimum that makes sense. On the Stage before production, err on the side of longer soak periods.</p>
 <p><strong>Use manual Freight approval as an emergency bypass.</strong> If you need to push a hotfix through and cannot wait for soak times, manually approving the Freight for a Stage skips both verification and soak requirements. Use this sparingly, but know it exists.</p>
-<h2>What's Next</h2>
+<h2 id="what's-next" tabindex="-1">What's Next</h2>
 <p>Kargo continues to ship features at a steady pace. Version 1.7 introduced <code>oci-download</code> and <code>http-download</code> promotion steps, letting you pull OCI artifacts or remote files directly into your promotion workflows. Version 1.8 added expression-based Freight creation criteria on Warehouses, which solves a real pain point for multi-subscription Warehouses by preventing Freight from being created with incompatible artifact combinations. Most recently, v1.9 shipped live log streaming for verification runs directly in the UI, making it far easier to debug failed AnalysisRuns without leaving the Kargo dashboard.</p>
 <p>If you are building promotion pipelines and want to go deeper, the <a href="https://docs.kargo.io/" target="_blank" rel="noopener">Kargo documentation</a> covers every built-in promotion step and its configuration options. For help designing pipelines for your organization, <a href="/contact" target="_blank" rel="noopener">get in touch</a>.</p>
 
@@ -470,6 +470,7 @@ spec:
   <script src="/js/main.js"></script>
   <script src="/js/blog-i18n-links.js"></script>
   <script src="/js/code-copy.js"></script>
+  <script src="/js/toc.js"></script>
   <script src="/js/mermaid.js" type="module"></script>
 </body>
 </html>

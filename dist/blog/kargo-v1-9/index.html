@@ -111,11 +111,11 @@
 </div>
 <p>Kargo v1.9 landed recently and the Akuity team is calling it the most significant release since v1.0. Having spent some time with it, that claim holds up. This is not a release dominated by one headline feature but rather a broad set of improvements that address pain points you hit once you start running Kargo at any real scale. API tokens for CI integration, a new REST API that future-proofs Kargo's Kubernetes compatibility, Warehouse performance tuning, a generic webhook receiver, and a batch of new promotion steps and expression functions all shipped in the same release.</p>
 <p>If you are new to Kargo, start with my <a href="/blog/kargo/" target="_blank" rel="noopener">introduction to Kargo</a> and <a href="/blog/kargo-verification/" target="_blank" rel="noopener">verification deep dive</a> before reading this post. If you are already running Kargo and looking for reasons to upgrade, this post covers the features that matter most.</p>
-<h2>The New REST API</h2>
+<h2 id="the-new-rest-api" tabindex="-1">The New REST API</h2>
 <p>Under the hood, Kargo's API server has historically used a Connect-based RPC layer built on protocol buffers. This worked well until Kubernetes v1.35 made breaking changes to how its Go types interact with the <code>google.golang.org/protobuf</code> library, making it difficult to represent Kubernetes resource types as protocol buffers. Beginning with Kubernetes v1.36, it will be impossible entirely. This currently prevents Kargo from upgrading its own Kubernetes dependencies past v1.34.x. Rather than working around the issue, the Kargo team built a new RESTful API to replace the Connect-based one.</p>
 <p>From a user perspective, the switch is mostly invisible. The Kargo CLI and UI both use the new API. If you have scripts that interact with Kargo's API directly using the old Connect endpoints, you will want to start migrating. The legacy Connect API is deprecated in v1.9 and will continue to be served alongside the new one through v1.11.x. It will be removed in v1.12.0, at which point Kargo can freely update its Kubernetes dependencies.</p>
 <p>The practical benefit is that Kargo will be able to advance past Kubernetes v1.34.x. If you are running or planning to run Kubernetes v1.35+ clusters, this matters.</p>
-<h2>API Tokens</h2>
+<h2 id="api-tokens" tabindex="-1">API Tokens</h2>
 <p>Before v1.9, integrating Kargo into CI pipelines or automation scripts meant sharing short-lived OIDC credentials or configuring service accounts through Kubernetes directly. Kargo v1.9 introduces JWT-based API tokens that you can provision through the CLI or UI, associate with a specific role, and use from any HTTP client.</p>
 <p>Creating a system-level token looks like this:</p>
 <pre><code class="language-bash">kargo create token --system --role kargo-admin my-ci-token
@@ -134,10 +134,10 @@
 </code></pre>
 <p>The tokens integrate with both the <code>kargo</code> CLI and standard HTTP tools. If your CI pipeline needs to approve a piece of Freight or trigger a promotion, you no longer need to set up Kubernetes RBAC and kubeconfig files in your CI environment. A Kargo API token and the REST API endpoint are enough.</p>
 <p>This is a big quality-of-life improvement for teams that run Kargo in a shared platform environment where CI systems do not have direct Kubernetes API access.</p>
-<h2>Warehouse Performance Tuning</h2>
+<h2 id="warehouse-performance-tuning" tabindex="-1">Warehouse Performance Tuning</h2>
 <p>Warehouse artifact discovery has been one of the more common sources of frustration at scale. Container registries enforce rate limits, and Kargo has historically applied conservative client-side rate limits on top of those to avoid hitting them. If you have a large number of Warehouses all polling busy registries, discovery can become slow simply because Kargo is throttling itself to be a good API citizen.</p>
 <p>Kargo v1.9 addresses this from two angles.</p>
-<h3>Metadata Caching</h3>
+<h3 id="metadata-caching" tabindex="-1">Metadata Caching</h3>
 <p>Individual image repository subscriptions in a Warehouse can now opt into tag metadata caching. When enabled, Kargo caches the metadata for image tags it has already seen, skipping redundant registry calls on subsequent discovery cycles. This is particularly effective for repositories where tags are immutable, which is the common case in most CI/CD pipelines.</p>
 <p>The caching behavior is controlled at two levels. Operators set a system-wide policy through the <code>controller.images.cache.cacheByTagPolicy</code> Helm value, choosing from <code>Forbid</code>, <code>Allow</code>, <code>Require</code>, or <code>Force</code>. The default is <code>Allow</code>. Within that policy, individual Warehouse image subscriptions opt in by setting <code>cacheByTag: true</code>:</p>
 <pre><code class="language-yaml">spec:
@@ -148,7 +148,7 @@
         cacheByTag: true
 </code></pre>
 <p>The <code>Forbid</code> and <code>Force</code> policies override the per-subscription setting, so operators can enforce a consistent approach across all projects. If your image tags are immutable (and they should be in a GitOps workflow), enabling metadata caching can significantly reduce the number of registry API calls your Warehouses make during each discovery cycle. Be careful with mutable tags like <code>latest</code> though, as caching can cause Kargo to select stale images indefinitely.</p>
-<h3>Configurable Rate Limits</h3>
+<h3 id="configurable-rate-limits" tabindex="-1">Configurable Rate Limits</h3>
 <p>The conservative default rate limits that Kargo applies to registry clients are now tunable through the <code>controller.images.registries.rateLimit</code> Helm value. This is a per-registry, client-side rate limit expressed in requests per second. The default is <code>20</code>:</p>
 <pre><code class="language-yaml">controller:
   images:
@@ -156,7 +156,7 @@
       rateLimit: 20
 </code></pre>
 <p>Be cautious with this. The Kargo chart documentation warns that turning it up is not a guarantee of improved Warehouse performance. When registries begin enforcing their own rate limits because the client is not self-throttling, the resulting errors can degrade performance worse than the conservative default. For teams running private registries with plenty of headroom, the default may have been unnecessarily restrictive, but for public registries like Docker Hub you are better off leaving it alone and relying on metadata caching to reduce the total number of calls instead.</p>
-<h2>Generic Webhook Receiver</h2>
+<h2 id="generic-webhook-receiver" tabindex="-1">Generic Webhook Receiver</h2>
 <p>My <a href="/blog/kargo-webhooks/" target="_blank" rel="noopener">previous post on webhook receivers</a> covered the platform-specific receivers for GitHub, GitLab, Docker Hub, and the others that Kargo supports natively. But not every artifact repository has a native Kargo receiver. Amazon ECR, for example, does not.</p>
 <p>Kargo v1.9 introduces a generic webhook receiver that handles arbitrary HTTP POST requests. You define the parsing rules and matching criteria, and Kargo extracts the relevant information from the payload to trigger the appropriate Warehouses.</p>
 <p>The configuration follows the same <code>ProjectConfig</code> or <code>ClusterConfig</code> pattern as the platform-specific receivers. You create a Secret containing a shared secret, then define the receiver with optional filtering and targeting rules:</p>
@@ -195,9 +195,9 @@ spec:
   -o=jsonpath='{.status.webhookReceivers}'
 </code></pre>
 <p>This closes the gap for teams using registries that Kargo does not have a dedicated receiver for. As long as the platform can send an HTTP POST with a JSON body, you can wire it into Kargo's event-driven discovery pipeline.</p>
-<h2>Expression Language Improvements</h2>
+<h2 id="expression-language-improvements" tabindex="-1">Expression Language Improvements</h2>
 <p>Kargo's expression language, used in promotion steps, webhook receivers, and verification, picked up several useful additions in v1.9.</p>
-<h3>Alternative Delimiters</h3>
+<h3 id="alternative-delimiters" tabindex="-1">Alternative Delimiters</h3>
 <p>If you have ever tried to embed a JSON object inside a Kargo expression, you have run into the problem of closing braces conflicting with the <code>${{ }}</code> delimiter syntax. Kargo v1.9 introduces an alternative delimiter <code>${% %}</code> that help mitigate this conflict:</p>
 <pre><code class="language-yaml">- uses: json-update
   config:
@@ -207,7 +207,7 @@ spec:
         value: ${% {&quot;version&quot;: vars.version, &quot;tag&quot;: vars.tag} %}
 </code></pre>
 <p>This is a small change that eliminates an annoying workaround.</p>
-<h3>semverParse Function</h3>
+<h3 id="semverparse-function" tabindex="-1">semverParse Function</h3>
 <p>The new <code>semverParse()</code> function breaks a semantic version string into its components:</p>
 <pre><code class="language-yaml">- uses: yaml-update
   config:
@@ -217,7 +217,7 @@ spec:
         value: ${{ semverParse(imageFrom(&quot;my-registry.io/my-app&quot;).Tag).Major }}
 </code></pre>
 <p>This is useful when your deployment configuration needs to reference individual parts of a version string, for example when setting a major version label or constructing a version-dependent URL.</p>
-<h3>Shared Resource Access</h3>
+<h3 id="shared-resource-access" tabindex="-1">Shared Resource Access</h3>
 <p>Two new functions provide access to resources in the shared resources namespace (formerly the global credentials namespace). Both return the resource's <code>Data</code> field as a <code>map[string]string</code>, so you access individual keys with dot notation. For example, you could use <code>sharedSecret()</code> to pull a Slack token from a centrally managed Secret during an <code>http</code> promotion step:</p>
 <pre><code class="language-yaml">- uses: http
   config:
@@ -235,9 +235,9 @@ spec:
         path: ./src
 </code></pre>
 <p>The <code>sharedSecret()</code> function is restricted to Secrets labeled with <code>kargo.akuity.io/cred-type: generic</code> to prevent accidental exposure of repository credentials. Both functions return an empty map if the resource does not exist rather than failing the step.</p>
-<h2>Expanded Promotion Steps</h2>
+<h2 id="expanded-promotion-steps" tabindex="-1">Expanded Promotion Steps</h2>
 <p>The promotion step library continues to grow. Here are the notable additions and improvements in v1.9.</p>
-<h3>git-clone Enhancements</h3>
+<h3 id="git-clone-enhancements" tabindex="-1">git-clone Enhancements</h3>
 <p>The <code>git-clone</code> step now supports sparse checkouts and Git submodules. Sparse checkouts are valuable when your repository is large but your promotion only needs to modify files in a specific subdirectory. Rather than cloning the entire repository, you specify the paths you need:</p>
 <pre><code class="language-yaml">- uses: git-clone
   config:
@@ -250,9 +250,9 @@ spec:
           - configs/common
 </code></pre>
 <p>When all checkouts use sparse patterns, Kargo automatically applies a blobless clone optimization, which further reduces the amount of data fetched from the remote.</p>
-<h3>git-push Force Push</h3>
+<h3 id="git-push-force-push" tabindex="-1">git-push Force Push</h3>
 <p>The <code>git-push</code> step now supports a <code>force</code> option that can force a push to a target branch. One such use case is pushing rendered manifests that do not depend on previous state, where you want to completely replace the branch content each time a promotion runs. Use it with caution as it will overwrite any commits on the remote branch that are not in your local branch. The default is <code>false</code>.</p>
-<h3>yaml-merge</h3>
+<h3 id="yaml-merge" tabindex="-1">yaml-merge</h3>
 <p>A new <code>yaml-merge</code> step consolidates multiple YAML files into a single output file. This is useful when you need to assemble a configuration from multiple sources during a promotion:</p>
 <pre><code class="language-yaml">- uses: yaml-merge
   config:
@@ -262,21 +262,21 @@ spec:
     outFile: ./out/merged/values.yaml
 </code></pre>
 <p>The first file in the list serves as the base, and each subsequent file is merged over it. Mappings merge recursively, scalar values get overridden, and sequences are replaced entirely rather than appended.</p>
-<h3>http Step Improvements</h3>
+<h3 id="http-step-improvements" tabindex="-1">http Step Improvements</h3>
 <p>The <code>http</code> promotion step gained more flexible response body parsing. Previously, extracting values from API responses required the response body to be JSON with a predictable structure. The updated step handles a wider range of response formats and makes it easier to extract specific fields.</p>
-<h3>argocd-update with Label Selectors</h3>
+<h3 id="argocd-update-with-label-selectors" tabindex="-1">argocd-update with Label Selectors</h3>
 <p>The <code>argocd-update</code> step can now identify target Applications using label selectors in addition to the existing name-based approach. This is helpful in environments where Application names follow a convention but you want to target a set of Applications matching a label query rather than listing them individually.</p>
-<h2>Namespace Terminology Changes</h2>
+<h2 id="namespace-terminology-changes" tabindex="-1">Namespace Terminology Changes</h2>
 <p>Kargo v1.9 renames two concepts that have caused confusion since the early releases.</p>
 <p>What was called the &quot;global credentials namespace&quot; is now the &quot;shared resources namespace,&quot; with a default of <code>kargo-shared-resources</code>. What was called the &quot;cluster secrets namespace&quot; is now the &quot;system resources namespace,&quot; with a default of <code>kargo-system-resources</code>.</p>
 <p>The old namespace names continue to work. Kargo v1.9 automatically migrates existing Secrets to the new locations. The naming change reflects the fact that these namespaces have grown beyond just holding credentials and secrets; they now serve as general-purpose shared resource stores accessible across projects or by the system itself.</p>
 <p>If you reference these namespaces in documentation or automation, update the names to avoid confusion as the old terminology is phased out.</p>
-<h2>Breaking Changes and Deprecations</h2>
+<h2 id="breaking-changes-and-deprecations" tabindex="-1">Breaking Changes and Deprecations</h2>
 <p>A few things to watch out for when upgrading.</p>
 <p>The <code>SemVerConstraint</code> field, deprecated since v1.7, has been removed. If you have Warehouses still using <code>SemVerConstraint</code> instead of <code>constraint</code>, they will break on upgrade. Migrate before upgrading.</p>
 <p>The <code>allowTags</code> and <code>ignoreTags</code> fields on Warehouse image subscriptions are deprecated in favor of <code>allowTagsRegexes</code> and <code>ignoreTagsRegexes</code>. These fields still work in v1.9 but artifact discovery will fail if they are non-empty starting in v1.11.0, with full removal in v1.13.0. You have time to migrate but do not wait too long.</p>
 <p>The Kargo CLI must be upgraded alongside the server. Protocol buffer serialization changes to the <code>Warehouse</code> and <code>Freight</code> types mean an older CLI will not work correctly with a v1.9 server.</p>
-<h2>Upgrading</h2>
+<h2 id="upgrading" tabindex="-1">Upgrading</h2>
 <p>If you are using the Kargo Helm chart, the upgrade path is straightforward:</p>
 <pre><code class="language-bash">helm upgrade kargo oci://ghcr.io/akuity/kargo-charts/kargo \
   --namespace kargo \
@@ -286,7 +286,7 @@ spec:
 <p>After upgrading the server, upgrade your CLI via Homebrew (<code>brew upgrade kargo</code>), by downloading the latest binary from the <a href="https://github.com/akuity/kargo/releases" target="_blank" rel="noopener">GitHub releases page</a>, or from the Kargo dashboard's CLI tab. Verify the upgrade with:</p>
 <pre><code class="language-bash">kargo version
 </code></pre>
-<h2>What's Next</h2>
+<h2 id="what's-next" tabindex="-1">What's Next</h2>
 <p>Kargo v1.9 rounds out many of the rough edges that appeared as teams moved from evaluation to production use. API tokens and the new REST API make it much easier to integrate Kargo into existing toolchains. The Warehouse performance improvements address the most common scaling bottleneck. The generic webhook receiver closes a gap that blocked adoption for teams running on AWS with ECR.</p>
 <p>If you have not read the earlier posts in this series, start with the <a href="/blog/kargo/" target="_blank" rel="noopener">Kargo introduction</a> for the core concepts, then the <a href="/blog/kargo-verification/" target="_blank" rel="noopener">verification and soak times deep dive</a> for production-hardening your pipelines, and the <a href="/blog/kargo-webhooks/" target="_blank" rel="noopener">webhook receivers guide</a> for event-driven artifact discovery. For more on the Argo CD side of the equation, the <a href="/blog/argo-cd/" target="_blank" rel="noopener">Argo CD deep dive</a> and <a href="/blog/argo-cd-applicationsets/" target="_blank" rel="noopener">ApplicationSets post</a> cover the deployment layer that Kargo orchestrates on top of.</p>
 <p>The full release notes are available in the <a href="https://docs.kargo.io/release-notes/v1.9.0/" target="_blank" rel="noopener">Kargo v1.9.0 documentation</a>.</p>
@@ -306,6 +306,7 @@ spec:
   <script src="/js/main.js"></script>
   <script src="/js/blog-i18n-links.js"></script>
   <script src="/js/code-copy.js"></script>
+  <script src="/js/toc.js"></script>
   <script src="/js/mermaid.js" type="module"></script>
 </body>
 </html>

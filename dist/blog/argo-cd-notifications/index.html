@@ -111,11 +111,11 @@
 </div>
 <p>A GitOps pipeline that nobody is watching is a pipeline that can fail silently. You can have <a href="/blog/argo-cd/" target="_blank" rel="noopener">Argo CD</a> reconciling your clusters, <a href="/blog/argo-cd-applicationsets/" target="_blank" rel="noopener">ApplicationSets</a> generating applications across environments, and <a href="/blog/argo-rollouts/" target="_blank" rel="noopener">Argo Rollouts</a> handling progressive delivery, but if a sync fails at 2 AM and nobody finds out until users start filing tickets, the automation is only doing half its job.</p>
 <p>Argo CD Notifications solves this. It is a built-in notification engine that continuously monitors your Argo CD applications and sends alerts through Slack, email, webhooks, PagerDuty, Microsoft Teams, and a dozen other services when something changes. Syncs succeed, syncs fail, health degrades, an operation takes too long. You define the conditions, the message content, and where the alerts go. Everything is configured declaratively through ConfigMaps and annotations, which means your notification rules live alongside your applications in Git.</p>
-<h2>How the Notification System Works</h2>
+<h2 id="how-the-notification-system-works" tabindex="-1">How the Notification System Works</h2>
 <p>Argo CD Notifications is built into the Argo CD controller. It watches Application resources for state changes and evaluates those changes against a set of triggers you define. When a trigger condition matches, the system renders a notification template and sends it through the configured service.</p>
 <p>The three core concepts are <strong>services</strong>, <strong>triggers</strong>, and <strong>templates</strong>. Services define where notifications go (Slack, email, webhook). Triggers define when notifications fire (sync succeeded, health degraded, operation running too long). Templates define what the notification says, including service-specific formatting like Slack blocks or webhook JSON bodies.</p>
 <p>All configuration lives in two resources: the <code>argocd-notifications-cm</code> ConfigMap for service definitions, triggers, and templates, and the <code>argocd-notifications-secret</code> Secret for credentials like API tokens. You subscribe individual applications to specific triggers by adding annotations.</p>
-<h2>Configuring a Notification Service</h2>
+<h2 id="configuring-a-notification-service" tabindex="-1">Configuring a Notification Service</h2>
 <p>Let's start with the most common setup: sending notifications to Slack. First, create a Slack app at <a href="https://api.slack.com/apps?new_app=1" target="_blank" rel="noopener">api.slack.com</a> and give the bot token the <code>chat:write</code> scope. Optionally add <code>chat:write.customize</code> if you want the bot to use a custom username and icon. Install the app to your workspace and copy the OAuth token.</p>
 <p>Store the token in the notifications secret:</p>
 <pre><code class="language-yaml">apiVersion: v1
@@ -137,7 +137,7 @@ data:
     token: $slack-token
 </code></pre>
 <p>The <code>$slack-token</code> syntax references the key from the Secret, keeping credentials out of the ConfigMap. Make sure to invite the bot to any channels you plan to send to, or message delivery will fail silently.</p>
-<h2>Writing Triggers</h2>
+<h2 id="writing-triggers" tabindex="-1">Writing Triggers</h2>
 <p>Triggers define the conditions under which a notification fires. Each trigger has a name, a <code>when</code> condition, and one or more templates to send. The condition is an expression evaluated against the Application object using the <a href="https://github.com/antonmedv/expr" target="_blank" rel="noopener">expr</a> expression language.</p>
 <p>Here is a trigger that fires when a sync operation succeeds:</p>
 <pre><code class="language-yaml">data:
@@ -154,7 +154,7 @@ data:
     - when: app.status.operationState.phase in ['Error', 'Failed']
       send: [app-sync-failed]
 </code></pre>
-<h3>Preventing Notification Floods</h3>
+<h3 id="preventing-notification-floods" tabindex="-1">Preventing Notification Floods</h3>
 <p>Without rate limiting, a flapping application can generate dozens of notifications per hour. The <code>oncePer</code> field solves this by deduplicating notifications based on a key you define. The trigger only fires again when the key value changes:</p>
 <pre><code class="language-yaml">data:
   trigger.on-deployed: |
@@ -163,7 +163,7 @@ data:
       send: [app-deployed]
 </code></pre>
 <p>This fires once per Git revision. Even if the application reconciles multiple times at the same revision, you only get one notification. For monorepo setups, use <code>app.status?.operationState.syncResult.revision</code> instead, which tracks the revision at the per-application level.</p>
-<h3>Time-Based Conditions</h3>
+<h3 id="time-based-conditions" tabindex="-1">Time-Based Conditions</h3>
 <p>Triggers support time functions, which lets you alert on operations that are running longer than expected:</p>
 <pre><code class="language-yaml">data:
   trigger.on-sync-running-long: |
@@ -171,7 +171,7 @@ data:
       send: [sync-running-long]
 </code></pre>
 <p>This fires when a sync operation has been running for more than ten minutes, which is a strong signal that something is stuck.</p>
-<h2>Writing Templates</h2>
+<h2 id="writing-templates" tabindex="-1">Writing Templates</h2>
 <p>Templates define the content of each notification. They use Go's <code>text/template</code> syntax and have access to the Application object, a user-defined context map, secrets, and a set of built-in functions.</p>
 <p>A basic template looks like this:</p>
 <pre><code class="language-yaml">data:
@@ -205,7 +205,7 @@ data:
   context: |
     argocdUrl: https://argocd.example.com
 </code></pre>
-<h3>Slack-Specific Features</h3>
+<h3 id="slack-specific-features" tabindex="-1">Slack-Specific Features</h3>
 <p>Slack templates support several features beyond basic attachments. The <code>groupingKey</code> field threads related notifications together, so multiple updates for the same deployment appear in a single thread rather than flooding the channel:</p>
 <pre><code class="language-yaml">data:
   template.app-sync-status: |
@@ -216,7 +216,7 @@ data:
       notifyBroadcast: true
 </code></pre>
 <p>Setting <code>notifyBroadcast: true</code> posts a notification to the channel even though the message goes into a thread, so people who are not watching the thread still see the alert. The <code>deliveryPolicy</code> field controls whether the notification creates a new message, updates an existing one, or does both. <code>PostAndUpdate</code> is useful when you want a single message that reflects the current state rather than a stream of individual updates.</p>
-<h2>Subscribing Applications</h2>
+<h2 id="subscribing-applications" tabindex="-1">Subscribing Applications</h2>
 <p>With services, triggers, and templates configured, the last step is subscribing applications to specific triggers. This is done through annotations on the Application resource:</p>
 <pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -239,7 +239,7 @@ metadata:
           - service: slack
             recipients: [on-call]
 </code></pre>
-<h3>Default Subscriptions</h3>
+<h3 id="default-subscriptions" tabindex="-1">Default Subscriptions</h3>
 <p>Annotating every application individually does not scale well. Argo CD Notifications supports default subscriptions in the ConfigMap that apply to all applications automatically, so you do not need to add annotations one at a time.</p>
 <p>The <code>subscriptions</code> field in <code>argocd-notifications-cm</code> defines global subscriptions with recipients, triggers, and an optional label selector:</p>
 <pre><code class="language-yaml">data:
@@ -272,7 +272,7 @@ metadata:
     notifications.argoproj.io/subscribe.slack: deployments
 </code></pre>
 <p>The two approaches work well together. Use <code>subscriptions</code> for organization-wide baselines that should apply everywhere, and <code>defaultTriggers</code> combined with per-application annotations for teams that want to choose their own channels while inheriting a standard set of triggers.</p>
-<h2>Webhook Notifications</h2>
+<h2 id="webhook-notifications" tabindex="-1">Webhook Notifications</h2>
 <p>Webhooks are the escape hatch for anything that Argo CD does not have a native integration for. You define a URL, optional headers and authentication, and a template that generates the request body.</p>
 <p>A practical example is updating GitHub commit status so your repository reflects the deployment state:</p>
 <pre><code class="language-yaml">data:
@@ -305,7 +305,7 @@ metadata:
 </code></pre>
 <p>The <code>path</code> field supports templates, which is how you construct the GitHub API URL dynamically using the repository and commit from the Application. The built-in <code>repo.FullNameByRepoURL</code> function converts a Git URL into the <code>owner/repo</code> format that GitHub expects.</p>
 <p>Webhook services also support retry configuration with <code>retryMax</code>, <code>retryWaitMin</code>, and <code>retryWaitMax</code> fields, and you can skip TLS verification with <code>insecureSkipVerify</code> for internal services running self-signed certificates.</p>
-<h2>PagerDuty Integration</h2>
+<h2 id="pagerduty-integration" tabindex="-1">PagerDuty Integration</h2>
 <p>For production alerting, PagerDuty integration routes critical notifications directly into your incident management workflow:</p>
 <pre><code class="language-yaml">data:
   service.pagerduty: |
@@ -323,10 +323,10 @@ metadata:
       component: &quot;{{.app.metadata.name}}&quot;
 </code></pre>
 <p>Wire this to a health degradation trigger and your on-call team gets paged automatically when an application's health drops, with a link back to the Argo CD dashboard for investigation.</p>
-<h2>Multi-Namespace Configuration</h2>
+<h2 id="multi-namespace-configuration" tabindex="-1">Multi-Namespace Configuration</h2>
 <p>In larger organizations, a single centralized notification configuration does not always make sense. Different teams own different applications and want to manage their own notification rules. Argo CD supports namespace-scoped notification configuration, where teams deploy their own <code>argocd-notifications-cm</code> and <code>argocd-notifications-secret</code> in the namespace where their Argo CD applications live.</p>
 <p>This is particularly useful alongside <a href="/blog/argo-cd-applicationsets/" target="_blank" rel="noopener">ApplicationSets</a>. When an ApplicationSet generates applications across multiple namespaces, each team can configure their own Slack channels, webhook endpoints, and trigger thresholds without needing access to the central Argo CD configuration.</p>
-<h2>A Complete Working Configuration</h2>
+<h2 id="a-complete-working-configuration" tabindex="-1">A Complete Working Configuration</h2>
 <p>Here is a full ConfigMap that ties together everything we have covered. It configures Slack as the primary service with three triggers for the most common scenarios, and includes a webhook for GitHub commit status updates:</p>
 <pre><code class="language-yaml">apiVersion: v1
 kind: ConfigMap
@@ -431,7 +431,7 @@ data:
     notifications.argoproj.io/subscribe.slack: deployments
     notifications.argoproj.io/subscribe.github: &quot;&quot;
 </code></pre>
-<h2>Practical Tips</h2>
+<h2 id="practical-tips" tabindex="-1">Practical Tips</h2>
 <p>A few things worth knowing before you roll this out.</p>
 <p><strong>Test with <code>argocd-notifications</code> CLI.</strong> The <code>argocd admin notifications</code> command lets you test triggers and templates locally against live application data without actually sending notifications. Run <code>argocd admin notifications template notify &lt;template&gt; &lt;app&gt;</code> to see what a rendered notification looks like before you commit the configuration.</p>
 <p><strong>Start with failures, not successes.</strong> It is tempting to set up notifications for every state change, but in practice the high-value alerts are sync failures and health degradation. Success notifications are useful for visibility but can create noise if you are deploying frequently. Use <code>oncePer</code> aggressively on success triggers.</p>
@@ -442,7 +442,7 @@ data:
   - name: TZ
     value: America/New_York
 </code></pre>
-<h2>Wrapping Up</h2>
+<h2 id="wrapping-up" tabindex="-1">Wrapping Up</h2>
 <p>Argo CD Notifications turns your GitOps pipeline from a silent automation into an observable system that keeps your team informed. Sync failures, health changes, and stuck operations all surface in the channels where your team already works, whether that is Slack, PagerDuty, email, or a custom webhook. The entire configuration is declarative, lives in Git, and follows the same annotation-based pattern that the rest of Argo CD uses.</p>
 <p>Combined with <a href="/blog/argo-cd/" target="_blank" rel="noopener">Argo CD</a> for delivery, <a href="/blog/kargo/" target="_blank" rel="noopener">Kargo</a> for promotion, <a href="/blog/argo-rollouts/" target="_blank" rel="noopener">Argo Rollouts</a> for progressive delivery, and <a href="/blog/external-secrets-operator/" target="_blank" rel="noopener">External Secrets Operator</a> for credential management, notifications complete the observability layer of your GitOps stack. Your pipeline deploys, your pipeline reports, and you only step in when something actually needs attention.</p>
 <p>If you need help configuring Argo CD Notifications, designing alert strategies, or integrating deployment alerts into your incident management workflow, <a href="/contact" target="_blank" rel="noopener">get in touch</a>.</p>
@@ -462,6 +462,7 @@ data:
   <script src="/js/main.js"></script>
   <script src="/js/blog-i18n-links.js"></script>
   <script src="/js/code-copy.js"></script>
+  <script src="/js/toc.js"></script>
   <script src="/js/mermaid.js" type="module"></script>
 </body>
 </html>

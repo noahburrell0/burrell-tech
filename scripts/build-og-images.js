@@ -74,10 +74,22 @@ async function buildOgImage(postFile) {
   );
 
   // Resize the hero image to fill available space while keeping padding
-  // For SVGs, set a high density so they rasterize at a large size before resizing
+  // For SVGs, pick a density that rasterizes large enough without exceeding sharp's pixel limit
   var sharpOpts = {};
   if (imagePath.match(/\.svg$/i)) {
-    sharpOpts.density = 300;
+    var svgHead = fs.readFileSync(imagePath, 'utf8').slice(0, 2000);
+    var vbMatch = svgHead.match(/viewBox="[\d.]+\s+[\d.]+\s+([\d.]+)\s+([\d.]+)"/);
+    var density = 300;
+    if (vbMatch) {
+      var vbW = parseFloat(vbMatch[1]);
+      var vbH = parseFloat(vbMatch[2]);
+      // sharp rasterizes at density/72 scale; cap so the larger dimension stays under 4000px
+      var maxDim = Math.max(vbW, vbH);
+      var maxPx = 4000;
+      var maxDensity = Math.floor((maxPx / maxDim) * 72);
+      density = Math.min(density, Math.max(72, maxDensity));
+    }
+    sharpOpts.density = density;
   }
   var heroBuffer = await sharp(imagePath, sharpOpts)
     .resize(MAX_WIDTH, MAX_HEIGHT, { fit: 'inside', withoutEnlargement: true })

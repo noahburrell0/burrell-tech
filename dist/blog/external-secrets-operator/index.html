@@ -111,18 +111,18 @@
 </div>
 <p>If you have been following my previous posts, you should have a solid GitOps foundation. Git is your source of truth, Argo CD reconciles your clusters, Kargo promotes changes between environments, and Argo Rollouts handles progressive delivery. But there is one topic we have not addressed yet, and it is probably the one that causes the most anxiety: secrets.</p>
 <p>Every Kubernetes application needs credentials. Database passwords, API keys, TLS certificates, OAuth tokens. In a GitOps world, everything is supposed to live in Git, but you obviously cannot commit plaintext secrets to a repository. This tension between &quot;everything in Git&quot; and &quot;secrets must be protected&quot; is the fundamental challenge of GitOps secrets management, and it is exactly what External Secrets Operator solves.</p>
-<h2>The Problem with Secrets in GitOps</h2>
+<h2 id="the-problem-with-secrets-in-gitops" tabindex="-1">The Problem with Secrets in GitOps</h2>
 <p>Before diving into External Secrets Operator, it is worth understanding why secrets are so awkward in GitOps workflows.</p>
 <p>Kubernetes has a native Secret resource, but it only base64-encodes values rather than encrypting them. Committing a base64-encoded Secret to Git is effectively the same as committing the plaintext value. Anyone with repository access can decode it instantly.</p>
 <p>Teams have tried various workarounds over the years. Some encrypt secrets in Git using tools like Sealed Secrets or SOPS. Others inject secrets during the CI/CD pipeline using vault plugins. Both approaches work, but they come with tradeoffs. Sealed Secrets requires per-cluster encryption keys and does not scale well across many clusters. Pipeline-based injection means Argo CD needs direct access to your secret store, which the Argo CD documentation itself <a href="https://argo-cd.readthedocs.io/en/stable/operator-manual/secret-management/" target="_blank" rel="noopener">recommends against</a>.</p>
 <p>The approach that the Kubernetes ecosystem has converged on is operator-based secret management: a controller running in your cluster that synchronizes secrets from an external provider into native Kubernetes Secrets. External Secrets Operator is the leading implementation of this pattern, and it is now a CNCF project.</p>
-<h2>What is External Secrets Operator?</h2>
+<h2 id="what-is-external-secrets-operator%3F" tabindex="-1">What is External Secrets Operator?</h2>
 <p>External Secrets Operator (ESO) is a Kubernetes operator that reads secrets from external APIs and creates Kubernetes Secret resources automatically. It supports over 40 secret providers, including AWS Secrets Manager, HashiCorp Vault, Google Cloud Secret Manager, Azure Key Vault, 1Password, Doppler, and many more.</p>
 <p>The key insight behind ESO is separation of concerns. Your Git repository contains ExternalSecret resources that describe <em>what</em> secrets your application needs and <em>where</em> to find them, but never the secret values themselves. The operator running in your cluster handles the actual retrieval and creates the corresponding Kubernetes Secrets at runtime.</p>
 <p>This means your Git repositories stay clean. Argo CD syncs the ExternalSecret manifests like any other Kubernetes resource. ESO watches those ExternalSecrets and populates the actual Secret objects. Your applications consume native Kubernetes Secrets as usual, completely unaware that ESO is involved.</p>
-<h2>Core Resources</h2>
+<h2 id="core-resources" tabindex="-1">Core Resources</h2>
 <p>ESO introduces a small set of custom resources that model the entire secrets lifecycle. Understanding these resources is essential to working with the operator effectively.</p>
-<h3>SecretStore and ClusterSecretStore</h3>
+<h3 id="secretstore-and-clustersecretstore" tabindex="-1">SecretStore and ClusterSecretStore</h3>
 <p>A SecretStore defines how to connect to an external secret provider. It contains the authentication configuration, the provider type, and any connection-specific settings. SecretStore is namespace-scoped, meaning each namespace can have its own store with its own credentials.</p>
 <p>Here is a SecretStore configured for AWS Secrets Manager:</p>
 <pre><code class="language-yaml">apiVersion: external-secrets.io/v1
@@ -161,7 +161,7 @@ spec:
           role: &quot;external-secrets&quot;
 </code></pre>
 <p>This ClusterSecretStore authenticates to HashiCorp Vault using Kubernetes service account authentication, which avoids storing any long-lived credentials. The Vault server validates the service account token and issues a short-lived Vault token scoped to the configured role.</p>
-<h3>ExternalSecret</h3>
+<h3 id="externalsecret" tabindex="-1">ExternalSecret</h3>
 <p>The ExternalSecret is the core resource that application teams interact with. It declares what data to fetch from the external provider and how to map it into a Kubernetes Secret.</p>
 <pre><code class="language-yaml">apiVersion: external-secrets.io/v1
 kind: ExternalSecret
@@ -188,7 +188,7 @@ spec:
 </code></pre>
 <p>This ExternalSecret tells ESO to fetch the <code>username</code> and <code>password</code> properties from the <code>prod/my-app/database</code> secret in AWS Secrets Manager, and create a Kubernetes Secret named <code>db-credentials</code> with those values. The <code>refreshInterval</code> of one hour means ESO will re-fetch the values periodically, so if someone rotates the database password in AWS Secrets Manager, the Kubernetes Secret updates automatically within an hour.</p>
 <p>The <code>creationPolicy: Owner</code> setting means the ExternalSecret owns the resulting Kubernetes Secret. If you delete the ExternalSecret, the Secret gets cleaned up too. You can also use <code>Orphan</code> if you want the Secret to persist after the ExternalSecret is removed, or <code>Merge</code> if you want ESO to add keys to an existing Secret without taking ownership.</p>
-<h3>ClusterExternalSecret</h3>
+<h3 id="clusterexternalsecret" tabindex="-1">ClusterExternalSecret</h3>
 <p>For platform teams that need to distribute the same secret across multiple namespaces, ClusterExternalSecret is the answer. It is a cluster-scoped resource that creates ExternalSecret resources in target namespaces based on a selector.</p>
 <pre><code class="language-yaml">apiVersion: external-secrets.io/v1
 kind: ClusterExternalSecret
@@ -216,7 +216,7 @@ spec:
           property: private_key
 </code></pre>
 <p>Every namespace with the label <code>needs-tls: &quot;true&quot;</code> gets an ExternalSecret that fetches the wildcard TLS certificate from Vault. When a new namespace is created with that label, the ClusterExternalSecret controller automatically creates the ExternalSecret in that namespace.</p>
-<h3>PushSecret</h3>
+<h3 id="pushsecret" tabindex="-1">PushSecret</h3>
 <p>While ExternalSecret pulls secrets from external providers into Kubernetes, PushSecret does the reverse. It takes an existing Kubernetes Secret and pushes it to an external provider. This is useful for bootstrapping scenarios or when a Kubernetes-native process generates credentials that need to be stored externally.</p>
 <pre><code class="language-yaml">apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
@@ -244,7 +244,7 @@ spec:
           property: private_key
 </code></pre>
 <p>In this example, cert-manager generates a TLS certificate and stores it as a Kubernetes Secret. PushSecret picks it up and writes the certificate and private key to AWS Secrets Manager, where other systems outside the cluster can access it.</p>
-<h2>Installing External Secrets Operator</h2>
+<h2 id="installing-external-secrets-operator" tabindex="-1">Installing External Secrets Operator</h2>
 <p>ESO installs via Helm, which makes it straightforward to manage with Argo CD:</p>
 <pre><code class="language-bash">helm repo add external-secrets https://charts.external-secrets.io
 helm install external-secrets external-secrets/external-secrets \
@@ -278,7 +278,7 @@ spec:
       - CreateNamespace=true
 </code></pre>
 <p>This Application deploys ESO with IRSA (IAM Roles for Service Accounts) on EKS, so the operator authenticates to AWS using its service account rather than static credentials.</p>
-<h2>Templating Secrets</h2>
+<h2 id="templating-secrets" tabindex="-1">Templating Secrets</h2>
 <p>One of ESO's more powerful features is secret templating. Instead of using the raw values from the external provider, you can transform them using Go templates before they land in the Kubernetes Secret.</p>
 <p>This is particularly useful for constructing connection strings or configuration files from individual secret values:</p>
 <pre><code class="language-yaml">apiVersion: external-secrets.io/v1
@@ -316,17 +316,17 @@ spec:
 </code></pre>
 <p>The resulting Kubernetes Secret contains a single <code>DATABASE_URL</code> key with the fully constructed connection string. Your application only needs to read one environment variable instead of assembling the URL itself.</p>
 <p>Templating also supports creating non-opaque secret types. You can set the <code>type</code> field in the template to create Secrets of type <code>kubernetes.io/tls</code>, <code>kubernetes.io/dockerconfigjson</code>, or any other Kubernetes secret type.</p>
-<h2>Refresh Policies</h2>
+<h2 id="refresh-policies" tabindex="-1">Refresh Policies</h2>
 <p>ESO offers three refresh policies that control when secrets are synchronized from the external provider.</p>
 <p><strong>Periodic</strong> is the default. The <code>refreshInterval</code> field controls how often ESO re-fetches the secret values. Set this based on how frequently your secrets change and how quickly you need rotations to propagate. A one-hour interval is reasonable for most workloads. For high-security environments where credential rotation happens frequently, you might reduce it to minutes.</p>
 <p><strong>CreatedOnce</strong> fetches the secret values once when the ExternalSecret is created and never updates them. This is useful for immutable credentials like encryption keys that should not change after initial provisioning.</p>
 <p><strong>OnChange</strong> only refreshes when the ExternalSecret resource itself is modified. This gives you explicit control over when secrets are re-fetched, which can be useful if you want to tie secret updates to your GitOps deployment workflow.</p>
-<h2>Integration with Argo CD</h2>
+<h2 id="integration-with-argo-cd" tabindex="-1">Integration with Argo CD</h2>
 <p>ESO integrates naturally with Argo CD because ExternalSecrets are standard Kubernetes custom resources. Argo CD manages ExternalSecret manifests the same way it manages Deployments or Services. When Argo CD syncs an application that includes ExternalSecret resources, the ESO controller detects them and creates the corresponding Kubernetes Secrets.</p>
 <p>From Argo CD's perspective, the ExternalSecret resource goes through its normal sync lifecycle. Argo CD does not need access to the secret provider because it never touches the actual secret values. The ESO controller, running independently in the cluster, handles all communication with the external provider.</p>
 <p>This separation is exactly what the Argo CD documentation recommends. Argo CD manages the declarative intent (the ExternalSecret), while ESO handles the operational concern of fetching and synchronizing the actual credentials. Argo CD's repo-server and Redis cache never see the secret values, which significantly reduces the attack surface.</p>
 <p>For health checking, ESO sets status conditions on ExternalSecret resources that Argo CD can interpret. A healthy ExternalSecret shows <code>SecretSynced: True</code> in its status. If the secret cannot be fetched, for example due to a permissions error or a missing secret in the provider, the status reflects the failure and Argo CD reports the resource as degraded.</p>
-<h2>Multi-Environment Secrets with Kargo</h2>
+<h2 id="multi-environment-secrets-with-kargo" tabindex="-1">Multi-Environment Secrets with Kargo</h2>
 <p>If you are using <a href="/blog/kargo/" target="_blank" rel="noopener">Kargo for promotion pipelines</a>, ExternalSecrets fit seamlessly into the model. Each environment has its own SecretStore (or references a ClusterSecretStore with environment-specific paths), and the ExternalSecrets in each environment's manifests point to the appropriate secret paths.</p>
 <p>When Kargo promotes an application from staging to production, the promotion steps update the manifests in Git. The ExternalSecrets in those manifests already reference the correct paths for each environment because they are part of your Kustomize overlays or Helm values. ESO in the production cluster fetches the production secrets from the provider. No secret values flow through the promotion pipeline.</p>
 <p>A typical structure looks like this:</p>
@@ -339,14 +339,14 @@ spec:
     kustomization.yaml      # Patches secret paths to production/
 </code></pre>
 <p>The base ExternalSecret defines the structure. The overlays patch the <code>remoteRef.key</code> values to point to the correct paths in the secret provider for each environment. Kargo promotes the image tag and configuration changes, while the secret paths are already correct for each environment by virtue of the overlay structure.</p>
-<h2>Security Best Practices</h2>
+<h2 id="security-best-practices" tabindex="-1">Security Best Practices</h2>
 <p>Running ESO securely requires attention to a few key areas.</p>
 <p><strong>Use workload identity when possible.</strong> On EKS, GKE, and AKS, you can authenticate to the secret provider using the pod's service account rather than static credentials. This eliminates the need to store provider credentials as Kubernetes Secrets, which would be a circular problem. IRSA on EKS, Workload Identity on GKE, and Azure Workload Identity all integrate directly with ESO.</p>
 <p><strong>Scope access narrowly.</strong> The IAM role or Vault policy that ESO uses should have read-only access to only the secret paths it needs. If you are using ClusterSecretStore, be aware that any namespace can reference it. Consider using namespace-scoped SecretStores for sensitive secrets and ClusterSecretStore only for truly shared credentials.</p>
 <p><strong>Set appropriate refresh intervals.</strong> Shorter intervals mean faster propagation of rotated credentials, but they also increase the load on your secret provider. One hour is a good default. For secrets that are rotated by an automated process, match the refresh interval to the rotation window.</p>
 <p><strong>Monitor ExternalSecret status.</strong> ESO emits events and sets status conditions on ExternalSecret resources. Set up alerting on <code>SecretSyncedError</code> conditions so you know immediately if a secret cannot be fetched. A missing secret in production usually means an application is running with stale or missing credentials.</p>
 <p><strong>Audit access to the secret provider.</strong> ESO's access to your secret provider should be visible in the provider's audit logs. AWS CloudTrail, Vault audit logs, and GCP audit logs all capture the API calls ESO makes. Review these periodically to ensure access patterns match expectations.</p>
-<h2>Getting Started</h2>
+<h2 id="getting-started" tabindex="-1">Getting Started</h2>
 <p>If you have Argo CD running and want to add proper secrets management, here is the path I recommend:</p>
 <ol>
 <li>Install ESO in your cluster, either manually or as an Argo CD Application. Use workload identity if your cloud provider supports it.</li>
@@ -357,7 +357,7 @@ spec:
 <li>Expand to more applications and environments as you gain confidence.</li>
 </ol>
 <p>The <a href="https://external-secrets.io/" target="_blank" rel="noopener">External Secrets Operator documentation</a> has guides for every supported provider with authentication examples and YAML manifests you can adapt for your environment. The <a href="https://argo-cd.readthedocs.io/en/stable/operator-manual/secret-management/" target="_blank" rel="noopener">Argo CD secret management documentation</a> provides additional context on why this approach is recommended over alternatives.</p>
-<h2>Wrapping Up</h2>
+<h2 id="wrapping-up" tabindex="-1">Wrapping Up</h2>
 <p>Secrets have always been the awkward edge case in GitOps. You want everything in Git, but secret values cannot go there. External Secrets Operator resolves this by letting you declare your secret requirements in Git as ExternalSecret resources while keeping the actual values safely in a dedicated secret management system.</p>
 <p>Combined with Argo CD, ESO gives you a fully declarative, auditable secrets workflow. Argo CD syncs the ExternalSecrets. ESO fetches the values. Your applications consume native Kubernetes Secrets. Nobody has to manually create secrets in the cluster, and nobody has to commit sensitive values to a repository.</p>
 <p>If you are building out your GitOps platform and have not addressed secrets management yet, External Secrets Operator should be your next addition. It closes the last major gap in the GitOps model and integrates cleanly with the rest of the Argo ecosystem.</p>
@@ -378,6 +378,7 @@ spec:
   <script src="/js/main.js"></script>
   <script src="/js/blog-i18n-links.js"></script>
   <script src="/js/code-copy.js"></script>
+  <script src="/js/toc.js"></script>
   <script src="/js/mermaid.js" type="module"></script>
 </body>
 </html>
