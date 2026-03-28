@@ -2,7 +2,7 @@
 title: "Argo CD Image Updater: Automating Container Image Deployments in GitOps"
 date: 2026-03-21
 description: "A deep dive into Argo CD Image Updater, the tool that automatically detects new container image versions and updates your Argo CD applications. Learn how to configure update strategies, write changes back to Git, authenticate with private registries, and close the gap between CI and CD in your GitOps pipeline."
-image: /blog/images/argo-cd-logo.webp
+image: /blog/images/argo-cd-logo.svg
 ogBackground: dark
 tags:
   - kubernetes
@@ -13,7 +13,7 @@ tags:
 ---
 
 <div class="blog-hero">
-  <img src="/blog/images/argo-cd-logo.webp" alt="Container image update cycle" width="200" style="display: inline-block;">
+  <img src="/blog/images/argo-cd-logo.svg" alt="Container image update cycle" width="200" style="display: inline-block;">
 </div>
 
 There is a gap in most GitOps pipelines that nobody likes to talk about. Your CI system builds a new container image, pushes it to a registry, and then... someone has to update a manifest. Maybe it is a developer opening a pull request to bump an image tag in a Helm values file. Maybe it is a CI job that commits the new tag back to a config repo. Either way, you have built an automated delivery pipeline with a manual step wedged right in the middle of it.

@@ -149,8 +149,16 @@ body {
   justify-content: center;
 }
 .blog-hero-card img {
-  max-width: 70%;
+  max-width: calc(100% - 2rem);
+  max-height: 60px;
+  width: auto;
+  height: auto;
   object-fit: contain;
+}
+@media (min-width: 640px) {
+  .blog-hero-card img {
+    max-height: 100px;
+  }
 }
 
 /* Make tables horizontally scrollable on mobile */

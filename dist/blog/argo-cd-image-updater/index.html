@@ -107,7 +107,7 @@
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
         <div class="blog-hero">
-  <img src="/blog/images/argo-cd-logo.webp" alt="Container image update cycle" width="200" style="display: inline-block;">
+  <img src="/blog/images/argo-cd-logo.svg" alt="Container image update cycle" width="200" style="display: inline-block;">
 </div>
 <p>There is a gap in most GitOps pipelines that nobody likes to talk about. Your CI system builds a new container image, pushes it to a registry, and then... someone has to update a manifest. Maybe it is a developer opening a pull request to bump an image tag in a Helm values file. Maybe it is a CI job that commits the new tag back to a config repo. Either way, you have built an automated delivery pipeline with a manual step wedged right in the middle of it.</p>
 <p>Argo CD Image Updater closes that gap. It watches your container registries for new image versions, evaluates them against constraints you define, and updates your <a href="/blog/argo-cd/" target="_blank" rel="noopener">Argo CD</a> applications automatically. The update can happen through the Argo CD API directly or, more commonly in mature setups, by committing the change back to your Git repository so the full GitOps reconciliation loop stays intact.</p>

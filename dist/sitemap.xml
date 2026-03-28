@@ -87,6 +87,12 @@
     <priority>0.2</priority>
   </url>
   <url>
+    <loc>https://burrell.tech/blog/argo-cd-multi-source/</loc>
+    <lastmod>2026-03-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://burrell.tech/blog/argo-cd-sync-waves-and-hooks/</loc>
     <lastmod>2026-03-27</lastmod>
     <changefreq>monthly</changefreq>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Argo CD Multi-Source Applications: Combining Helm Charts with Git-Hosted Values | Burrell Technology Services</title>
+  <meta name="description" content="A practical guide to Argo CD multi-source Applications. Learn how to pair external Helm charts with Git-hosted values files, layer additional manifests on top of charts, use the ref field for cross-repository references, and scale the pattern with ApplicationSets.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://burrell.tech/blog/argo-cd-multi-source/">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/logo.webp" as="image">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Burrell Technology Services S.A.">
+  <meta property="og:title" content="Argo CD Multi-Source Applications: Combining Helm Charts with Git-Hosted Values">
+  <meta property="og:description" content="A practical guide to Argo CD multi-source Applications. Learn how to pair external Helm charts with Git-hosted values files, layer additional manifests on top of charts, use the ref field for cross-repository references, and scale the pattern with ApplicationSets.">
+  <meta property="og:url" content="https://burrell.tech/blog/argo-cd-multi-source/">
+  <meta property="og:image" content="https://burrell.tech/blog/og/argo-cd-multi-source.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-03-28">
+  <meta property="article:modified_time" content="2026-03-28">
+  <meta property="article:author" content="Noah Burrell">
+  <meta property="article:tag" content="kubernetes">
+  <meta property="article:tag" content="argo-cd">
+  <meta property="article:tag" content="gitops">
+  <meta property="article:tag" content="helm">
+  <meta property="article:section" content="kubernetes">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Argo CD Multi-Source Applications: Combining Helm Charts with Git-Hosted Values">
+  <meta name="twitter:description" content="A practical guide to Argo CD multi-source Applications. Learn how to pair external Helm charts with Git-hosted values files, layer additional manifests on top of charts, use the ref field for cross-repository references, and scale the pattern with ApplicationSets.">
+  <meta name="twitter:image" content="https://burrell.tech/blog/og/argo-cd-multi-source.png">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Argo CD Multi-Source Applications: Combining Helm Charts with Git-Hosted Values",
+    "datePublished": "2026-03-28",
+    "dateModified": "2026-03-28",
+    "description": "A practical guide to Argo CD multi-source Applications. Learn how to pair external Helm charts with Git-hosted values files, layer additional manifests on top of charts, use the ref field for cross-repository references, and scale the pattern with ApplicationSets.",
+    "url": "https://burrell.tech/blog/argo-cd-multi-source/",
+    "image": "https://burrell.tech/blog/og/argo-cd-multi-source.png",
+    "timeRequired": "PT9M",
+    "author": {
+      "@type": "Person",
+      "name": "Noah Burrell",
+      "url": "https://burrell.tech/about"
+    },
+    "publisher": {
+      "@id": "https://burrell.tech/#organization"
+    },
+    "keywords": "kubernetes, argo-cd, gitops, helm"
+  }
+  </script>
+
+  <!-- Theme (blocking - must run before first paint to prevent flash) -->
+  <script src="/js/theme.js"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/tailwind.css">
+  <link rel="stylesheet" href="/css/custom.css">
+
+  <!-- Scripts -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="/js/analytics.js"></script>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans antialiased">
+
+  <div id="nav-placeholder" data-active-page="blog"></div>
+
+  <main class="flex-1">
+  <!-- Post Header -->
+  <section class="bg-gray-50 dark:bg-gray-900/40 border-b border-gray-200 dark:border-gray-800 py-16 sm:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <a href="/blog" class="inline-flex items-center gap-1.5 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors mb-6">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        All posts
+      </a>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Argo CD Multi-Source Applications: Combining Helm Charts with Git-Hosted Values</h1>
+      <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
+        <time datetime="2026-03-28">March 28, 2026</time>
+        <span>&middot;</span>
+        <span>Noah Burrell</span>
+        <span>&middot;</span>
+        <span>9 min read</span>
+      </div>
+      <div class="mt-4 flex flex-wrap gap-2">
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">kubernetes</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">argo-cd</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">gitops</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">helm</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Post Content -->
+  <section class="py-12 sm:py-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
+        <div class="blog-hero">
+  <img src="/blog/images/multi-source-hero.svg" alt="Argo CD multi-source application combining Helm and Git repositories into a single deployment" width="500" style="display: inline-block;">
+</div>
+<p>There is a common friction point that shows up the moment a team adopts GitOps with Argo CD and tries to consume a third-party Helm chart. You want to use the upstream chart from its official Helm repository, but you also need to override its default values with your own configuration stored in Git. The traditional approach forces a compromise: either vendor the chart into your Git repo so the values file lives alongside it, or set Helm parameters directly in the Application spec where they are harder to review and version alongside your other configuration.</p>
+<p>Argo CD's multi-source feature eliminates this trade-off. Instead of a single <code>source</code> pointing to one repository, you define a <code>sources</code> array that pulls from multiple repositories. Argo CD generates manifests from each source independently, combines them, and reconciles the result as a single Application. The chart stays upstream, your values stay in your config repo, and both are tracked together in one Application resource.</p>
+<p>If you are new to Argo CD, my <a href="/blog/argo-cd/" target="_blank" rel="noopener">getting started guide</a> covers installation and core concepts. This post assumes you have a working Argo CD instance and want to use multi-source to solve real repository layout problems.</p>
+<h2 id="how-multi-source-works" tabindex="-1">How Multi-Source Works</h2>
+<p>When you specify the <code>sources</code> field (plural) on an Application, Argo CD ignores the singular <code>source</code> field entirely. It processes each entry in the <code>sources</code> array independently, generating manifests from each one, then combines all the resulting resources into a single set for reconciliation.</p>
+<p>The merging logic is straightforward but has an important edge case. If two sources produce a resource with the same <code>group</code>, <code>kind</code>, <code>name</code>, and <code>namespace</code>, the last source in the array wins. Argo CD will still sync the resource, but it logs a <code>RepeatedResourceWarning</code> so you know something is being shadowed. This is actually useful. You can use a later source to deliberately override a resource produced by an earlier source, such as replacing a default ConfigMap from a Helm chart with your own version.</p>
+<p>Here is the simplest possible multi-source Application, combining manifests from two Git repositories:</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: billing-app
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: billing
+  sources:
+    - repoURL: https://github.com/mycompany/billing-app.git
+      path: manifests
+      targetRevision: v2.4.0
+    - repoURL: https://github.com/mycompany/common-config.git
+      path: configmaps-billing
+      targetRevision: HEAD
+</code></pre>
+<p>Both repositories contribute manifests, and the resulting Kubernetes resources are applied together. If the billing-app repo and the common-config repo both define a ConfigMap called <code>billing-settings</code>, the version from <code>common-config</code> takes precedence because it is the last source in the array.</p>
+<h2 id="external-helm-charts-with-git-hosted-values" tabindex="-1">External Helm Charts with Git-Hosted Values</h2>
+<p>This is the pattern that makes multi-source worth learning. You want to deploy Prometheus using the community Helm chart, but your team maintains its own <code>values.yaml</code> in a configuration repository. Without multi-source, you would either fork the chart, vendor it, or inline every override as <code>helm.parameters</code> in the Application spec. None of those options are great at scale.</p>
+<p>With multi-source, the Helm chart stays upstream and your values file stays in Git:</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prometheus
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  sources:
+    - repoURL: https://prometheus-community.github.io/helm-charts
+      chart: prometheus
+      targetRevision: 28.14.0
+      helm:
+        valueFiles:
+          - $values/clusters/production/prometheus-values.yaml
+    - repoURL: https://github.com/mycompany/platform-config.git
+      targetRevision: main
+      ref: values
+</code></pre>
+<p>There are two entries in <code>sources</code>. The first is the Helm chart source. It specifies the Helm repository URL in <code>repoURL</code>, the chart name in <code>chart</code>, and the version in <code>targetRevision</code>. Under <code>helm.valueFiles</code>, the path starts with <code>$values</code>, which is a variable that resolves to the root of the second source.</p>
+<p>The second entry is the Git repository containing your values file. It does not produce any Kubernetes manifests on its own because <code>path</code> is omitted. The <code>ref: values</code> field maps this source to the <code>$values</code> variable used in the first source's value file paths. The variable name comes directly from the <code>ref</code> value, so <code>ref: values</code> creates <code>$values</code>, <code>ref: myconfig</code> would create <code>$myconfig</code>, and so on.</p>
+<p>A few rules govern how <code>ref</code> works. The <code>$values</code> variable can only appear at the beginning of a value file path. You cannot use it in the middle of a path like <code>/some/$values/thing</code>. The path after the variable is always relative to the root of the referenced repository. And critically, a source with <code>ref</code> set cannot also have a <code>chart</code> field. The <code>ref</code> source is a value provider, not a chart source.</p>
+<h3 id="multiple-values-files" tabindex="-1">Multiple Values Files</h3>
+<p>Helm's values precedence applies here just as it does in a standard <code>helm install</code> command. When you list multiple files in <code>valueFiles</code>, each subsequent file overrides values from the previous ones. You can combine this with multi-source to layer a base values file from one repository on top of the chart's defaults, then apply environment-specific overrides from another:</p>
+<pre><code class="language-yaml">sources:
+  - repoURL: https://prometheus-community.github.io/helm-charts
+    chart: prometheus
+    targetRevision: 28.14.0
+    helm:
+      valueFiles:
+        - $defaults/charts/prometheus/base-values.yaml
+        - $env/clusters/production/prometheus-values.yaml
+  - repoURL: https://github.com/mycompany/chart-defaults.git
+    targetRevision: main
+    ref: defaults
+  - repoURL: https://github.com/mycompany/env-config.git
+    targetRevision: main
+    ref: env
+</code></pre>
+<p>In this setup, <code>base-values.yaml</code> from the defaults repo is applied first, then <code>prometheus-values.yaml</code> from the environment-specific repo overrides any conflicting keys. The chart's own <code>values.yaml</code> is always the lowest priority.</p>
+<h3 id="combining-values-files-with-inline-parameters" tabindex="-1">Combining Values Files with Inline Parameters</h3>
+<p>The <code>valueFiles</code> approach and <code>helm.parameters</code> are not mutually exclusive. If you need most of your configuration in a values file but want to override a single value at the Application level, perhaps to inject a cluster-specific endpoint that changes per Application rather than per environment, you can combine both:</p>
+<pre><code class="language-yaml">sources:
+  - repoURL: https://prometheus-community.github.io/helm-charts
+    chart: prometheus
+    targetRevision: 28.14.0
+    helm:
+      valueFiles:
+        - $values/prometheus/values.yaml
+      parameters:
+        - name: server.persistentVolume.storageClass
+          value: gp3
+  - repoURL: https://github.com/mycompany/platform-config.git
+    targetRevision: main
+    ref: values
+</code></pre>
+<p>Argo CD applies Helm values in a specific precedence order from lowest to highest: the chart's default <code>values.yaml</code>, then files listed in <code>valueFiles</code> (in order), then inline <code>values</code>, then <code>valuesObject</code>, and finally <code>parameters</code>. A <code>parameters</code> entry always wins over a conflicting key in a values file, and <code>valuesObject</code> takes precedence over <code>values</code> if both are specified.</p>
+<h3 id="handling-optional-values-files" tabindex="-1">Handling Optional Values Files</h3>
+<p>Sometimes you want a values file to apply only if it exists. For example, you might have a shared configuration repo where some clusters have a <code>monitoring-overrides.yaml</code> and others do not. Argo CD will fail the sync if a file referenced in <code>valueFiles</code> is missing, unless you set <code>ignoreMissingValueFiles</code>:</p>
+<pre><code class="language-yaml">sources:
+  - repoURL: https://prometheus-community.github.io/helm-charts
+    chart: prometheus
+    targetRevision: 28.14.0
+    helm:
+      ignoreMissingValueFiles: true
+      valueFiles:
+        - $values/base/prometheus-values.yaml
+        - $values/clusters/us-east-1/prometheus-overrides.yaml
+  - repoURL: https://github.com/mycompany/platform-config.git
+    targetRevision: main
+    ref: values
+</code></pre>
+<p>With <code>ignoreMissingValueFiles</code> set to <code>true</code>, any file in the <code>valueFiles</code> list that does not exist is silently skipped rather than causing a sync failure. This applies to all entries in the list, so you should be confident that your base values file path is correct since a typo there would be silently ignored too. The trade-off is worth it when you have optional per-cluster or per-region override files that only exist for some environments. It lets you add customization incrementally without creating empty placeholder files everywhere.</p>
+<h2 id="supplementing-a-helm-chart-with-extra-manifests" tabindex="-1">Supplementing a Helm Chart with Extra Manifests</h2>
+<p>The values overlay pattern handles most customization, but sometimes you need to deploy resources alongside a Helm chart that the chart does not template at all. Maybe you need a <code>ServiceMonitor</code> for Prometheus Operator, a <code>NetworkPolicy</code>, or an <code>ExternalSecret</code> that the chart has no opinion about. You can add a second source that contributes plain manifests:</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cert-manager
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cert-manager
+  sources:
+    - repoURL: https://charts.jetstack.io
+      chart: cert-manager
+      targetRevision: v1.20.0
+      helm:
+        valueFiles:
+          - $values/cert-manager/values.yaml
+    - repoURL: https://github.com/mycompany/platform-config.git
+      targetRevision: main
+      ref: values
+    - repoURL: https://github.com/mycompany/platform-config.git
+      targetRevision: main
+      path: cert-manager/extras
+</code></pre>
+<p>The third source points to a <code>cert-manager/extras</code> directory in the same platform-config repository. Any YAML manifests in that directory (a <code>ClusterIssuer</code> for Let's Encrypt, a <code>NetworkPolicy</code>, whatever you need) are rendered and combined with the output of the Helm chart. Notice that this source uses the same <code>repoURL</code> as the <code>ref</code> source but specifies <code>path</code> instead of <code>ref</code>, which means it generates manifests from that directory.</p>
+<p>This is also where the resource precedence rule becomes useful. If the Helm chart produces a <code>ConfigMap</code> that you want to replace entirely, you can put your replacement in the <code>cert-manager/extras</code> directory. Because it appears later in the <code>sources</code> array, your version takes precedence.</p>
+<h2 id="multi-source-with-applicationsets" tabindex="-1">Multi-Source with ApplicationSets</h2>
+<p>If you manage multiple environments or clusters, you probably use <a href="/blog/argo-cd-applicationsets/" target="_blank" rel="noopener">ApplicationSets</a> to generate Applications from templates. Multi-source works inside ApplicationSet templates, which means you can parameterize the values file path or chart version per environment.</p>
+<p>Here is an ApplicationSet that deploys Prometheus to three environments, each with its own values file:</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: prometheus
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: [&quot;missingkey=error&quot;]
+  generators:
+    - list:
+        elements:
+          - env: dev
+            cluster: https://dev.k8s.example.com
+            revision: main
+          - env: staging
+            cluster: https://staging.k8s.example.com
+            revision: main
+          - env: production
+            cluster: https://prod.k8s.example.com
+            revision: v2.1.0
+  template:
+    metadata:
+      name: 'prometheus-{{ .env }}'
+    spec:
+      project: default
+      destination:
+        server: '{{ .cluster }}'
+        namespace: monitoring
+      sources:
+        - repoURL: https://prometheus-community.github.io/helm-charts
+          chart: prometheus
+          targetRevision: 28.14.0
+          helm:
+            valueFiles:
+              - '$values/envs/{{ .env }}/prometheus-values.yaml'
+        - repoURL: https://github.com/mycompany/platform-config.git
+          targetRevision: '{{ .revision }}'
+          ref: values
+</code></pre>
+<p>Each generated Application gets its own values file path based on the environment name. The production environment pins a specific Git revision for the values repo while dev and staging follow <code>main</code>. This gives you a clean separation between environment configurations while sharing a single ApplicationSet definition.</p>
+<h2 id="limitations-and-when-to-avoid-multi-source" tabindex="-1">Limitations and When to Avoid Multi-Source</h2>
+<p>Multi-source is designed for combining a small number of tightly related sources into one Application, not as a general-purpose way to group unrelated workloads. The Argo CD documentation explicitly warns against abusing it. If you find yourself adding more than two or three entries to the <code>sources</code> array, reconsider your repository layout. An app-of-apps pattern or ApplicationSets are better tools for managing genuinely separate applications.</p>
+<p>The <code>ref</code> field and <code>chart</code> field are mutually exclusive on the same source. A source that provides values via <code>ref</code> cannot also be a Helm chart. If you need to use one Helm chart's output as values for another chart, you will need to approach it differently, either by extracting the relevant values into a Git-managed file or by restructuring your charts.</p>
+<p>Multi-source also does not change how Argo CD handles sync operations. All sources are rendered together and applied as one unit. You cannot sync one source independently of the others. If you need independent lifecycle management for different components, they should be separate Applications.</p>
+<h2 id="putting-it-together" tabindex="-1">Putting It Together</h2>
+<p>Multi-source solves a specific set of problems cleanly. The core use case is consuming external Helm charts without vendoring them while keeping your configuration in Git where it belongs. The secondary use case is supplementing a chart with additional manifests that the chart does not provide. Combined with ApplicationSets, you get a scalable pattern for managing the same chart across multiple environments with per-environment configuration.</p>
+<p>One pattern that works well for platform teams is a single config repository organized by environment and service, with each service directory containing a <code>values.yaml</code> and an optional <code>extras/</code> directory for additional manifests:</p>
+<pre><code>platform-config/
+  envs/
+    dev/
+      prometheus/
+        values.yaml
+      cert-manager/
+        values.yaml
+        extras/
+          cluster-issuer.yaml
+    staging/
+      prometheus/
+        values.yaml
+      cert-manager/
+        values.yaml
+        extras/
+          cluster-issuer.yaml
+    production/
+      prometheus/
+        values.yaml
+      cert-manager/
+        values.yaml
+        extras/
+          cluster-issuer.yaml
+          network-policy.yaml
+</code></pre>
+<p>Each service gets an ApplicationSet that templates the environment name into the values file path and extras path. The Helm charts stay upstream, the values stay in Git, and the additional manifests live next to the values they relate to. Changes to any of these paths trigger a sync in the relevant environment without touching the others.</p>
+<p>If you are working with ApplicationSets, my <a href="/blog/argo-cd-applicationsets/" target="_blank" rel="noopener">ApplicationSets deep dive</a> covers generators, templating, and progressive sync in detail. And if you are managing the values files themselves through a promotion pipeline, <a href="/blog/kargo/" target="_blank" rel="noopener">Kargo</a> can automate the process of moving configuration changes across environments.</p>
+
+      </article>
+    </div>
+  </section>
+  </main>
+
+  <div id="cta-placeholder"
+    data-i18n="blog_cta"
+    data-variant="simple"></div>
+  <div id="footer-placeholder"></div>
+
+  <!-- components.js must run before Alpine (deferred) so nav x-data is in the DOM at Alpine init time -->
+  <script src="/js/components.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="/js/blog-i18n-links.js"></script>
+  <script src="/js/code-copy.js"></script>
+  <script src="/js/toc.js"></script>
+  <script src="/js/mermaid.js" type="module"></script>
+</body>
+</html>

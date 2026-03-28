@@ -14,7 +14,7 @@ permalink: "blog/{% if pagination.pageNumber > 0 %}page/{{ pagination.pageNumber
     {%- if post.data.image %}
     <a href="{{ post.url }}" class="block" aria-label="{{ post.data.title }}">
       <div class="blog-hero blog-hero-card h-[100px] sm:h-[160px]">
-        <img src="{{ post.data.image }}" alt="" width="100" height="100" class="max-h-[60px] sm:max-h-[100px]">
+        <img src="{{ post.data.image }}" alt="" width="100" height="100">
       </div>
     </a>
     {%- endif %}
