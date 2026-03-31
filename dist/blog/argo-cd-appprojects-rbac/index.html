@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Argo CD AppProjects and RBAC: Securing a Multi-Tenant GitOps Platform | Burrell Technology Services</title>
+  <meta name="description" content="A deep dive into Argo CD AppProjects and RBAC. Learn how to isolate teams with Projects, write Casbin policies, bind OIDC groups to roles, scope repositories and clusters per project, and test your policies before they hit production.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://burrell.tech/blog/argo-cd-appprojects-rbac/">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/logo.webp" as="image">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Burrell Technology Services S.A.">
+  <meta property="og:title" content="Argo CD AppProjects and RBAC: Securing a Multi-Tenant GitOps Platform">
+  <meta property="og:description" content="A deep dive into Argo CD AppProjects and RBAC. Learn how to isolate teams with Projects, write Casbin policies, bind OIDC groups to roles, scope repositories and clusters per project, and test your policies before they hit production.">
+  <meta property="og:url" content="https://burrell.tech/blog/argo-cd-appprojects-rbac/">
+  <meta property="og:image" content="https://burrell.tech/blog/og/argo-cd-appprojects-rbac.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-03-30">
+  <meta property="article:modified_time" content="2026-03-30">
+  <meta property="article:author" content="Noah Burrell">
+  <meta property="article:tag" content="kubernetes">
+  <meta property="article:tag" content="argo-cd">
+  <meta property="article:tag" content="gitops">
+  <meta property="article:tag" content="security">
+  <meta property="article:tag" content="multi-tenancy">
+  <meta property="article:section" content="kubernetes">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Argo CD AppProjects and RBAC: Securing a Multi-Tenant GitOps Platform">
+  <meta name="twitter:description" content="A deep dive into Argo CD AppProjects and RBAC. Learn how to isolate teams with Projects, write Casbin policies, bind OIDC groups to roles, scope repositories and clusters per project, and test your policies before they hit production.">
+  <meta name="twitter:image" content="https://burrell.tech/blog/og/argo-cd-appprojects-rbac.png">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Argo CD AppProjects and RBAC: Securing a Multi-Tenant GitOps Platform",
+    "datePublished": "2026-03-30",
+    "dateModified": "2026-03-30",
+    "description": "A deep dive into Argo CD AppProjects and RBAC. Learn how to isolate teams with Projects, write Casbin policies, bind OIDC groups to roles, scope repositories and clusters per project, and test your policies before they hit production.",
+    "url": "https://burrell.tech/blog/argo-cd-appprojects-rbac/",
+    "image": "https://burrell.tech/blog/og/argo-cd-appprojects-rbac.png",
+    "timeRequired": "PT16M",
+    "author": {
+      "@type": "Person",
+      "name": "Noah Burrell",
+      "url": "https://burrell.tech/about"
+    },
+    "publisher": {
+      "@id": "https://burrell.tech/#organization"
+    },
+    "keywords": "kubernetes, argo-cd, gitops, security, multi-tenancy"
+  }
+  </script>
+
+  <!-- Theme (blocking - must run before first paint to prevent flash) -->
+  <script src="/js/theme.js"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/tailwind.css">
+  <link rel="stylesheet" href="/css/custom.css">
+
+  <!-- Scripts -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="/js/analytics.js"></script>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans antialiased">
+
+  <div id="nav-placeholder" data-active-page="blog"></div>
+
+  <main class="flex-1">
+  <!-- Post Header -->
+  <section class="bg-gray-50 dark:bg-gray-900/40 border-b border-gray-200 dark:border-gray-800 py-16 sm:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <a href="/blog" class="inline-flex items-center gap-1.5 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors mb-6">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        All posts
+      </a>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Argo CD AppProjects and RBAC: Securing a Multi-Tenant GitOps Platform</h1>
+      <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
+        <time datetime="2026-03-30">March 30, 2026</time>
+        <span>&middot;</span>
+        <span>Noah Burrell</span>
+        <span>&middot;</span>
+        <span>16 min read</span>
+      </div>
+      <div class="mt-4 flex flex-wrap gap-2">
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">kubernetes</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">argo-cd</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">gitops</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">security</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">multi-tenancy</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Post Content -->
+  <section class="py-12 sm:py-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
+        <div class="blog-hero">
+  <img src="/blog/images/appproject-rbac-hero.svg" alt="Argo CD AppProject RBAC controlling access for multiple teams" width="200" style="display: inline-block;">
+</div>
+<p>A single Argo CD instance can serve an entire organization, but only if every team trusts every other team with full access to every cluster and every application. In practice that never holds. The frontend team should not be able to delete the payment service. The intern experimenting with a dev cluster should not be able to sync to production. And nobody outside the platform team should be deploying CRDs or ClusterRoles.</p>
+<p>Argo CD solves this with two mechanisms that work together: AppProjects and RBAC. An AppProject defines the boundaries of what an Application can do, restricting which repositories it can pull from, which clusters and namespaces it can deploy to, and which Kubernetes resource types it is allowed to create. RBAC defines who can do what within those boundaries, controlling which users and groups can view, sync, delete, or manage Applications belonging to a given Project.</p>
+<p>If you are new to Argo CD, my <a href="/blog/argo-cd/" target="_blank" rel="noopener">getting started guide</a> covers installation and core concepts. This post assumes you have a working Argo CD instance and at least one Application deployed, and you want to move beyond the permissive defaults toward a production-grade access model.</p>
+<h2 id="the-default-project-and-why-you-should-stop-using-it" tabindex="-1">The Default Project and Why You Should Stop Using It</h2>
+<p>Every Argo CD installation ships with a built-in Project called <code>default</code>. It permits any source repository, any destination cluster and namespace, and all resource types. When you follow a quickstart tutorial and create an Application without specifying a project, it lands in <code>default</code> and everything works because nothing is restricted.</p>
+<p>This is fine for learning but dangerous for production. An Application in the <code>default</code> project can deploy a ClusterRole that grants itself admin privileges across the cluster. It can pull manifests from any Git repository, including one controlled by someone outside your organization if the URL is misconfigured. It can write resources into <code>kube-system</code> or any other sensitive namespace.</p>
+<p>The first step toward a secure multi-tenant setup is to restrict the <code>default</code> project and create purpose-built projects for each team or workload category. You cannot delete the <code>default</code> project, but you can lock it down so that no Applications can use it:</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: default
+  namespace: argocd
+spec:
+  sourceRepos: []
+  destinations: []
+  clusterResourceWhitelist: []
+  namespaceResourceWhitelist: []
+</code></pre>
+<p>With empty lists for source repos and destinations, any Application assigned to the <code>default</code> project will fail to sync. This forces teams to explicitly assign their Applications to a project that has been configured with appropriate boundaries.</p>
+<h2 id="creating-an-appproject" tabindex="-1">Creating an AppProject</h2>
+<p>An AppProject is a namespaced custom resource that lives in the same namespace as Argo CD, typically <code>argocd</code>. Here is a project for a hypothetical payments team:</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: payments
+  namespace: argocd
+spec:
+  description: &quot;Applications owned by the payments team&quot;
+  sourceRepos:
+    - 'https://github.com/mycompany/payments-*.git'
+    - 'https://charts.example.com/*'
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: 'payments-*'
+    - server: https://kubernetes.default.svc
+      namespace: payments
+  clusterResourceWhitelist: []
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
+</code></pre>
+<p>This project allows Applications to pull from any GitHub repo matching the <code>payments-*</code> pattern and any chart from the company Helm repository. It allows deployments only to the in-cluster server and only to namespaces that start with <code>payments-</code> or the exact <code>payments</code> namespace. The <code>clusterResourceWhitelist</code> is empty, which means Applications in this project cannot create cluster-scoped resources like Namespaces, ClusterRoles, or CRDs. The <code>namespaceResourceWhitelist</code> allows all namespaced resource types.</p>
+<h3 id="source-repository-controls" tabindex="-1">Source Repository Controls</h3>
+<p>The <code>sourceRepos</code> field accepts exact URLs and glob patterns. You can also negate entries using the <code>!</code> prefix to create deny rules:</p>
+<pre><code class="language-yaml">spec:
+  sourceRepos:
+    - 'https://github.com/mycompany/*'
+    - '!https://github.com/mycompany/infrastructure-secrets.git'
+</code></pre>
+<p>This permits any repo under the company GitHub org except the infrastructure-secrets repo. The evaluation logic works in two steps: first, at least one allow rule must match the source URL; second, no deny rule can match it. If both an allow and a deny rule match, the deny wins.</p>
+<h3 id="destination-controls" tabindex="-1">Destination Controls</h3>
+<p>Destinations are pairs of a server URL and a namespace. Both support glob patterns and negation:</p>
+<pre><code class="language-yaml">spec:
+  destinations:
+    - server: '*'
+      namespace: '*'
+    - server: '*'
+      namespace: '!kube-system'
+    - server: '!https://production.k8s.example.com'
+      namespace: '*'
+</code></pre>
+<p>This configuration allows deployment to any namespace on any cluster, except <code>kube-system</code> on all clusters and except the production cluster entirely. The same two-step evaluation applies: an allow rule must match, and no deny rule can reject it.</p>
+<h3 id="resource-type-restrictions" tabindex="-1">Resource Type Restrictions</h3>
+<p>You have four fields that control which Kubernetes resource types an Application can manage:</p>
+<p><code>clusterResourceWhitelist</code> and <code>clusterResourceBlacklist</code> control cluster-scoped resources like Namespaces, ClusterRoles, ClusterRoleBindings, CRDs, and IngressClasses. <code>namespaceResourceWhitelist</code> and <code>namespaceResourceBlacklist</code> control namespaced resources like Deployments, Services, ConfigMaps, and Secrets.</p>
+<p>When neither whitelist nor blacklist is specified for namespace resources, the default behavior is to allow all namespaced resource types. For cluster-scoped resources, the intended default is to deny all, but there have been edge cases in older versions where an empty whitelist was treated as permissive. To be explicit about denying cluster-scoped resources, you can combine an empty whitelist with a wildcard blacklist:</p>
+<pre><code class="language-yaml">spec:
+  clusterResourceWhitelist: []
+  clusterResourceBlacklist:
+    - group: '*'
+      kind: '*'
+</code></pre>
+<p>A common pattern for application teams is to deny all cluster resources and allow all namespace resources, which is what we did in the payments example. Platform teams that need to manage infrastructure might get a more permissive project:</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: platform
+  namespace: argocd
+spec:
+  description: &quot;Infrastructure managed by the platform team&quot;
+  sourceRepos:
+    - 'https://github.com/mycompany/platform-*.git'
+    - 'https://charts.example.com/*'
+  destinations:
+    - server: '*'
+      namespace: '*'
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
+</code></pre>
+<p>If you want to be more surgical, you can allow specific cluster resource types rather than wildcarding everything:</p>
+<pre><code class="language-yaml">spec:
+  clusterResourceWhitelist:
+    - group: ''
+      kind: Namespace
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
+    - group: networking.k8s.io
+      kind: IngressClass
+</code></pre>
+<p>You can also restrict cluster resources by name using the <code>name</code> field with glob patterns:</p>
+<pre><code class="language-yaml">spec:
+  clusterResourceWhitelist:
+    - group: ''
+      kind: Namespace
+      name: 'payments-*'
+</code></pre>
+<p>This lets the project create Namespaces, but only ones whose names start with <code>payments-</code>. Attempts to create a Namespace with any other name will be rejected.</p>
+<h2 id="how-rbac-works-in-argo-cd" tabindex="-1">How RBAC Works in Argo CD</h2>
+<p>AppProjects define boundaries for Applications, but they do not control which users can interact with those Applications. That is the job of RBAC.</p>
+<p>Argo CD's RBAC system is built on <a href="https://casbin.org/" target="_blank" rel="noopener">Casbin</a>, an open-source access control library. Policies are stored in the <code>argocd-rbac-cm</code> ConfigMap in the <code>argocd</code> namespace. Each policy line follows a specific format:</p>
+<pre><code>p, &lt;subject&gt;, &lt;resource&gt;, &lt;action&gt;, &lt;object&gt;, &lt;effect&gt;
+</code></pre>
+<p>The subject is a role name, a user, or an SSO group. The resource is one of Argo CD's resource types. The action is what the subject wants to do. The object identifies the specific resource instance. And the effect is either <code>allow</code> or <code>deny</code>.</p>
+<p>Here is a concrete example that gives the <code>payments-dev</code> role read-only access to all Applications in the <code>payments</code> project:</p>
+<pre><code>p, role:payments-dev, applications, get, payments/*, allow
+</code></pre>
+<p>The <code>payments/*</code> object follows the pattern <code>&lt;project-name&gt;/&lt;application-name&gt;</code>. The wildcard means any Application within the payments project.</p>
+<h3 id="resource-types-and-actions" tabindex="-1">Resource Types and Actions</h3>
+<p>Each Argo CD resource type supports specific actions:</p>
+<p><strong>applications</strong>: <code>get</code>, <code>create</code>, <code>update</code>, <code>delete</code>, <code>sync</code>, <code>action</code>, <code>override</code></p>
+<p><strong>applicationsets</strong>: <code>get</code>, <code>create</code>, <code>update</code>, <code>delete</code></p>
+<p><strong>clusters</strong>: <code>get</code>, <code>create</code>, <code>update</code>, <code>delete</code></p>
+<p><strong>projects</strong>: <code>get</code>, <code>create</code>, <code>update</code>, <code>delete</code></p>
+<p><strong>repositories</strong>: <code>get</code>, <code>create</code>, <code>update</code>, <code>delete</code></p>
+<p><strong>accounts</strong>: <code>get</code>, <code>update</code></p>
+<p><strong>certificates</strong>: <code>get</code>, <code>create</code>, <code>delete</code></p>
+<p><strong>gpgkeys</strong>: <code>get</code>, <code>create</code>, <code>delete</code></p>
+<p><strong>logs</strong>: <code>get</code></p>
+<p><strong>exec</strong>: <code>create</code></p>
+<p><strong>extensions</strong>: <code>invoke</code></p>
+<p>The <code>logs</code> and <code>exec</code> resources deserve special attention. The <code>logs</code> resource controls access to application pod logs through the Argo CD UI and API. The <code>exec</code> resource controls the web terminal feature that lets users execute commands inside running pods. Both use the <code>&lt;project&gt;/&lt;application&gt;</code> object format.</p>
+<h3 id="built-in-roles" tabindex="-1">Built-in Roles</h3>
+<p>Argo CD provides two built-in roles:</p>
+<p><code>role:readonly</code> grants <code>get</code> access to all resources. <code>role:admin</code> grants unrestricted access to everything. You assign users or groups to these roles with group binding lines:</p>
+<pre><code>g, my-admin-group, role:admin
+g, readonly-users, role:readonly
+</code></pre>
+<p>For most production setups, you will want custom roles that sit between these extremes.</p>
+<h3 id="fine-grained-sub-resource-permissions" tabindex="-1">Fine-Grained Sub-Resource Permissions</h3>
+<p>The <code>update</code> and <code>delete</code> actions on applications support an extended format that targets specific Kubernetes resource types within an Application:</p>
+<pre><code>p, role:payments-ops, applications, delete/*/Pod/*/*, payments/*, allow
+</code></pre>
+<p>The format after the action is <code>&lt;action&gt;/&lt;api-group&gt;/&lt;kind&gt;/&lt;namespace&gt;/&lt;name&gt;</code>. This policy allows the <code>payments-ops</code> role to delete Pods within any Application in the payments project, but not Deployments, Services, or any other resource type. This is useful for allowing teams to restart pods without giving them the ability to delete an entire Application.</p>
+<h3 id="deny-rules" tabindex="-1">Deny Rules</h3>
+<p>The <code>deny</code> effect creates explicit rejections that override allow rules. If a subject matches both an allow and a deny policy for the same request, the deny wins:</p>
+<pre><code>p, role:payments-dev, applications, *, payments/*, allow
+p, role:payments-dev, applications, delete, payments/payments-production, deny
+</code></pre>
+<p>This grants the <code>payments-dev</code> role full access to all Applications in the payments project, except it explicitly prevents deletion of the <code>payments-production</code> Application. Deny rules are a safety net for protecting critical resources even from users who otherwise have broad permissions.</p>
+<h2 id="binding-sso-groups-to-roles" tabindex="-1">Binding SSO Groups to Roles</h2>
+<p>Argo CD supports local accounts configured in the <code>argocd-cm</code> ConfigMap, including a built-in <code>admin</code> account. You can create additional local users and assign them passwords or restrict them to API-only access. However, local accounts do not support group membership, which limits how you can structure RBAC around them. For production multi-tenant setups, most organizations use an SSO provider like Okta, Azure AD, Keycloak, or Dex (which ships with Argo CD) because SSO tokens carry group claims that map cleanly to RBAC role bindings.</p>
+<p>Here is a complete <code>argocd-rbac-cm</code> ConfigMap that defines roles for two teams:</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-rbac-cm
+  namespace: argocd
+data:
+  policy.default: role:authenticated
+  policy.csv: |
+    # Default role for authenticated users - intentionally grants no permissions
+    p, role:authenticated, *, *, */*, deny
+
+    # Payments team roles
+    p, role:payments-admin, applications, *, payments/*, allow
+    p, role:payments-admin, applicationsets, *, payments/*, allow
+    p, role:payments-admin, logs, get, payments/*, allow
+    p, role:payments-admin, exec, create, payments/*, allow
+    p, role:payments-admin, repositories, get, payments/*, allow
+
+    p, role:payments-viewer, applications, get, payments/*, allow
+    p, role:payments-viewer, logs, get, payments/*, allow
+
+    # Frontend team roles
+    p, role:frontend-admin, applications, *, frontend/*, allow
+    p, role:frontend-admin, applicationsets, *, frontend/*, allow
+    p, role:frontend-admin, logs, get, frontend/*, allow
+    p, role:frontend-admin, repositories, get, frontend/*, allow
+
+    p, role:frontend-viewer, applications, get, frontend/*, allow
+
+    # SSO group bindings
+    g, payments-engineers, role:payments-admin
+    g, payments-oncall, role:payments-viewer
+    g, frontend-engineers, role:frontend-admin
+    g, frontend-oncall, role:frontend-viewer
+
+    # Platform team SSO group gets admin
+    g, platform-admins, role:admin
+  scopes: '[groups]'
+</code></pre>
+<p>The <code>policy.default: role:authenticated</code> line is important. The <a href="https://argo-cd.readthedocs.io/en/stable/operator-manual/rbac/" target="_blank" rel="noopener">Argo CD RBAC documentation</a> recommends creating a <code>role:authenticated</code> with the minimum set of permissions possible and assigning it as the default. Here we define <code>role:authenticated</code> with an explicit deny-all policy, so any authenticated user who does not match a group binding can still log in but will have no access to applications, projects, or other resources. The <a href="https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/argocd-rbac-cm.yaml" target="_blank" rel="noopener">official example ConfigMap</a> shows <code>policy.default: role:readonly</code> as a starting point, but that grants every authenticated user read access to every Application across every project, which is too permissive for a multi-tenant setup.</p>
+<p>The <code>scopes</code> field tells Argo CD which OIDC claims to use for group membership. The value <code>[groups]</code> is the most common configuration and maps to the <code>groups</code> claim in the OIDC token.</p>
+<h3 id="composing-policies-across-multiple-configmap-keys" tabindex="-1">Composing Policies Across Multiple ConfigMap Keys</h3>
+<p>For organizations with many teams, a single <code>policy.csv</code> can become unwieldy. Argo CD supports splitting policies across multiple keys using the <code>policy.&lt;name&gt;.csv</code> naming convention:</p>
+<pre><code class="language-yaml">data:
+  policy.csv: |
+    g, platform-admins, role:admin
+  policy.payments.csv: |
+    p, role:payments-admin, applications, *, payments/*, allow
+    g, payments-engineers, role:payments-admin
+  policy.frontend.csv: |
+    p, role:frontend-admin, applications, *, frontend/*, allow
+    g, frontend-engineers, role:frontend-admin
+</code></pre>
+<p>Argo CD concatenates the main <code>policy.csv</code> with all <code>policy.&lt;name&gt;.csv</code> keys in alphabetical order by key name. The result is a single combined policy set.</p>
+<h2 id="project-roles-and-jwt-tokens" tabindex="-1">Project Roles and JWT Tokens</h2>
+<p>In addition to SSO-based RBAC, AppProjects support their own role definitions with JWT tokens. This is primarily useful for CI/CD pipelines and automation that needs to interact with Argo CD's API programmatically.</p>
+<p>Project roles are defined inline within the AppProject spec:</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: payments
+  namespace: argocd
+spec:
+  roles:
+    - name: ci-deployer
+      description: &quot;Used by the CI pipeline to sync Applications&quot;
+      policies:
+        - p, proj:payments:ci-deployer, applications, sync, payments/*, allow
+        - p, proj:payments:ci-deployer, applications, get, payments/*, allow
+    - name: monitoring
+      description: &quot;Used by monitoring tools to read application status&quot;
+      policies:
+        - p, proj:payments:monitoring, applications, get, payments/*, allow
+</code></pre>
+<p>The policy subject must follow the pattern <code>proj:&lt;project-name&gt;:&lt;role-name&gt;</code>. This is different from the global RBAC policies in <code>argocd-rbac-cm</code>, which use <code>role:&lt;role-name&gt;</code>.</p>
+<p>After defining the role, you generate a JWT token for it:</p>
+<pre><code class="language-bash">argocd proj role create-token payments ci-deployer
+</code></pre>
+<p>The token is printed once and not stored by Argo CD. Treat it like any other secret and store it in your secrets manager. The token inherits the role's policies, and any changes to those policies take effect immediately for existing tokens without needing to regenerate them.</p>
+<p>You can use the token with the Argo CD CLI or API:</p>
+<pre><code class="language-bash">argocd app sync payments-api --auth-token &quot;$ARGOCD_TOKEN&quot;
+</code></pre>
+<p>Or as an environment variable:</p>
+<pre><code class="language-bash">export ARGOCD_AUTH_TOKEN=&quot;$ARGOCD_TOKEN&quot;
+argocd app sync payments-api
+</code></pre>
+<p>Tokens can be created with an expiration time using the <code>-e</code> flag:</p>
+<pre><code class="language-bash">argocd proj role create-token payments ci-deployer -e 24h
+</code></pre>
+<p>To revoke a token before it expires, you need its ID. The token ID is the Unix timestamp of when it was issued. You can look it up with <code>argocd proj role get</code>:</p>
+<pre><code class="language-bash">argocd proj role get payments ci-deployer
+</code></pre>
+<p>This prints the role's policies and a table of JWT tokens showing their ID, issued-at time, and expiration. Pass the ID to <code>delete-token</code>:</p>
+<pre><code class="language-bash">argocd proj role delete-token payments ci-deployer 1696769937
+</code></pre>
+<p>You can also bind project roles to SSO groups instead of (or in addition to) using JWT tokens:</p>
+<pre><code class="language-yaml">spec:
+  roles:
+    - name: admin
+      description: &quot;Payments project admins&quot;
+      groups:
+        - payments-engineers
+      policies:
+        - p, proj:payments:admin, applications, *, payments/*, allow
+        - p, proj:payments:admin, logs, get, payments/*, allow
+</code></pre>
+<p>When a project role has both a <code>groups</code> binding and JWT tokens, both authentication methods are valid.</p>
+<h2 id="project-scoped-repositories-and-clusters" tabindex="-1">Project-Scoped Repositories and Clusters</h2>
+<p>By default, repositories and clusters are global in Argo CD. Any project can reference any repository that has been registered, and any project can deploy to any cluster that has been added. Project-scoped resources change this so that specific repositories and clusters belong to a specific project and are invisible to others.</p>
+<p>To add a repository that is scoped to a project:</p>
+<pre><code class="language-bash">argocd repo add https://github.com/mycompany/payments-config.git \
+  --username argocd-bot \
+  --password ghp_xxxxxxxxxxxx \
+  --project payments
+</code></pre>
+<p>The equivalent declarative Secret looks like this:</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Secret
+metadata:
+  name: repo-payments-config
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repository
+type: Opaque
+stringData:
+  project: payments
+  url: https://github.com/mycompany/payments-config.git
+  username: argocd-bot
+  password: ghp_xxxxxxxxxxxx
+</code></pre>
+<p>Applications in the <code>payments</code> project can use this repository, but Applications in other projects cannot see it. This is useful when teams use different Git credentials or when certain repositories should not be accessible outside their owning team.</p>
+<p>You need to grant RBAC permissions for teams to manage their own project-scoped repositories:</p>
+<pre><code>p, role:payments-admin, repositories, *, payments/*, allow
+</code></pre>
+<p>The same pattern works for clusters. You can scope a cluster to a project and then enable the <code>permitOnlyProjectScopedClusters</code> field on the AppProject to prevent its Applications from deploying to any cluster that is not explicitly scoped to it:</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: payments
+  namespace: argocd
+spec:
+  permitOnlyProjectScopedClusters: true
+  destinations:
+    - server: https://payments-cluster.example.com
+      namespace: 'payments-*'
+</code></pre>
+<p>This is a strong isolation mechanism for organizations that need hard boundaries between teams at the cluster level.</p>
+<h2 id="testing-policies-before-deploying" tabindex="-1">Testing Policies Before Deploying</h2>
+<p>Argo CD includes CLI tools for validating and testing RBAC policies without deploying them. This catches syntax errors and logic mistakes before they affect real users. The <code>--policy-file</code> flag accepts two formats: a raw CSV file containing just the policy lines, or a full Kubernetes ConfigMap YAML file in the same format as <code>argocd-rbac-cm</code> (with <code>policy.csv</code> and optionally <code>policy.default</code> as data keys). You must provide either <code>--policy-file</code> or <code>--namespace</code>, not both.</p>
+<h3 id="validating-against-a-local-csv-file" tabindex="-1">Validating against a local CSV file</h3>
+<p>If you have a standalone <code>policy.csv</code> file with just the Casbin policy lines:</p>
+<pre><code class="language-bash">argocd admin settings rbac validate --policy-file policy.csv
+</code></pre>
+<h3 id="validating-against-a-configmap-yaml" tabindex="-1">Validating against a ConfigMap YAML</h3>
+<p>If you manage your RBAC as a Kubernetes ConfigMap manifest (which is more likely in a GitOps workflow), you can pass that file directly:</p>
+<pre><code class="language-bash">argocd admin settings rbac validate --policy-file argocd-rbac-cm.yaml
+</code></pre>
+<h3 id="validating-against-the-live-cluster" tabindex="-1">Validating against the live cluster</h3>
+<p>If you want to validate the policies currently applied to your cluster, pass the namespace where Argo CD is installed instead of a file:</p>
+<pre><code class="language-bash">argocd admin settings rbac validate --namespace argocd
+</code></pre>
+<h3 id="testing-specific-permissions" tabindex="-1">Testing specific permissions</h3>
+<p>The <code>argocd admin settings rbac can</code> command tests whether a specific subject can perform an action. It accepts the same <code>--policy-file</code> or <code>--namespace</code> options:</p>
+<pre><code class="language-bash"># Test against a local ConfigMap file
+argocd admin settings rbac can role:payments-admin \
+  sync applications payments/payments-api \
+  --policy-file argocd-rbac-cm.yaml
+
+# Test against the live cluster
+argocd admin settings rbac can role:payments-admin \
+  sync applications payments/payments-api \
+  --namespace argocd
+</code></pre>
+<p>This returns <code>Yes</code> or <code>No</code> and is invaluable for debugging complex policy sets.</p>
+<p>If you are managing RBAC policies in Git (which you should be, since this is a GitOps blog), you can add policy validation to your CI pipeline. A check that runs <code>argocd admin settings rbac validate --policy-file argocd-rbac-cm.yaml</code> on every pull request prevents broken policies from reaching your cluster.</p>
+<h2 id="glob-vs-regex-matching" tabindex="-1">Glob vs Regex Matching</h2>
+<p>Argo CD supports two pattern matching modes for RBAC policy evaluation, configured in <code>argocd-rbac-cm</code>:</p>
+<pre><code class="language-yaml">data:
+  policy.matchMode: glob
+</code></pre>
+<p>The default is <code>glob</code>, which treats each token in the policy as a simple pattern where <code>*</code> matches any sequence of characters. Importantly, in glob mode the <code>/</code> character is not treated as a separator, so <code>payments/*</code> matches <code>payments/api</code> and <code>payments/web/frontend</code> equally.</p>
+<p>If you need more precise matching, you can switch to <code>regex</code> mode:</p>
+<pre><code class="language-yaml">data:
+  policy.matchMode: regex
+</code></pre>
+<p>In regex mode, the same object field uses standard regular expressions:</p>
+<pre><code>p, role:payments-admin, applications, *, payments/[^/]+, allow
+</code></pre>
+<p>The pattern <code>payments/[^/]+</code> matches <code>payments/api</code> but not <code>payments/web/frontend</code>. This level of control is rarely needed but available when you have complex naming conventions.</p>
+<h2 id="putting-it-all-together%3A-a-complete-multi-tenant-setup" tabindex="-1">Putting It All Together: A Complete Multi-Tenant Setup</h2>
+<p>Here is what a production multi-tenant Argo CD configuration looks like when you combine AppProjects and RBAC. This example supports three teams: platform, payments, and frontend.</p>
+<p>First, the AppProjects:</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: platform
+  namespace: argocd
+spec:
+  description: &quot;Cluster infrastructure managed by the platform team&quot;
+  sourceRepos:
+    - 'https://github.com/mycompany/platform-*.git'
+    - 'https://charts.example.com/*'
+  destinations:
+    - server: '*'
+      namespace: '*'
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: payments
+  namespace: argocd
+spec:
+  description: &quot;Applications owned by the payments team&quot;
+  sourceRepos:
+    - 'https://github.com/mycompany/payments-*.git'
+    - 'https://charts.example.com/*'
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: 'payments-*'
+    - server: https://kubernetes.default.svc
+      namespace: payments
+  clusterResourceWhitelist: []
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  roles:
+    - name: ci-deployer
+      description: &quot;CI pipeline sync access&quot;
+      policies:
+        - p, proj:payments:ci-deployer, applications, sync, payments/*, allow
+        - p, proj:payments:ci-deployer, applications, get, payments/*, allow
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: frontend
+  namespace: argocd
+spec:
+  description: &quot;Applications owned by the frontend team&quot;
+  sourceRepos:
+    - 'https://github.com/mycompany/frontend-*.git'
+    - 'https://charts.example.com/*'
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: 'frontend-*'
+    - server: https://kubernetes.default.svc
+      namespace: frontend
+  clusterResourceWhitelist: []
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  roles:
+    - name: ci-deployer
+      description: &quot;CI pipeline sync access&quot;
+      policies:
+        - p, proj:frontend:ci-deployer, applications, sync, frontend/*, allow
+        - p, proj:frontend:ci-deployer, applications, get, frontend/*, allow
+</code></pre>
+<p>Then the RBAC ConfigMap:</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-rbac-cm
+  namespace: argocd
+data:
+  policy.default: role:authenticated
+  scopes: '[groups]'
+  policy.csv: |
+    # Default role - deny all access
+    p, role:authenticated, *, *, */*, deny
+
+    # Platform team - full admin
+    g, platform-admins, role:admin
+
+    # Payments team
+    p, role:payments-admin, applications, *, payments/*, allow
+    p, role:payments-admin, applicationsets, *, payments/*, allow
+    p, role:payments-admin, logs, get, payments/*, allow
+    p, role:payments-admin, exec, create, payments/*, allow
+    p, role:payments-admin, repositories, *, payments/*, allow
+    p, role:payments-viewer, applications, get, payments/*, allow
+    p, role:payments-viewer, logs, get, payments/*, allow
+    g, payments-engineers, role:payments-admin
+    g, payments-oncall, role:payments-viewer
+
+    # Frontend team
+    p, role:frontend-admin, applications, *, frontend/*, allow
+    p, role:frontend-admin, applicationsets, *, frontend/*, allow
+    p, role:frontend-admin, logs, get, frontend/*, allow
+    p, role:frontend-admin, exec, create, frontend/*, allow
+    p, role:frontend-admin, repositories, *, frontend/*, allow
+    p, role:frontend-viewer, applications, get, frontend/*, allow
+    p, role:frontend-viewer, logs, get, frontend/*, allow
+    g, frontend-engineers, role:frontend-admin
+    g, frontend-oncall, role:frontend-viewer
+</code></pre>
+<p>And lock down the default project:</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: default
+  namespace: argocd
+spec:
+  sourceRepos: []
+  destinations: []
+  clusterResourceWhitelist: []
+  namespaceResourceWhitelist: []
+</code></pre>
+<p>With this configuration in place, each team can only see and manage their own Applications. The payments team cannot sync the frontend team's Applications, and neither team can create cluster-scoped resources. The platform team retains full admin access for infrastructure management. CI pipelines authenticate with project-scoped JWT tokens that only allow syncing within their respective projects.</p>
+<p>If you are using <a href="/blog/argo-cd-applicationsets/" target="_blank" rel="noopener">ApplicationSets</a> to generate Applications from templates, those Applications inherit the project specified in the template spec, so the same RBAC boundaries apply automatically.</p>
+<p>The key principle is defense in depth. AppProjects constrain what Applications can do. RBAC constrains what users can do to those Applications. Together they create an access model where each team has exactly the permissions they need and nothing more.</p>
+
+      </article>
+    </div>
+  </section>
+  </main>
+
+  <div id="cta-placeholder"
+    data-i18n="blog_cta"
+    data-variant="simple"></div>
+  <div id="footer-placeholder"></div>
+
+  <!-- components.js must run before Alpine (deferred) so nav x-data is in the DOM at Alpine init time -->
+  <script src="/js/components.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="/js/blog-i18n-links.js"></script>
+  <script src="/js/code-copy.js"></script>
+  <script src="/js/toc.js"></script>
+  <script src="/js/mermaid.js" type="module"></script>
+</body>
+</html>

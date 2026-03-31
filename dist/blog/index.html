@@ -91,6 +91,32 @@
 <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
   
   <article class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all flex flex-col">
+    <a href="/blog/argo-cd-appprojects-rbac/" class="block" aria-label="Argo CD AppProjects and RBAC: Securing a Multi-Tenant GitOps Platform">
+      <div class="blog-hero blog-hero-card h-[100px] sm:h-[160px]">
+        <img src="/blog/images/appproject-rbac-hero.svg" alt="" width="100" height="100">
+      </div>
+    </a>
+    <div class="p-4 pt-3 sm:p-6 sm:pt-5 flex flex-col flex-1">
+      <div class="flex items-center gap-2 text-xs sm:text-sm text-gray-500 dark:text-gray-500">
+        <time datetime="2026-03-30">March 30, 2026</time>
+        <span>&middot;</span>
+        <span>16 min read</span>
+      </div>
+      <h2 class="mt-1 sm:mt-2 text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
+        <a href="/blog/argo-cd-appprojects-rbac/" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Argo CD AppProjects and RBAC: Securing a Multi-Tenant GitOps Platform</a>
+      </h2>
+      <p class="mt-1 sm:mt-2 text-gray-600 dark:text-gray-400 text-xs sm:text-sm leading-relaxed">A deep dive into Argo CD AppProjects and RBAC. Learn how to isolate teams with Projects, write Casbin policies, bind OIDC groups to roles, scope repositories and clusters per project, and test your policies before they hit production.</p>
+      <div class="mt-auto pt-3 sm:pt-4 flex flex-wrap gap-1.5 sm:gap-2">
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">kubernetes</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">argo-cd</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">gitops</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">security</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">multi-tenancy</span>
+      </div>
+    </div>
+  </article>
+  
+  <article class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all flex flex-col">
     <a href="/blog/argo-cd-multi-source/" class="block" aria-label="Argo CD Multi-Source Applications: Combining Helm Charts with Git-Hosted Values">
       <div class="blog-hero blog-hero-card h-[100px] sm:h-[160px]">
         <img src="/blog/images/multi-source-hero.svg" alt="" width="100" height="100">
@@ -368,30 +394,6 @@
           <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">argo-rollouts</span>
           <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">gitops</span>
           <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">progressive-delivery</span>
-      </div>
-    </div>
-  </article>
-  
-  <article class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all flex flex-col">
-    <a href="/blog/argo-cd-3-3/" class="block" aria-label="What&#39;s New in Argo CD 3.3: PreDelete Hooks, Source Hydrator Upgrades, and Shallow Cloning">
-      <div class="blog-hero blog-hero-card h-[100px] sm:h-[160px]">
-        <img src="/blog/images/argo-cd-3-3-hero.svg" alt="" width="100" height="100">
-      </div>
-    </a>
-    <div class="p-4 pt-3 sm:p-6 sm:pt-5 flex flex-col flex-1">
-      <div class="flex items-center gap-2 text-xs sm:text-sm text-gray-500 dark:text-gray-500">
-        <time datetime="2026-03-17">March 17, 2026</time>
-        <span>&middot;</span>
-        <span>8 min read</span>
-      </div>
-      <h2 class="mt-1 sm:mt-2 text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
-        <a href="/blog/argo-cd-3-3/" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">What&#39;s New in Argo CD 3.3: PreDelete Hooks, Source Hydrator Upgrades, and Shallow Cloning</a>
-      </h2>
-      <p class="mt-1 sm:mt-2 text-gray-600 dark:text-gray-400 text-xs sm:text-sm leading-relaxed">A deep dive into Argo CD 3.3&#39;s most impactful features, including PreDelete hooks for safe application teardown, inline parameters for the Source Hydrator, shallow Git cloning for faster syncs, and native KEDA integration.</p>
-      <div class="mt-auto pt-3 sm:pt-4 flex flex-wrap gap-1.5 sm:gap-2">
-          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">kubernetes</span>
-          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">argo-cd</span>
-          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">gitops</span>
       </div>
     </div>
   </article>
