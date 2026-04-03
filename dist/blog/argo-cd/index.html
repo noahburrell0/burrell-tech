@@ -100,9 +100,11 @@
 
   <!-- Post Content -->
   <section class="py-12 sm:py-16">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
-        <div class="blog-hero">
+    <div class="toc-layout">
+      <aside id="toc-sidebar-slot" class="toc-sidebar-column"></aside>
+      <div class="toc-content-column">
+        <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
+          <div class="blog-hero">
   <img src="/blog/images/argo-cd-logo.svg" alt="Argo CD logo" width="180" style="display: inline-block;">
 </div>
 <p>If you have been working with Kubernetes for any length of time, you have probably experienced the pain of managing deployments manually. Keeping track of what is running where, ensuring your clusters match your intended state, and rolling back when things go wrong can quickly become overwhelming. This is the problem that Argo CD solves.</p>
@@ -191,7 +193,8 @@ EOF
 </ul>
 <p>If you are looking for hands-on help adopting Argo CD or GitOps practices in your organization, <a href="/contact" target="_blank" rel="noopener">get in touch</a>. I offer training, architecture reviews, and embedded support to help teams get the most out of their Kubernetes platform.</p>
 
-      </article>
+        </article>
+      </div>
     </div>
   </section>
   </main>

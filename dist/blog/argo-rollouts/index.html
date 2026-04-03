@@ -104,9 +104,11 @@
 
   <!-- Post Content -->
   <section class="py-12 sm:py-16">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
-        <div class="blog-hero">
+    <div class="toc-layout">
+      <aside id="toc-sidebar-slot" class="toc-sidebar-column"></aside>
+      <div class="toc-content-column">
+        <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
+          <div class="blog-hero">
   <img src="/blog/images/argo-rollouts-hero.svg" alt="Argo Rollouts progressive delivery" width="200" style="display: inline-block;">
 </div>
 <p>If you have been following my previous posts on <a href="/blog/argo-cd/" target="_blank" rel="noopener">Argo CD</a> and <a href="/blog/kargo/" target="_blank" rel="noopener">Kargo</a>, you have a solid foundation for GitOps on Kubernetes. Argo CD ensures your clusters match what is defined in Git, and Kargo orchestrates how changes move between environments. But there is a gap neither of them fills: what happens during a deployment inside a single environment? When a new version of your application is ready, do you flip all traffic at once and hope for the best?</p>
@@ -345,7 +347,8 @@ spec:
 <p>Combined with Argo CD for GitOps delivery and Kargo for environment promotion, Argo Rollouts completes the pipeline from code commit to safe production deployment. If your team is deploying to Kubernetes and not yet using progressive delivery, this is the missing piece.</p>
 <p>If you need help implementing Argo Rollouts, designing analysis strategies, or integrating progressive delivery into your existing GitOps workflow, <a href="/contact" target="_blank" rel="noopener">get in touch</a>.</p>
 
-      </article>
+        </article>
+      </div>
     </div>
   </section>
   </main>

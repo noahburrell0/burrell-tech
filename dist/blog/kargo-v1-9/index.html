@@ -104,9 +104,11 @@
 
   <!-- Post Content -->
   <section class="py-12 sm:py-16">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
-        <div class="blog-hero">
+    <div class="toc-layout">
+      <aside id="toc-sidebar-slot" class="toc-sidebar-column"></aside>
+      <div class="toc-content-column">
+        <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
+          <div class="blog-hero">
   <img src="/blog/images/kargo-logo.svg" alt="Kargo v1.9 infrastructure-aware promotions" width="200" style="display: inline-block;">
 </div>
 <p>Kargo v1.9 landed recently and the Akuity team is calling it the most significant release since v1.0. Having spent some time with it, that claim holds up. This is not a release dominated by one headline feature but rather a broad set of improvements that address pain points you hit once you start running Kargo at any real scale. API tokens for CI integration, a new REST API that future-proofs Kargo's Kubernetes compatibility, Warehouse performance tuning, a generic webhook receiver, and a batch of new promotion steps and expression functions all shipped in the same release.</p>
@@ -291,7 +293,8 @@ spec:
 <p>If you have not read the earlier posts in this series, start with the <a href="/blog/kargo/" target="_blank" rel="noopener">Kargo introduction</a> for the core concepts, then the <a href="/blog/kargo-verification/" target="_blank" rel="noopener">verification and soak times deep dive</a> for production-hardening your pipelines, and the <a href="/blog/kargo-webhooks/" target="_blank" rel="noopener">webhook receivers guide</a> for event-driven artifact discovery. For more on the Argo CD side of the equation, the <a href="/blog/argo-cd/" target="_blank" rel="noopener">Argo CD deep dive</a> and <a href="/blog/argo-cd-applicationsets/" target="_blank" rel="noopener">ApplicationSets post</a> cover the deployment layer that Kargo orchestrates on top of.</p>
 <p>The full release notes are available in the <a href="https://docs.kargo.io/release-notes/v1.9.0/" target="_blank" rel="noopener">Kargo v1.9.0 documentation</a>.</p>
 
-      </article>
+        </article>
+      </div>
     </div>
   </section>
   </main>

@@ -102,9 +102,11 @@
 
   <!-- Post Content -->
   <section class="py-12 sm:py-16">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
-        <div class="blog-hero">
+    <div class="toc-layout">
+      <aside id="toc-sidebar-slot" class="toc-sidebar-column"></aside>
+      <div class="toc-content-column">
+        <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
+          <div class="blog-hero">
   <img src="/blog/images/sync-waves-hero.svg" alt="Argo CD sync waves and hooks deployment phases" width="300" style="display: inline-block;">
 </div>
 <p>Argo CD syncs your desired state from Git to your cluster, but real-world deployments are rarely as simple as applying a flat set of manifests all at once. Database schemas need to migrate before the new application code starts. Namespaces and CRDs need to exist before anything references them. Smoke tests should run after a rollout completes, and someone should be notified if the whole thing falls over. Sync waves and hooks give you that control without leaving the declarative GitOps model.</p>
@@ -525,7 +527,8 @@ spec:
 <p>Sync waves and hooks transform Argo CD from a tool that applies manifests into a tool that orchestrates deployments. The key insight is that you get ordered, health-gated deployments and lifecycle hooks without giving up the declarative GitOps model. Everything is still defined in Git, everything is still version-controlled, and Argo CD still manages the reconciliation loop. You just have more control over the order it happens.</p>
 <p>For further reading, the <a href="https://argo-cd.readthedocs.io/en/stable/user-guide/sync-waves/" target="_blank" rel="noopener">official sync waves documentation</a> covers the complete specification. If you are looking to build on this with promotion pipelines across environments, my <a href="/blog/kargo/" target="_blank" rel="noopener">introduction to Kargo</a> covers how Kargo orchestrates multi-stage deployments using Argo CD as the underlying sync engine.</p>
 
-      </article>
+        </article>
+      </div>
     </div>
   </section>
   </main>

@@ -102,9 +102,11 @@
 
   <!-- Post Content -->
   <section class="py-12 sm:py-16">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
-        <div class="blog-hero">
+    <div class="toc-layout">
+      <aside id="toc-sidebar-slot" class="toc-sidebar-column"></aside>
+      <div class="toc-content-column">
+        <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
+          <div class="blog-hero">
   <img src="/blog/images/applicationsets-hero.svg" alt="ApplicationSet spawning multiple Applications across clusters" width="500" style="display: inline-block;">
 </div>
 <p>In my <a href="/blog/argo-cd/" target="_blank" rel="noopener">getting started guide for Argo CD</a>, I mentioned the App of Apps pattern as a way to manage growing numbers of applications. That pattern works well when you have a handful of services, but it starts to show its limits when you are deploying the same application across dozens of clusters or generating applications dynamically from repository structures. This is where ApplicationSets come in.</p>
@@ -290,7 +292,8 @@ spec:
 <p>The official <a href="https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/" target="_blank" rel="noopener">ApplicationSet documentation</a> covers every generator in detail with additional examples. For teams managing <a href="/blog/kargo/" target="_blank" rel="noopener">Kargo promotion pipelines</a>, ApplicationSets pair naturally: ApplicationSets handle the breadth of deployment targets while Kargo handles the depth of promotion workflows through environments.</p>
 <p>If you need help designing ApplicationSet strategies for your organization or want to discuss how they fit into your broader GitOps architecture, <a href="/contact" target="_blank" rel="noopener">get in touch</a>.</p>
 
-      </article>
+        </article>
+      </div>
     </div>
   </section>
   </main>

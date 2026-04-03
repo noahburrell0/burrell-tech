@@ -104,9 +104,11 @@
 
   <!-- Post Content -->
   <section class="py-12 sm:py-16">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
-        <div class="blog-hero">
+    <div class="toc-layout">
+      <aside id="toc-sidebar-slot" class="toc-sidebar-column"></aside>
+      <div class="toc-content-column">
+        <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
+          <div class="blog-hero">
   <img src="/blog/images/appproject-rbac-hero.svg" alt="Argo CD AppProject RBAC controlling access for multiple teams" width="200" style="display: inline-block;">
 </div>
 <p>A single Argo CD instance can serve an entire organization, but only if every team trusts every other team with full access to every cluster and every application. In practice that never holds. The frontend team should not be able to delete the payment service. The intern experimenting with a dev cluster should not be able to sync to production. And nobody outside the platform team should be deploying CRDs or ClusterRoles.</p>
@@ -585,7 +587,8 @@ spec:
 <p>If you are using <a href="/blog/argo-cd-applicationsets/" target="_blank" rel="noopener">ApplicationSets</a> to generate Applications from templates, those Applications inherit the project specified in the template spec, so the same RBAC boundaries apply automatically.</p>
 <p>The key principle is defense in depth. AppProjects constrain what Applications can do. RBAC constrains what users can do to those Applications. Together they create an access model where each team has exactly the permissions they need and nothing more.</p>
 
-      </article>
+        </article>
+      </div>
     </div>
   </section>
   </main>

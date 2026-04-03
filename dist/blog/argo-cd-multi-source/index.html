@@ -102,9 +102,11 @@
 
   <!-- Post Content -->
   <section class="py-12 sm:py-16">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
-        <div class="blog-hero">
+    <div class="toc-layout">
+      <aside id="toc-sidebar-slot" class="toc-sidebar-column"></aside>
+      <div class="toc-content-column">
+        <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
+          <div class="blog-hero">
   <img src="/blog/images/multi-source-hero.svg" alt="Argo CD multi-source application combining Helm and Git repositories into a single deployment" width="500" style="display: inline-block;">
 </div>
 <p>There is a common friction point that shows up the moment a team adopts GitOps with Argo CD and tries to consume a third-party Helm chart. You want to use the upstream chart from its official Helm repository, but you also need to override its default values with your own configuration stored in Git. The traditional approach forces a compromise: either vendor the chart into your Git repo so the values file lives alongside it, or set Helm parameters directly in the Application spec where they are harder to review and version alongside your other configuration.</p>
@@ -317,7 +319,8 @@ spec:
 <p>Each service gets an ApplicationSet that templates the environment name into the values file path and extras path. The Helm charts stay upstream, the values stay in Git, and the additional manifests live next to the values they relate to. Changes to any of these paths trigger a sync in the relevant environment without touching the others.</p>
 <p>If you are working with ApplicationSets, my <a href="/blog/argo-cd-applicationsets/" target="_blank" rel="noopener">ApplicationSets deep dive</a> covers generators, templating, and progressive sync in detail. And if you are managing the values files themselves through a promotion pipeline, <a href="/blog/kargo/" target="_blank" rel="noopener">Kargo</a> can automate the process of moving configuration changes across environments.</p>
 
-      </article>
+        </article>
+      </div>
     </div>
   </section>
   </main>

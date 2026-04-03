@@ -104,9 +104,11 @@
 
   <!-- Post Content -->
   <section class="py-12 sm:py-16">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
-        <div class="blog-hero">
+    <div class="toc-layout">
+      <aside id="toc-sidebar-slot" class="toc-sidebar-column"></aside>
+      <div class="toc-content-column">
+        <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
+          <div class="blog-hero">
   <img src="/blog/images/kargo-logo.svg" alt="Kargo verification and promotion pipeline" width="180" style="display: inline-block;">
 </div>
 <p>In my <a href="/blog/kargo/" target="_blank" rel="noopener">introduction to Kargo</a>, I covered the fundamentals: Warehouses detect new artifacts, Freight packages them into promotable units, and Stages define how changes flow through your environments. If you followed along, you have the building blocks for a basic promotion pipeline. But a production pipeline needs more than just the ability to push changes forward. It needs quality gates that prevent bad releases from reaching users, time-based controls that let deployments bake before moving downstream, and reusable promotion logic that does not require copy-pasting YAML across every Stage.</p>
@@ -455,7 +457,8 @@ spec:
 <p>Kargo continues to ship features at a steady pace. Version 1.7 introduced <code>oci-download</code> and <code>http-download</code> promotion steps, letting you pull OCI artifacts or remote files directly into your promotion workflows. Version 1.8 added expression-based Freight creation criteria on Warehouses, which solves a real pain point for multi-subscription Warehouses by preventing Freight from being created with incompatible artifact combinations. Most recently, v1.9 shipped live log streaming for verification runs directly in the UI, making it far easier to debug failed AnalysisRuns without leaving the Kargo dashboard.</p>
 <p>If you are building promotion pipelines and want to go deeper, the <a href="https://docs.kargo.io/" target="_blank" rel="noopener">Kargo documentation</a> covers every built-in promotion step and its configuration options. For help designing pipelines for your organization, <a href="/contact" target="_blank" rel="noopener">get in touch</a>.</p>
 
-      </article>
+        </article>
+      </div>
     </div>
   </section>
   </main>

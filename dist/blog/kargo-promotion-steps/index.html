@@ -104,9 +104,11 @@
 
   <!-- Post Content -->
   <section class="py-12 sm:py-16">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
-        <div class="blog-hero">
+    <div class="toc-layout">
+      <aside id="toc-sidebar-slot" class="toc-sidebar-column"></aside>
+      <div class="toc-content-column">
+        <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
+          <div class="blog-hero">
   <img src="/blog/images/kargo-logo.svg" alt="Kargo promotion steps pipeline" width="200" style="display: inline-block;">
 </div>
 <p>My <a href="/blog/kargo/" target="_blank" rel="noopener">introduction to Kargo</a> covered the high-level architecture: Warehouses watch for new artifacts, Freight bundles them into promotable units, and Stages define how those units flow through your environments. The <a href="/blog/kargo-verification/" target="_blank" rel="noopener">verification post</a> added quality gates. And the <a href="/blog/kargo-v1-9/" target="_blank" rel="noopener">v1.9 overview</a> covered the latest platform features. But I have not yet gone deep on the piece that does the actual work: promotion steps.</p>
@@ -741,7 +743,8 @@ steps:
 <p>Kargo's step library continues to expand with each release. The OpenTofu steps (<code>tf-plan</code>, <code>tf-apply</code>, <code>tf-output</code>) open the door to infrastructure promotions that go beyond Kubernetes manifests, though these are currently Akuity Platform only. The JFrog Artifactory evidence step (<code>jfrog-evidence</code>, also Platform only) brings supply chain attestation into the promotion workflow. Akuity has also <a href="https://akuity.io/blog/kargo-custom-steps-gitops-promotion" target="_blank" rel="noopener">announced</a> OCI-based custom steps that would let teams package entirely custom logic as container images and register them as native Kargo steps, though this feature has not yet shipped in a released version of Kargo at the time of writing.</p>
 <p>If you want to explore the full list of built-in steps and their configuration options, the <a href="https://docs.kargo.io/user-guide/reference-docs/promotion-steps/" target="_blank" rel="noopener">Kargo promotion steps reference</a> is the definitive resource. For help designing promotion pipelines for your organization, <a href="/contact" target="_blank" rel="noopener">get in touch</a>.</p>
 
-      </article>
+        </article>
+      </div>
     </div>
   </section>
   </main>

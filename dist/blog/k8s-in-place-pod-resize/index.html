@@ -100,9 +100,11 @@
 
   <!-- Post Content -->
   <section class="py-12 sm:py-16">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
-        <div class="blog-hero">
+    <div class="toc-layout">
+      <aside id="toc-sidebar-slot" class="toc-sidebar-column"></aside>
+      <div class="toc-content-column">
+        <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
+          <div class="blog-hero">
   <img src="/blog/images/vpa.svg" alt="Kubernetes in-place pod resize" width="300" style="display: inline-block;">
 </div>
 <p>Since Kubernetes 1.0, CPU and memory requests and limits on a pod have been immutable. If your application needed more memory, the only option was to delete the pod and create a new one with higher resource values. For stateless web servers behind a Deployment, that is fine. For stateful workloads, long-running batch jobs, or latency-sensitive services that cannot tolerate restarts, it has always been a painful limitation.</p>
@@ -227,7 +229,8 @@ spec:
 <p>The combination of in-place resize with VPA closes a gap that has existed since Kubernetes launched. Horizontal scaling with HPA handles load-based scaling by adding or removing pod replicas. Vertical scaling with VPA and in-place resize now handles resource-based scaling by adjusting individual pod allocations without downtime. Together, they give you a complete autoscaling story where pods get the right amount of resources at the right time, without sacrificing availability.</p>
 <p>For help designing your cluster's autoscaling strategy or migrating workloads to take advantage of in-place resize, <a href="/contact" target="_blank" rel="noopener">get in touch</a>.</p>
 
-      </article>
+        </article>
+      </div>
     </div>
   </section>
   </main>
