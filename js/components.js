@@ -108,6 +108,9 @@
       '<symbol id="icon-check" viewBox="0 0 20 20">' +
         '<path fill="currentColor" fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>' +
       '</symbol>' +
+      '<symbol id="icon-link" viewBox="0 0 24 24">' +
+        '<path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>' +
+      '</symbol>' +
     '</svg>'
   );
 
