@@ -1,7 +1,8 @@
 ---
-title: "Kargo Deep Dive: Verification, Soak Times, and Reusable Promotion Tasks"
+title: "Don't Promote Blind: Kargo Verification, Soak Times, and Reusable Tasks"
 date: 2026-03-23
-description: "A practical guide to building production-ready Kargo promotion pipelines. Covers post-promotion verification with AnalysisTemplates, soak time requirements for safe progressive delivery, and PromotionTasks for DRY promotion workflows across environments."
+modified: 2026-04-04
+description: "Promoting without verification is a production incident waiting to happen. Learn how to add AnalysisTemplates, soak time gates, and reusable PromotionTasks to your Kargo pipelines."
 image: /blog/images/kargo-logo.svg
 ogBackground: dark
 tags:

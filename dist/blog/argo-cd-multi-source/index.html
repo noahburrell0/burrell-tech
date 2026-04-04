@@ -4,8 +4,8 @@
   <!-- Meta -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Argo CD Multi-Source Applications: Combining Helm Charts with Git-Hosted Values | Burrell Technology Services</title>
-  <meta name="description" content="A practical guide to Argo CD multi-source Applications. Learn how to pair external Helm charts with Git-hosted values files, layer additional manifests on top of charts, use the ref field for cross-repository references, and scale the pattern with ApplicationSets.">
+  <title>Argo CD Multi-Source Apps: Use Helm Charts with Your Own Values Files | Burrell Technology Services</title>
+  <meta name="description" content="Want to use an upstream Helm chart but keep your values in a separate Git repo? Multi-source Applications solve this cleanly, from ref fields and manifest layering to scaling across environments with ApplicationSets.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://burrell.tech/blog/argo-cd-multi-source/">
   <link rel="icon" href="/favicon.ico">
@@ -15,14 +15,14 @@
   <!-- Open Graph -->
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Burrell Technology Services S.A.">
-  <meta property="og:title" content="Argo CD Multi-Source Applications: Combining Helm Charts with Git-Hosted Values">
-  <meta property="og:description" content="A practical guide to Argo CD multi-source Applications. Learn how to pair external Helm charts with Git-hosted values files, layer additional manifests on top of charts, use the ref field for cross-repository references, and scale the pattern with ApplicationSets.">
+  <meta property="og:title" content="Argo CD Multi-Source Apps: Use Helm Charts with Your Own Values Files">
+  <meta property="og:description" content="Want to use an upstream Helm chart but keep your values in a separate Git repo? Multi-source Applications solve this cleanly, from ref fields and manifest layering to scaling across environments with ApplicationSets.">
   <meta property="og:url" content="https://burrell.tech/blog/argo-cd-multi-source/">
   <meta property="og:image" content="https://burrell.tech/blog/og/argo-cd-multi-source.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="article:published_time" content="2026-03-28">
-  <meta property="article:modified_time" content="2026-03-28">
+  <meta property="article:modified_time" content="2026-04-04">
   <meta property="article:author" content="Noah Burrell">
   <meta property="article:tag" content="kubernetes">
   <meta property="article:tag" content="argo-cd">
@@ -32,8 +32,8 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Argo CD Multi-Source Applications: Combining Helm Charts with Git-Hosted Values">
-  <meta name="twitter:description" content="A practical guide to Argo CD multi-source Applications. Learn how to pair external Helm charts with Git-hosted values files, layer additional manifests on top of charts, use the ref field for cross-repository references, and scale the pattern with ApplicationSets.">
+  <meta name="twitter:title" content="Argo CD Multi-Source Apps: Use Helm Charts with Your Own Values Files">
+  <meta name="twitter:description" content="Want to use an upstream Helm chart but keep your values in a separate Git repo? Multi-source Applications solve this cleanly, from ref fields and manifest layering to scaling across environments with ApplicationSets.">
   <meta name="twitter:image" content="https://burrell.tech/blog/og/argo-cd-multi-source.png">
 
   <!-- Structured Data -->
@@ -41,10 +41,10 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "Argo CD Multi-Source Applications: Combining Helm Charts with Git-Hosted Values",
+    "headline": "Argo CD Multi-Source Apps: Use Helm Charts with Your Own Values Files",
     "datePublished": "2026-03-28",
-    "dateModified": "2026-03-28",
-    "description": "A practical guide to Argo CD multi-source Applications. Learn how to pair external Helm charts with Git-hosted values files, layer additional manifests on top of charts, use the ref field for cross-repository references, and scale the pattern with ApplicationSets.",
+    "dateModified": "2026-04-04",
+    "description": "Want to use an upstream Helm chart but keep your values in a separate Git repo? Multi-source Applications solve this cleanly, from ref fields and manifest layering to scaling across environments with ApplicationSets.",
     "url": "https://burrell.tech/blog/argo-cd-multi-source/",
     "image": "https://burrell.tech/blog/og/argo-cd-multi-source.png",
     "timeRequired": "PT9M",
@@ -83,7 +83,7 @@
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
         All posts
       </a>
-      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Argo CD Multi-Source Applications: Combining Helm Charts with Git-Hosted Values</h1>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Argo CD Multi-Source Apps: Use Helm Charts with Your Own Values Files</h1>
       <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
         <time datetime="2026-03-28">March 28, 2026</time>
         <span>&middot;</span>

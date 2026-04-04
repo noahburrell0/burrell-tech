@@ -1,7 +1,8 @@
 ---
-title: "Migrating from NGINX Ingress to Envoy Gateway: A Practical Guide"
+title: "I Migrated 16 Services from NGINX Ingress to Envoy Gateway: What Broke"
 date: 2026-03-22
-description: "A detailed walkthrough of migrating 16+ services from NGINX Ingress Controller to Envoy Gateway using the Kubernetes Gateway API. Covers HTTPRoute patterns, SecurityPolicy, BackendTrafficPolicy, TLS backends, custom error pages, and the real-world problems you will hit along the way."
+modified: 2026-04-04
+description: "A real migration story with real problems. HTTPRoute gotchas, TLS backend surprises, and missing NGINX annotations. Here's everything I hit moving 16 services to Envoy Gateway."
 image: /blog/images/gateway-api-migration-hero.svg
 ogBackground: dark
 tags:

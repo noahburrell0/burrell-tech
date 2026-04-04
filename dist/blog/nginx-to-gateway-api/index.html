@@ -4,8 +4,8 @@
   <!-- Meta -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Migrating from NGINX Ingress to Envoy Gateway: A Practical Guide | Burrell Technology Services</title>
-  <meta name="description" content="A detailed walkthrough of migrating 16+ services from NGINX Ingress Controller to Envoy Gateway using the Kubernetes Gateway API. Covers HTTPRoute patterns, SecurityPolicy, BackendTrafficPolicy, TLS backends, custom error pages, and the real-world problems you will hit along the way.">
+  <title>I Migrated 16 Services from NGINX Ingress to Envoy Gateway: What Broke | Burrell Technology Services</title>
+  <meta name="description" content="A real migration story with real problems. HTTPRoute gotchas, TLS backend surprises, and missing NGINX annotations. Here&#39;s everything I hit moving 16 services to Envoy Gateway.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://burrell.tech/blog/nginx-to-gateway-api/">
   <link rel="icon" href="/favicon.ico">
@@ -15,14 +15,14 @@
   <!-- Open Graph -->
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Burrell Technology Services S.A.">
-  <meta property="og:title" content="Migrating from NGINX Ingress to Envoy Gateway: A Practical Guide">
-  <meta property="og:description" content="A detailed walkthrough of migrating 16+ services from NGINX Ingress Controller to Envoy Gateway using the Kubernetes Gateway API. Covers HTTPRoute patterns, SecurityPolicy, BackendTrafficPolicy, TLS backends, custom error pages, and the real-world problems you will hit along the way.">
+  <meta property="og:title" content="I Migrated 16 Services from NGINX Ingress to Envoy Gateway: What Broke">
+  <meta property="og:description" content="A real migration story with real problems. HTTPRoute gotchas, TLS backend surprises, and missing NGINX annotations. Here&#39;s everything I hit moving 16 services to Envoy Gateway.">
   <meta property="og:url" content="https://burrell.tech/blog/nginx-to-gateway-api/">
   <meta property="og:image" content="https://burrell.tech/blog/og/nginx-to-gateway-api.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="article:published_time" content="2026-03-22">
-  <meta property="article:modified_time" content="2026-03-22">
+  <meta property="article:modified_time" content="2026-04-04">
   <meta property="article:author" content="Noah Burrell">
   <meta property="article:tag" content="kubernetes">
   <meta property="article:tag" content="gateway-api">
@@ -33,8 +33,8 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Migrating from NGINX Ingress to Envoy Gateway: A Practical Guide">
-  <meta name="twitter:description" content="A detailed walkthrough of migrating 16+ services from NGINX Ingress Controller to Envoy Gateway using the Kubernetes Gateway API. Covers HTTPRoute patterns, SecurityPolicy, BackendTrafficPolicy, TLS backends, custom error pages, and the real-world problems you will hit along the way.">
+  <meta name="twitter:title" content="I Migrated 16 Services from NGINX Ingress to Envoy Gateway: What Broke">
+  <meta name="twitter:description" content="A real migration story with real problems. HTTPRoute gotchas, TLS backend surprises, and missing NGINX annotations. Here&#39;s everything I hit moving 16 services to Envoy Gateway.">
   <meta name="twitter:image" content="https://burrell.tech/blog/og/nginx-to-gateway-api.png">
 
   <!-- Structured Data -->
@@ -42,10 +42,10 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "Migrating from NGINX Ingress to Envoy Gateway: A Practical Guide",
+    "headline": "I Migrated 16 Services from NGINX Ingress to Envoy Gateway: What Broke",
     "datePublished": "2026-03-22",
-    "dateModified": "2026-03-22",
-    "description": "A detailed walkthrough of migrating 16+ services from NGINX Ingress Controller to Envoy Gateway using the Kubernetes Gateway API. Covers HTTPRoute patterns, SecurityPolicy, BackendTrafficPolicy, TLS backends, custom error pages, and the real-world problems you will hit along the way.",
+    "dateModified": "2026-04-04",
+    "description": "A real migration story with real problems. HTTPRoute gotchas, TLS backend surprises, and missing NGINX annotations. Here&#39;s everything I hit moving 16 services to Envoy Gateway.",
     "url": "https://burrell.tech/blog/nginx-to-gateway-api/",
     "image": "https://burrell.tech/blog/og/nginx-to-gateway-api.png",
     "timeRequired": "PT13M",
@@ -84,7 +84,7 @@
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
         All posts
       </a>
-      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Migrating from NGINX Ingress to Envoy Gateway: A Practical Guide</h1>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">I Migrated 16 Services from NGINX Ingress to Envoy Gateway: What Broke</h1>
       <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
         <time datetime="2026-03-22">March 22, 2026</time>
         <span>&middot;</span>

@@ -1,7 +1,8 @@
 ---
-title: "Kargo Webhook Receivers: Event-Driven Artifact Discovery for GitOps Pipelines"
+title: "Replace Polling with Push: Kargo Webhook Receivers for Faster Promotions"
 date: 2026-03-25
-description: "A practical guide to configuring Kargo webhook receivers for event-driven artifact discovery. Replace polling with push-based notifications from GitHub, GitLab, Docker Hub, and more to reduce latency and registry load in your promotion pipelines."
+modified: 2026-04-04
+description: "Kargo polls your registries by default, but webhooks are faster and lighter. Set up push-based triggers from GitHub, GitLab, or Docker Hub to kick off promotions instantly."
 image: /blog/images/webhook.svg
 ogBackground: dark
 tags:

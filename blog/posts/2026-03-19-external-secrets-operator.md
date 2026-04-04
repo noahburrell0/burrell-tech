@@ -1,7 +1,8 @@
 ---
-title: "Secrets Management for GitOps: A Deep Dive into External Secrets Operator"
+title: "How to Manage Kubernetes Secrets in GitOps Without Committing Them to Git"
 date: 2026-03-19
-description: "A practical guide to managing secrets in GitOps workflows using External Secrets Operator. Learn how SecretStores, ExternalSecrets, and PushSecrets bridge the gap between external secret providers and Kubernetes, and how ESO integrates with Argo CD for secure, automated secret delivery."
+modified: 2026-04-04
+description: "GitOps says everything belongs in Git, but secrets clearly don't. External Secrets Operator bridges the gap by syncing from Vault, AWS, and GCP into Kubernetes automatically."
 image: /blog/images/eso-logo.svg
 ogBackground: dark
 tags:

@@ -4,8 +4,8 @@
   <!-- Meta -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>What&#39;s New in Kargo v1.9: API Tokens, Warehouse Performance, and a New REST API | Burrell Technology Services</title>
-  <meta name="description" content="A deep dive into Kargo v1.9, the most significant release since v1.0. Covers the new REST API, JWT-based API tokens for programmatic access, Warehouse metadata caching for faster artifact discovery, the generic webhook receiver, new expression functions, and the expanded promotion step library.">
+  <title>Kargo v1.9: The Biggest Release Since v1.0 and Why It Matters | Burrell Technology Services</title>
+  <meta name="description" content="Kargo v1.9 adds a REST API, JWT tokens for automation, and Warehouse caching that cuts artifact discovery time significantly. Here&#39;s what shipped and how to take advantage of it.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://burrell.tech/blog/kargo-v1-9/">
   <link rel="icon" href="/favicon.ico">
@@ -15,14 +15,14 @@
   <!-- Open Graph -->
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Burrell Technology Services S.A.">
-  <meta property="og:title" content="What&#39;s New in Kargo v1.9: API Tokens, Warehouse Performance, and a New REST API">
-  <meta property="og:description" content="A deep dive into Kargo v1.9, the most significant release since v1.0. Covers the new REST API, JWT-based API tokens for programmatic access, Warehouse metadata caching for faster artifact discovery, the generic webhook receiver, new expression functions, and the expanded promotion step library.">
+  <meta property="og:title" content="Kargo v1.9: The Biggest Release Since v1.0 and Why It Matters">
+  <meta property="og:description" content="Kargo v1.9 adds a REST API, JWT tokens for automation, and Warehouse caching that cuts artifact discovery time significantly. Here&#39;s what shipped and how to take advantage of it.">
   <meta property="og:url" content="https://burrell.tech/blog/kargo-v1-9/">
   <meta property="og:image" content="https://burrell.tech/blog/og/kargo-v1-9.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="article:published_time" content="2026-03-26">
-  <meta property="article:modified_time" content="2026-03-26">
+  <meta property="article:modified_time" content="2026-04-04">
   <meta property="article:author" content="Noah Burrell">
   <meta property="article:tag" content="kubernetes">
   <meta property="article:tag" content="kargo">
@@ -33,8 +33,8 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="What&#39;s New in Kargo v1.9: API Tokens, Warehouse Performance, and a New REST API">
-  <meta name="twitter:description" content="A deep dive into Kargo v1.9, the most significant release since v1.0. Covers the new REST API, JWT-based API tokens for programmatic access, Warehouse metadata caching for faster artifact discovery, the generic webhook receiver, new expression functions, and the expanded promotion step library.">
+  <meta name="twitter:title" content="Kargo v1.9: The Biggest Release Since v1.0 and Why It Matters">
+  <meta name="twitter:description" content="Kargo v1.9 adds a REST API, JWT tokens for automation, and Warehouse caching that cuts artifact discovery time significantly. Here&#39;s what shipped and how to take advantage of it.">
   <meta name="twitter:image" content="https://burrell.tech/blog/og/kargo-v1-9.png">
 
   <!-- Structured Data -->
@@ -42,10 +42,10 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "What&#39;s New in Kargo v1.9: API Tokens, Warehouse Performance, and a New REST API",
+    "headline": "Kargo v1.9: The Biggest Release Since v1.0 and Why It Matters",
     "datePublished": "2026-03-26",
-    "dateModified": "2026-03-26",
-    "description": "A deep dive into Kargo v1.9, the most significant release since v1.0. Covers the new REST API, JWT-based API tokens for programmatic access, Warehouse metadata caching for faster artifact discovery, the generic webhook receiver, new expression functions, and the expanded promotion step library.",
+    "dateModified": "2026-04-04",
+    "description": "Kargo v1.9 adds a REST API, JWT tokens for automation, and Warehouse caching that cuts artifact discovery time significantly. Here&#39;s what shipped and how to take advantage of it.",
     "url": "https://burrell.tech/blog/kargo-v1-9/",
     "image": "https://burrell.tech/blog/og/kargo-v1-9.png",
     "timeRequired": "PT11M",
@@ -84,7 +84,7 @@
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
         All posts
       </a>
-      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">What&#39;s New in Kargo v1.9: API Tokens, Warehouse Performance, and a New REST API</h1>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Kargo v1.9: The Biggest Release Since v1.0 and Why It Matters</h1>
       <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
         <time datetime="2026-03-26">March 26, 2026</time>
         <span>&middot;</span>

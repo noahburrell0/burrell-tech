@@ -1,7 +1,8 @@
 ---
-title: "Argo Rollouts: Progressive Delivery for Kubernetes"
+title: "Canary and Blue-Green Deploys on Kubernetes with Argo Rollouts"
 date: 2026-03-18
-description: "A deep dive into Argo Rollouts, the Kubernetes-native progressive delivery controller. Learn how to implement canary deployments, blue-green releases, and automated analysis to safely roll out changes with minimal risk."
+modified: 2026-04-04
+description: "Kubernetes Deployments are all-or-nothing. Argo Rollouts adds canary percentages, blue-green cutover, and automated analysis so you can catch bad releases before your users do."
 image: /blog/images/argo-rollouts-hero.svg
 ogBackground: dark
 tags:

@@ -1,7 +1,8 @@
 ---
-title: "Argo CD Notifications: Alerting on Your GitOps Pipeline"
+title: "Stop Watching the Argo CD Dashboard: Set Up Slack and PagerDuty Notifications"
 date: 2026-03-20
-description: "A deep dive into Argo CD Notifications, the built-in system for sending alerts when your applications sync, fail, or change health status. Learn how to configure triggers, templates, and services like Slack, webhooks, and PagerDuty to keep your team informed without watching dashboards."
+modified: 2026-04-04
+description: "Get Slack alerts when apps go OutOfSync and PagerDuty pages when they degrade. Set up triggers, templates, and service integrations in minutes with Argo CD's built-in notification engine."
 image: /blog/images/notifications-hero.webp
 ogBackground: dark
 tags:

@@ -4,8 +4,8 @@
   <!-- Meta -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Argo CD Sync Waves and Hooks: Controlling Deployment Order in GitOps | Burrell Technology Services</title>
-  <meta name="description" content="A deep dive into Argo CD sync waves and hooks. Learn how to use PreSync, PostSync, and SyncFail hooks alongside sync wave ordering to run database migrations before deployments, execute smoke tests after rollouts, and handle failures gracefully.">
+  <title>Run Migrations Before Deploys: Argo CD Sync Waves and Hooks Explained | Burrell Technology Services</title>
+  <meta name="description" content="Need database migrations to run before your app deploys? Sync waves and hooks give you precise ordering control, from PreSync jobs and wave numbering to PostSync smoke tests and SyncFail cleanup.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://burrell.tech/blog/argo-cd-sync-waves-and-hooks/">
   <link rel="icon" href="/favicon.ico">
@@ -15,14 +15,14 @@
   <!-- Open Graph -->
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Burrell Technology Services S.A.">
-  <meta property="og:title" content="Argo CD Sync Waves and Hooks: Controlling Deployment Order in GitOps">
-  <meta property="og:description" content="A deep dive into Argo CD sync waves and hooks. Learn how to use PreSync, PostSync, and SyncFail hooks alongside sync wave ordering to run database migrations before deployments, execute smoke tests after rollouts, and handle failures gracefully.">
+  <meta property="og:title" content="Run Migrations Before Deploys: Argo CD Sync Waves and Hooks Explained">
+  <meta property="og:description" content="Need database migrations to run before your app deploys? Sync waves and hooks give you precise ordering control, from PreSync jobs and wave numbering to PostSync smoke tests and SyncFail cleanup.">
   <meta property="og:url" content="https://burrell.tech/blog/argo-cd-sync-waves-and-hooks/">
   <meta property="og:image" content="https://burrell.tech/blog/og/argo-cd-sync-waves-and-hooks.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="article:published_time" content="2026-03-27">
-  <meta property="article:modified_time" content="2026-03-27">
+  <meta property="article:modified_time" content="2026-04-04">
   <meta property="article:author" content="Noah Burrell">
   <meta property="article:tag" content="kubernetes">
   <meta property="article:tag" content="argo-cd">
@@ -32,8 +32,8 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Argo CD Sync Waves and Hooks: Controlling Deployment Order in GitOps">
-  <meta name="twitter:description" content="A deep dive into Argo CD sync waves and hooks. Learn how to use PreSync, PostSync, and SyncFail hooks alongside sync wave ordering to run database migrations before deployments, execute smoke tests after rollouts, and handle failures gracefully.">
+  <meta name="twitter:title" content="Run Migrations Before Deploys: Argo CD Sync Waves and Hooks Explained">
+  <meta name="twitter:description" content="Need database migrations to run before your app deploys? Sync waves and hooks give you precise ordering control, from PreSync jobs and wave numbering to PostSync smoke tests and SyncFail cleanup.">
   <meta name="twitter:image" content="https://burrell.tech/blog/og/argo-cd-sync-waves-and-hooks.png">
 
   <!-- Structured Data -->
@@ -41,10 +41,10 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "Argo CD Sync Waves and Hooks: Controlling Deployment Order in GitOps",
+    "headline": "Run Migrations Before Deploys: Argo CD Sync Waves and Hooks Explained",
     "datePublished": "2026-03-27",
-    "dateModified": "2026-03-27",
-    "description": "A deep dive into Argo CD sync waves and hooks. Learn how to use PreSync, PostSync, and SyncFail hooks alongside sync wave ordering to run database migrations before deployments, execute smoke tests after rollouts, and handle failures gracefully.",
+    "dateModified": "2026-04-04",
+    "description": "Need database migrations to run before your app deploys? Sync waves and hooks give you precise ordering control, from PreSync jobs and wave numbering to PostSync smoke tests and SyncFail cleanup.",
     "url": "https://burrell.tech/blog/argo-cd-sync-waves-and-hooks/",
     "image": "https://burrell.tech/blog/og/argo-cd-sync-waves-and-hooks.png",
     "timeRequired": "PT12M",
@@ -83,7 +83,7 @@
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
         All posts
       </a>
-      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Argo CD Sync Waves and Hooks: Controlling Deployment Order in GitOps</h1>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Run Migrations Before Deploys: Argo CD Sync Waves and Hooks Explained</h1>
       <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
         <time datetime="2026-03-27">March 27, 2026</time>
         <span>&middot;</span>

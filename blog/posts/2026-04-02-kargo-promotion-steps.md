@@ -1,7 +1,8 @@
 ---
-title: "Kargo Promotion Steps: Building Advanced GitOps Promotion Pipelines"
+title: "Kargo Promotion Steps: Conditionals, Error Handling, and Reusable Tasks"
 date: 2026-04-02
-description: "A comprehensive guide to Kargo's promotion step system. Covers the built-in step library, PromotionTasks for reusable workflows, the expression language, conditional execution, error handling, and practical patterns for real-world promotion pipelines."
+modified: 2026-04-04
+description: "Kargo's built-in steps handle the basics, but real pipelines need conditionals, retries, and shared tasks. Learn how to combine the step library, expression language, and PromotionTasks into production-ready workflows."
 image: /blog/images/kargo-logo.svg
 ogBackground: dark
 tags:

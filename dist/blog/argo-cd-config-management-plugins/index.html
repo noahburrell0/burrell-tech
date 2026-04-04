@@ -4,8 +4,8 @@
   <!-- Meta -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Argo CD Config Management Plugins: Extending GitOps Beyond Helm and Kustomize | Burrell Technology Services</title>
-  <meta name="description" content="A deep dive into Argo CD Config Management Plugins. Covers the sidecar architecture, writing plugin configurations, discovery rules, parameterization, building custom plugins for tools like CUE and Tanka, deployment patterns, and debugging strategies for production CMPs.">
+  <title>Beyond Helm and Kustomize: Writing Custom Argo CD Config Management Plugins | Burrell Technology Services</title>
+  <meta name="description" content="Using CUE, Tanka, or another tool Argo CD doesn&#39;t support natively? Config Management Plugins let you plug in anything. Learn the sidecar architecture, discovery rules, and how to debug when things go wrong.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://burrell.tech/blog/argo-cd-config-management-plugins/">
   <link rel="icon" href="/favicon.ico">
@@ -15,14 +15,14 @@
   <!-- Open Graph -->
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Burrell Technology Services S.A.">
-  <meta property="og:title" content="Argo CD Config Management Plugins: Extending GitOps Beyond Helm and Kustomize">
-  <meta property="og:description" content="A deep dive into Argo CD Config Management Plugins. Covers the sidecar architecture, writing plugin configurations, discovery rules, parameterization, building custom plugins for tools like CUE and Tanka, deployment patterns, and debugging strategies for production CMPs.">
+  <meta property="og:title" content="Beyond Helm and Kustomize: Writing Custom Argo CD Config Management Plugins">
+  <meta property="og:description" content="Using CUE, Tanka, or another tool Argo CD doesn&#39;t support natively? Config Management Plugins let you plug in anything. Learn the sidecar architecture, discovery rules, and how to debug when things go wrong.">
   <meta property="og:url" content="https://burrell.tech/blog/argo-cd-config-management-plugins/">
   <meta property="og:image" content="https://burrell.tech/blog/og/argo-cd-config-management-plugins.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="article:published_time" content="2026-04-03">
-  <meta property="article:modified_time" content="2026-04-03">
+  <meta property="article:modified_time" content="2026-04-04">
   <meta property="article:author" content="Noah Burrell">
   <meta property="article:tag" content="kubernetes">
   <meta property="article:tag" content="argo-cd">
@@ -32,8 +32,8 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Argo CD Config Management Plugins: Extending GitOps Beyond Helm and Kustomize">
-  <meta name="twitter:description" content="A deep dive into Argo CD Config Management Plugins. Covers the sidecar architecture, writing plugin configurations, discovery rules, parameterization, building custom plugins for tools like CUE and Tanka, deployment patterns, and debugging strategies for production CMPs.">
+  <meta name="twitter:title" content="Beyond Helm and Kustomize: Writing Custom Argo CD Config Management Plugins">
+  <meta name="twitter:description" content="Using CUE, Tanka, or another tool Argo CD doesn&#39;t support natively? Config Management Plugins let you plug in anything. Learn the sidecar architecture, discovery rules, and how to debug when things go wrong.">
   <meta name="twitter:image" content="https://burrell.tech/blog/og/argo-cd-config-management-plugins.png">
 
   <!-- Structured Data -->
@@ -41,10 +41,10 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "Argo CD Config Management Plugins: Extending GitOps Beyond Helm and Kustomize",
+    "headline": "Beyond Helm and Kustomize: Writing Custom Argo CD Config Management Plugins",
     "datePublished": "2026-04-03",
-    "dateModified": "2026-04-03",
-    "description": "A deep dive into Argo CD Config Management Plugins. Covers the sidecar architecture, writing plugin configurations, discovery rules, parameterization, building custom plugins for tools like CUE and Tanka, deployment patterns, and debugging strategies for production CMPs.",
+    "dateModified": "2026-04-04",
+    "description": "Using CUE, Tanka, or another tool Argo CD doesn&#39;t support natively? Config Management Plugins let you plug in anything. Learn the sidecar architecture, discovery rules, and how to debug when things go wrong.",
     "url": "https://burrell.tech/blog/argo-cd-config-management-plugins/",
     "image": "https://burrell.tech/blog/og/argo-cd-config-management-plugins.png",
     "timeRequired": "PT15M",
@@ -83,7 +83,7 @@
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
         All posts
       </a>
-      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Argo CD Config Management Plugins: Extending GitOps Beyond Helm and Kustomize</h1>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Beyond Helm and Kustomize: Writing Custom Argo CD Config Management Plugins</h1>
       <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
         <time datetime="2026-04-03">April 3, 2026</time>
         <span>&middot;</span>

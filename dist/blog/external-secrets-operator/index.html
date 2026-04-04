@@ -4,8 +4,8 @@
   <!-- Meta -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Secrets Management for GitOps: A Deep Dive into External Secrets Operator | Burrell Technology Services</title>
-  <meta name="description" content="A practical guide to managing secrets in GitOps workflows using External Secrets Operator. Learn how SecretStores, ExternalSecrets, and PushSecrets bridge the gap between external secret providers and Kubernetes, and how ESO integrates with Argo CD for secure, automated secret delivery.">
+  <title>How to Manage Kubernetes Secrets in GitOps Without Committing Them to Git | Burrell Technology Services</title>
+  <meta name="description" content="GitOps says everything belongs in Git, but secrets clearly don&#39;t. External Secrets Operator bridges the gap by syncing from Vault, AWS, and GCP into Kubernetes automatically.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://burrell.tech/blog/external-secrets-operator/">
   <link rel="icon" href="/favicon.ico">
@@ -15,14 +15,14 @@
   <!-- Open Graph -->
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Burrell Technology Services S.A.">
-  <meta property="og:title" content="Secrets Management for GitOps: A Deep Dive into External Secrets Operator">
-  <meta property="og:description" content="A practical guide to managing secrets in GitOps workflows using External Secrets Operator. Learn how SecretStores, ExternalSecrets, and PushSecrets bridge the gap between external secret providers and Kubernetes, and how ESO integrates with Argo CD for secure, automated secret delivery.">
+  <meta property="og:title" content="How to Manage Kubernetes Secrets in GitOps Without Committing Them to Git">
+  <meta property="og:description" content="GitOps says everything belongs in Git, but secrets clearly don&#39;t. External Secrets Operator bridges the gap by syncing from Vault, AWS, and GCP into Kubernetes automatically.">
   <meta property="og:url" content="https://burrell.tech/blog/external-secrets-operator/">
   <meta property="og:image" content="https://burrell.tech/blog/og/external-secrets-operator.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="article:published_time" content="2026-03-19">
-  <meta property="article:modified_time" content="2026-03-19">
+  <meta property="article:modified_time" content="2026-04-04">
   <meta property="article:author" content="Noah Burrell">
   <meta property="article:tag" content="kubernetes">
   <meta property="article:tag" content="gitops">
@@ -33,8 +33,8 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Secrets Management for GitOps: A Deep Dive into External Secrets Operator">
-  <meta name="twitter:description" content="A practical guide to managing secrets in GitOps workflows using External Secrets Operator. Learn how SecretStores, ExternalSecrets, and PushSecrets bridge the gap between external secret providers and Kubernetes, and how ESO integrates with Argo CD for secure, automated secret delivery.">
+  <meta name="twitter:title" content="How to Manage Kubernetes Secrets in GitOps Without Committing Them to Git">
+  <meta name="twitter:description" content="GitOps says everything belongs in Git, but secrets clearly don&#39;t. External Secrets Operator bridges the gap by syncing from Vault, AWS, and GCP into Kubernetes automatically.">
   <meta name="twitter:image" content="https://burrell.tech/blog/og/external-secrets-operator.png">
 
   <!-- Structured Data -->
@@ -42,10 +42,10 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "Secrets Management for GitOps: A Deep Dive into External Secrets Operator",
+    "headline": "How to Manage Kubernetes Secrets in GitOps Without Committing Them to Git",
     "datePublished": "2026-03-19",
-    "dateModified": "2026-03-19",
-    "description": "A practical guide to managing secrets in GitOps workflows using External Secrets Operator. Learn how SecretStores, ExternalSecrets, and PushSecrets bridge the gap between external secret providers and Kubernetes, and how ESO integrates with Argo CD for secure, automated secret delivery.",
+    "dateModified": "2026-04-04",
+    "description": "GitOps says everything belongs in Git, but secrets clearly don&#39;t. External Secrets Operator bridges the gap by syncing from Vault, AWS, and GCP into Kubernetes automatically.",
     "url": "https://burrell.tech/blog/external-secrets-operator/",
     "image": "https://burrell.tech/blog/og/external-secrets-operator.png",
     "timeRequired": "PT12M",
@@ -84,7 +84,7 @@
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
         All posts
       </a>
-      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Secrets Management for GitOps: A Deep Dive into External Secrets Operator</h1>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">How to Manage Kubernetes Secrets in GitOps Without Committing Them to Git</h1>
       <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
         <time datetime="2026-03-19">March 19, 2026</time>
         <span>&middot;</span>

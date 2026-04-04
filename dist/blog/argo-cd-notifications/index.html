@@ -4,8 +4,8 @@
   <!-- Meta -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Argo CD Notifications: Alerting on Your GitOps Pipeline | Burrell Technology Services</title>
-  <meta name="description" content="A deep dive into Argo CD Notifications, the built-in system for sending alerts when your applications sync, fail, or change health status. Learn how to configure triggers, templates, and services like Slack, webhooks, and PagerDuty to keep your team informed without watching dashboards.">
+  <title>Stop Watching the Argo CD Dashboard: Set Up Slack and PagerDuty Notifications | Burrell Technology Services</title>
+  <meta name="description" content="Get Slack alerts when apps go OutOfSync and PagerDuty pages when they degrade. Set up triggers, templates, and service integrations in minutes with Argo CD&#39;s built-in notification engine.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://burrell.tech/blog/argo-cd-notifications/">
   <link rel="icon" href="/favicon.ico">
@@ -15,14 +15,14 @@
   <!-- Open Graph -->
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Burrell Technology Services S.A.">
-  <meta property="og:title" content="Argo CD Notifications: Alerting on Your GitOps Pipeline">
-  <meta property="og:description" content="A deep dive into Argo CD Notifications, the built-in system for sending alerts when your applications sync, fail, or change health status. Learn how to configure triggers, templates, and services like Slack, webhooks, and PagerDuty to keep your team informed without watching dashboards.">
+  <meta property="og:title" content="Stop Watching the Argo CD Dashboard: Set Up Slack and PagerDuty Notifications">
+  <meta property="og:description" content="Get Slack alerts when apps go OutOfSync and PagerDuty pages when they degrade. Set up triggers, templates, and service integrations in minutes with Argo CD&#39;s built-in notification engine.">
   <meta property="og:url" content="https://burrell.tech/blog/argo-cd-notifications/">
   <meta property="og:image" content="https://burrell.tech/blog/og/argo-cd-notifications.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="article:published_time" content="2026-03-20">
-  <meta property="article:modified_time" content="2026-03-20">
+  <meta property="article:modified_time" content="2026-04-04">
   <meta property="article:author" content="Noah Burrell">
   <meta property="article:tag" content="kubernetes">
   <meta property="article:tag" content="argo-cd">
@@ -33,8 +33,8 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Argo CD Notifications: Alerting on Your GitOps Pipeline">
-  <meta name="twitter:description" content="A deep dive into Argo CD Notifications, the built-in system for sending alerts when your applications sync, fail, or change health status. Learn how to configure triggers, templates, and services like Slack, webhooks, and PagerDuty to keep your team informed without watching dashboards.">
+  <meta name="twitter:title" content="Stop Watching the Argo CD Dashboard: Set Up Slack and PagerDuty Notifications">
+  <meta name="twitter:description" content="Get Slack alerts when apps go OutOfSync and PagerDuty pages when they degrade. Set up triggers, templates, and service integrations in minutes with Argo CD&#39;s built-in notification engine.">
   <meta name="twitter:image" content="https://burrell.tech/blog/og/argo-cd-notifications.png">
 
   <!-- Structured Data -->
@@ -42,10 +42,10 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "Argo CD Notifications: Alerting on Your GitOps Pipeline",
+    "headline": "Stop Watching the Argo CD Dashboard: Set Up Slack and PagerDuty Notifications",
     "datePublished": "2026-03-20",
-    "dateModified": "2026-03-20",
-    "description": "A deep dive into Argo CD Notifications, the built-in system for sending alerts when your applications sync, fail, or change health status. Learn how to configure triggers, templates, and services like Slack, webhooks, and PagerDuty to keep your team informed without watching dashboards.",
+    "dateModified": "2026-04-04",
+    "description": "Get Slack alerts when apps go OutOfSync and PagerDuty pages when they degrade. Set up triggers, templates, and service integrations in minutes with Argo CD&#39;s built-in notification engine.",
     "url": "https://burrell.tech/blog/argo-cd-notifications/",
     "image": "https://burrell.tech/blog/og/argo-cd-notifications.png",
     "timeRequired": "PT11M",
@@ -84,7 +84,7 @@
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
         All posts
       </a>
-      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Argo CD Notifications: Alerting on Your GitOps Pipeline</h1>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Stop Watching the Argo CD Dashboard: Set Up Slack and PagerDuty Notifications</h1>
       <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
         <time datetime="2026-03-20">March 20, 2026</time>
         <span>&middot;</span>

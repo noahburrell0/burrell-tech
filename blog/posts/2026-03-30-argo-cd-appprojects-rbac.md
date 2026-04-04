@@ -1,7 +1,8 @@
 ---
-title: "Argo CD AppProjects and RBAC: Securing a Multi-Tenant GitOps Platform"
+title: "How to Lock Down Argo CD for Multiple Teams with AppProjects and RBAC"
 date: 2026-03-30
-description: "A deep dive into Argo CD AppProjects and RBAC. Learn how to isolate teams with Projects, write Casbin policies, bind OIDC groups to roles, scope repositories and clusters per project, and test your policies before they hit production."
+modified: 2026-04-04
+description: "Sharing one Argo CD instance across teams without proper isolation is asking for trouble. Learn how to scope access with AppProjects, Casbin policies, and OIDC role bindings."
 image: /blog/images/appproject-rbac-hero.svg
 ogBackground: dark
 tags:

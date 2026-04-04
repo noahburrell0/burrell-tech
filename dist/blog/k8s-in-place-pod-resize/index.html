@@ -4,8 +4,8 @@
   <!-- Meta -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kubernetes In-Place Pod Resize: Vertical Scaling Without Downtime | Burrell Technology Services</title>
-  <meta name="description" content="A practical deep dive into Kubernetes In-Place Pod Resize, now GA in v1.35. Covers how mutable resource requests work, resize policies, pod conditions, VPA integration with InPlaceOrRecreate mode, and real-world patterns for resizing running pods without restarts.">
+  <title>Resize Running Pods Without Restarting Them (Kubernetes v1.35 GA) | Burrell Technology Services</title>
+  <meta name="description" content="No more restarts just to change CPU or memory limits. In-Place Pod Resize is now GA in Kubernetes v1.35. Here&#39;s how it works, including resize policies, VPA integration, and real-world patterns.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://burrell.tech/blog/k8s-in-place-pod-resize/">
   <link rel="icon" href="/favicon.ico">
@@ -15,14 +15,14 @@
   <!-- Open Graph -->
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Burrell Technology Services S.A.">
-  <meta property="og:title" content="Kubernetes In-Place Pod Resize: Vertical Scaling Without Downtime">
-  <meta property="og:description" content="A practical deep dive into Kubernetes In-Place Pod Resize, now GA in v1.35. Covers how mutable resource requests work, resize policies, pod conditions, VPA integration with InPlaceOrRecreate mode, and real-world patterns for resizing running pods without restarts.">
+  <meta property="og:title" content="Resize Running Pods Without Restarting Them (Kubernetes v1.35 GA)">
+  <meta property="og:description" content="No more restarts just to change CPU or memory limits. In-Place Pod Resize is now GA in Kubernetes v1.35. Here&#39;s how it works, including resize policies, VPA integration, and real-world patterns.">
   <meta property="og:url" content="https://burrell.tech/blog/k8s-in-place-pod-resize/">
   <meta property="og:image" content="https://burrell.tech/blog/og/k8s-in-place-pod-resize.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="article:published_time" content="2026-03-24">
-  <meta property="article:modified_time" content="2026-03-24">
+  <meta property="article:modified_time" content="2026-04-04">
   <meta property="article:author" content="Noah Burrell">
   <meta property="article:tag" content="kubernetes">
   <meta property="article:tag" content="scaling">
@@ -31,8 +31,8 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Kubernetes In-Place Pod Resize: Vertical Scaling Without Downtime">
-  <meta name="twitter:description" content="A practical deep dive into Kubernetes In-Place Pod Resize, now GA in v1.35. Covers how mutable resource requests work, resize policies, pod conditions, VPA integration with InPlaceOrRecreate mode, and real-world patterns for resizing running pods without restarts.">
+  <meta name="twitter:title" content="Resize Running Pods Without Restarting Them (Kubernetes v1.35 GA)">
+  <meta name="twitter:description" content="No more restarts just to change CPU or memory limits. In-Place Pod Resize is now GA in Kubernetes v1.35. Here&#39;s how it works, including resize policies, VPA integration, and real-world patterns.">
   <meta name="twitter:image" content="https://burrell.tech/blog/og/k8s-in-place-pod-resize.png">
 
   <!-- Structured Data -->
@@ -40,10 +40,10 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "Kubernetes In-Place Pod Resize: Vertical Scaling Without Downtime",
+    "headline": "Resize Running Pods Without Restarting Them (Kubernetes v1.35 GA)",
     "datePublished": "2026-03-24",
-    "dateModified": "2026-03-24",
-    "description": "A practical deep dive into Kubernetes In-Place Pod Resize, now GA in v1.35. Covers how mutable resource requests work, resize policies, pod conditions, VPA integration with InPlaceOrRecreate mode, and real-world patterns for resizing running pods without restarts.",
+    "dateModified": "2026-04-04",
+    "description": "No more restarts just to change CPU or memory limits. In-Place Pod Resize is now GA in Kubernetes v1.35. Here&#39;s how it works, including resize policies, VPA integration, and real-world patterns.",
     "url": "https://burrell.tech/blog/k8s-in-place-pod-resize/",
     "image": "https://burrell.tech/blog/og/k8s-in-place-pod-resize.png",
     "timeRequired": "PT9M",
@@ -82,7 +82,7 @@
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
         All posts
       </a>
-      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Kubernetes In-Place Pod Resize: Vertical Scaling Without Downtime</h1>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Resize Running Pods Without Restarting Them (Kubernetes v1.35 GA)</h1>
       <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
         <time datetime="2026-03-24">March 24, 2026</time>
         <span>&middot;</span>

@@ -1,7 +1,8 @@
 ---
-title: "Argo CD Sync Waves and Hooks: Controlling Deployment Order in GitOps"
+title: "Run Migrations Before Deploys: Argo CD Sync Waves and Hooks Explained"
 date: 2026-03-27
-description: "A deep dive into Argo CD sync waves and hooks. Learn how to use PreSync, PostSync, and SyncFail hooks alongside sync wave ordering to run database migrations before deployments, execute smoke tests after rollouts, and handle failures gracefully."
+modified: 2026-04-04
+description: "Need database migrations to run before your app deploys? Sync waves and hooks give you precise ordering control, from PreSync jobs and wave numbering to PostSync smoke tests and SyncFail cleanup."
 image: /blog/images/sync-waves-hero.svg
 ogBackground: dark
 tags:

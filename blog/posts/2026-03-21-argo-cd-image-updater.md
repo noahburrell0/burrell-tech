@@ -1,7 +1,8 @@
 ---
-title: "Argo CD Image Updater: Automating Container Image Deployments in GitOps"
+title: "Auto-Deploy New Container Images with Argo CD Image Updater"
 date: 2026-03-21
-description: "A deep dive into Argo CD Image Updater, the tool that automatically detects new container image versions and updates your Argo CD applications. Learn how to configure update strategies, write changes back to Git, authenticate with private registries, and close the gap between CI and CD in your GitOps pipeline."
+modified: 2026-04-04
+description: "Push a new image tag and let Argo CD deploy it automatically. Image Updater watches your registries, picks up new versions, and writes the change back to Git for you."
 image: /blog/images/argo-cd-logo.svg
 ogBackground: dark
 tags:

@@ -1,7 +1,8 @@
 ---
-title: "Argo CD Multi-Source Applications: Combining Helm Charts with Git-Hosted Values"
+title: "Argo CD Multi-Source Apps: Use Helm Charts with Your Own Values Files"
 date: 2026-03-28
-description: "A practical guide to Argo CD multi-source Applications. Learn how to pair external Helm charts with Git-hosted values files, layer additional manifests on top of charts, use the ref field for cross-repository references, and scale the pattern with ApplicationSets."
+modified: 2026-04-04
+description: "Want to use an upstream Helm chart but keep your values in a separate Git repo? Multi-source Applications solve this cleanly, from ref fields and manifest layering to scaling across environments with ApplicationSets."
 image: /blog/images/multi-source-hero.svg
 ogBackground: dark
 tags:

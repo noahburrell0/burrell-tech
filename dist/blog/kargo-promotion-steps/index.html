@@ -4,8 +4,8 @@
   <!-- Meta -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kargo Promotion Steps: Building Advanced GitOps Promotion Pipelines | Burrell Technology Services</title>
-  <meta name="description" content="A comprehensive guide to Kargo&#39;s promotion step system. Covers the built-in step library, PromotionTasks for reusable workflows, the expression language, conditional execution, error handling, and practical patterns for real-world promotion pipelines.">
+  <title>Kargo Promotion Steps: Conditionals, Error Handling, and Reusable Tasks | Burrell Technology Services</title>
+  <meta name="description" content="Kargo&#39;s built-in steps handle the basics, but real pipelines need conditionals, retries, and shared tasks. Learn how to combine the step library, expression language, and PromotionTasks into production-ready workflows.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://burrell.tech/blog/kargo-promotion-steps/">
   <link rel="icon" href="/favicon.ico">
@@ -15,14 +15,14 @@
   <!-- Open Graph -->
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Burrell Technology Services S.A.">
-  <meta property="og:title" content="Kargo Promotion Steps: Building Advanced GitOps Promotion Pipelines">
-  <meta property="og:description" content="A comprehensive guide to Kargo&#39;s promotion step system. Covers the built-in step library, PromotionTasks for reusable workflows, the expression language, conditional execution, error handling, and practical patterns for real-world promotion pipelines.">
+  <meta property="og:title" content="Kargo Promotion Steps: Conditionals, Error Handling, and Reusable Tasks">
+  <meta property="og:description" content="Kargo&#39;s built-in steps handle the basics, but real pipelines need conditionals, retries, and shared tasks. Learn how to combine the step library, expression language, and PromotionTasks into production-ready workflows.">
   <meta property="og:url" content="https://burrell.tech/blog/kargo-promotion-steps/">
   <meta property="og:image" content="https://burrell.tech/blog/og/kargo-promotion-steps.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="article:published_time" content="2026-04-02">
-  <meta property="article:modified_time" content="2026-04-02">
+  <meta property="article:modified_time" content="2026-04-04">
   <meta property="article:author" content="Noah Burrell">
   <meta property="article:tag" content="kubernetes">
   <meta property="article:tag" content="kargo">
@@ -33,8 +33,8 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Kargo Promotion Steps: Building Advanced GitOps Promotion Pipelines">
-  <meta name="twitter:description" content="A comprehensive guide to Kargo&#39;s promotion step system. Covers the built-in step library, PromotionTasks for reusable workflows, the expression language, conditional execution, error handling, and practical patterns for real-world promotion pipelines.">
+  <meta name="twitter:title" content="Kargo Promotion Steps: Conditionals, Error Handling, and Reusable Tasks">
+  <meta name="twitter:description" content="Kargo&#39;s built-in steps handle the basics, but real pipelines need conditionals, retries, and shared tasks. Learn how to combine the step library, expression language, and PromotionTasks into production-ready workflows.">
   <meta name="twitter:image" content="https://burrell.tech/blog/og/kargo-promotion-steps.png">
 
   <!-- Structured Data -->
@@ -42,10 +42,10 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "Kargo Promotion Steps: Building Advanced GitOps Promotion Pipelines",
+    "headline": "Kargo Promotion Steps: Conditionals, Error Handling, and Reusable Tasks",
     "datePublished": "2026-04-02",
-    "dateModified": "2026-04-02",
-    "description": "A comprehensive guide to Kargo&#39;s promotion step system. Covers the built-in step library, PromotionTasks for reusable workflows, the expression language, conditional execution, error handling, and practical patterns for real-world promotion pipelines.",
+    "dateModified": "2026-04-04",
+    "description": "Kargo&#39;s built-in steps handle the basics, but real pipelines need conditionals, retries, and shared tasks. Learn how to combine the step library, expression language, and PromotionTasks into production-ready workflows.",
     "url": "https://burrell.tech/blog/kargo-promotion-steps/",
     "image": "https://burrell.tech/blog/og/kargo-promotion-steps.png",
     "timeRequired": "PT19M",
@@ -84,7 +84,7 @@
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
         All posts
       </a>
-      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Kargo Promotion Steps: Building Advanced GitOps Promotion Pipelines</h1>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Kargo Promotion Steps: Conditionals, Error Handling, and Reusable Tasks</h1>
       <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
         <time datetime="2026-04-02">April 2, 2026</time>
         <span>&middot;</span>

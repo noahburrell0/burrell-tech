@@ -1,7 +1,8 @@
 ---
-title: "Argo CD Config Management Plugins: Extending GitOps Beyond Helm and Kustomize"
+title: "Beyond Helm and Kustomize: Writing Custom Argo CD Config Management Plugins"
 date: 2026-04-03
-description: "A deep dive into Argo CD Config Management Plugins. Covers the sidecar architecture, writing plugin configurations, discovery rules, parameterization, building custom plugins for tools like CUE and Tanka, deployment patterns, and debugging strategies for production CMPs."
+modified: 2026-04-04
+description: "Using CUE, Tanka, or another tool Argo CD doesn't support natively? Config Management Plugins let you plug in anything. Learn the sidecar architecture, discovery rules, and how to debug when things go wrong."
 image: /blog/images/tanka.svg
 ogBackground: dark
 tags:

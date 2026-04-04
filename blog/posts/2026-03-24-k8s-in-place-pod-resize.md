@@ -1,7 +1,8 @@
 ---
-title: "Kubernetes In-Place Pod Resize: Vertical Scaling Without Downtime"
+title: "Resize Running Pods Without Restarting Them (Kubernetes v1.35 GA)"
 date: 2026-03-24
-description: "A practical deep dive into Kubernetes In-Place Pod Resize, now GA in v1.35. Covers how mutable resource requests work, resize policies, pod conditions, VPA integration with InPlaceOrRecreate mode, and real-world patterns for resizing running pods without restarts."
+modified: 2026-04-04
+description: "No more restarts just to change CPU or memory limits. In-Place Pod Resize is now GA in Kubernetes v1.35. Here's how it works, including resize policies, VPA integration, and real-world patterns."
 image: /blog/images/vpa.svg
 ogBackground: dark
 tags:

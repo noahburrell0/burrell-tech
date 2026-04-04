@@ -1,7 +1,8 @@
 ---
-title: "Argo CD ApplicationSets: Managing Applications at Scale"
+title: "One Manifest, Hundreds of Apps: How Argo CD ApplicationSets Work"
 date: 2026-03-17
-description: "A deep dive into Argo CD ApplicationSets, the powerful controller that automates Application generation across clusters and environments. Learn how generators, templating, and progressive sync help you manage hundreds of applications from a single manifest."
+modified: 2026-04-04
+description: "Stop copy-pasting Application YAMLs. ApplicationSets let you generate and manage hundreds of Argo CD apps from a single template using generators, progressive sync, and more."
 image: /blog/images/applicationsets-hero.svg
 ogBackground: dark
 tags:
