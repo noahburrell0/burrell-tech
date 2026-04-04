@@ -2,7 +2,7 @@
 title: "Argo CD Config Management Plugins: Extending GitOps Beyond Helm and Kustomize"
 date: 2026-04-03
 description: "A deep dive into Argo CD Config Management Plugins. Covers the sidecar architecture, writing plugin configurations, discovery rules, parameterization, building custom plugins for tools like CUE and Tanka, deployment patterns, and debugging strategies for production CMPs."
-image: /blog/images/cmp-hero.svg
+image: /blog/images/tanka.svg
 ogBackground: dark
 tags:
   - kubernetes
@@ -12,7 +12,7 @@ tags:
 ---
 
 <div class="blog-hero">
-  <img src="/blog/images/cmp-hero.svg" alt="Argo CD Config Management Plugin sidecar architecture" width="500" style="display: inline-block;">
+  <img src="/blog/images/tanka.svg" alt="Argo CD Config Management Plugin sidecar architecture" width="300" style="display: inline-block;">
 </div>
 
 Argo CD ships with native support for Helm, Kustomize, and Jsonnet. For many teams, that covers everything. But the Kubernetes configuration management ecosystem is broader than those three tools. Maybe your team standardized on [CUE](https://cuelang.org/) for its type safety and validation. Maybe you inherited a stack built on [Grafana Tanka](https://tanka.dev/) and Jsonnet libraries that go beyond what Argo CD's native Jsonnet support handles. Maybe you have a proprietary templating pipeline that stitches together manifests from an internal API. Or maybe you just need to run a script that calls `envsubst` on plain YAML before Argo CD applies it.
