@@ -91,6 +91,31 @@
 <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
   
   <article class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all flex flex-col">
+    <a href="/blog/argo-cd-custom-health-checks/" class="block" aria-label="Why Your CRDs Show Healthy When They&#39;re Broken: Argo CD Custom Health Checks">
+      <div class="blog-hero blog-hero-card h-[100px] sm:h-[160px]">
+        <img src="/blog/images/lua-logo.svg" alt="" width="100" height="100">
+      </div>
+    </a>
+    <div class="p-4 pt-3 sm:p-6 sm:pt-5 flex flex-col flex-1">
+      <div class="flex items-center gap-2 text-xs sm:text-sm text-gray-500 dark:text-gray-500">
+        <time datetime="2026-04-04">April 4, 2026</time>
+        <span>&middot;</span>
+        <span>15 min read</span>
+      </div>
+      <h2 class="mt-1 sm:mt-2 text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
+        <a href="/blog/argo-cd-custom-health-checks/" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Why Your CRDs Show Healthy When They&#39;re Broken: Argo CD Custom Health Checks</a>
+      </h2>
+      <p class="mt-1 sm:mt-2 text-gray-600 dark:text-gray-400 text-xs sm:text-sm leading-relaxed">Argo CD marks unknown CRDs as Healthy by default, hiding failures behind a green dashboard. Learn how to write Lua health checks that surface real status for cert-manager, Crossplane, and your own custom resources.</p>
+      <div class="mt-auto pt-3 sm:pt-4 flex flex-wrap gap-1.5 sm:gap-2">
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">kubernetes</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">argo-cd</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">gitops</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">health-checks</span>
+      </div>
+    </div>
+  </article>
+  
+  <article class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all flex flex-col">
     <a href="/blog/argo-cd-config-management-plugins/" class="block" aria-label="Beyond Helm and Kustomize: Writing Custom Argo CD Config Management Plugins">
       <div class="blog-hero blog-hero-card h-[100px] sm:h-[160px]">
         <img src="/blog/images/tanka.svg" alt="" width="100" height="100">
@@ -367,32 +392,6 @@
           <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">gitops</span>
           <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">containers</span>
           <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">automation</span>
-      </div>
-    </div>
-  </article>
-  
-  <article class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all flex flex-col">
-    <a href="/blog/argo-cd-notifications/" class="block" aria-label="Stop Watching the Argo CD Dashboard: Set Up Slack and PagerDuty Notifications">
-      <div class="blog-hero blog-hero-card h-[100px] sm:h-[160px]">
-        <img src="/blog/images/notifications-hero.webp" alt="" width="100" height="100">
-      </div>
-    </a>
-    <div class="p-4 pt-3 sm:p-6 sm:pt-5 flex flex-col flex-1">
-      <div class="flex items-center gap-2 text-xs sm:text-sm text-gray-500 dark:text-gray-500">
-        <time datetime="2026-03-20">March 20, 2026</time>
-        <span>&middot;</span>
-        <span>11 min read</span>
-      </div>
-      <h2 class="mt-1 sm:mt-2 text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
-        <a href="/blog/argo-cd-notifications/" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Stop Watching the Argo CD Dashboard: Set Up Slack and PagerDuty Notifications</a>
-      </h2>
-      <p class="mt-1 sm:mt-2 text-gray-600 dark:text-gray-400 text-xs sm:text-sm leading-relaxed">Get Slack alerts when apps go OutOfSync and PagerDuty pages when they degrade. Set up triggers, templates, and service integrations in minutes with Argo CD&#39;s built-in notification engine.</p>
-      <div class="mt-auto pt-3 sm:pt-4 flex flex-wrap gap-1.5 sm:gap-2">
-          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">kubernetes</span>
-          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">argo-cd</span>
-          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">gitops</span>
-          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">notifications</span>
-          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">observability</span>
       </div>
     </div>
   </article>

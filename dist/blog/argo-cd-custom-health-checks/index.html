@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Why Your CRDs Show Healthy When They&#39;re Broken: Argo CD Custom Health Checks | Burrell Technology Services</title>
+  <meta name="description" content="Argo CD marks unknown CRDs as Healthy by default, hiding failures behind a green dashboard. Learn how to write Lua health checks that surface real status for cert-manager, Crossplane, and your own custom resources.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://burrell.tech/blog/argo-cd-custom-health-checks/">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/logo.webp" as="image">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Burrell Technology Services S.A.">
+  <meta property="og:title" content="Why Your CRDs Show Healthy When They&#39;re Broken: Argo CD Custom Health Checks">
+  <meta property="og:description" content="Argo CD marks unknown CRDs as Healthy by default, hiding failures behind a green dashboard. Learn how to write Lua health checks that surface real status for cert-manager, Crossplane, and your own custom resources.">
+  <meta property="og:url" content="https://burrell.tech/blog/argo-cd-custom-health-checks/">
+  <meta property="og:image" content="https://burrell.tech/blog/og/argo-cd-custom-health-checks.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-04-04">
+  <meta property="article:modified_time" content="2026-04-04">
+  <meta property="article:author" content="Noah Burrell">
+  <meta property="article:tag" content="kubernetes">
+  <meta property="article:tag" content="argo-cd">
+  <meta property="article:tag" content="gitops">
+  <meta property="article:tag" content="health-checks">
+  <meta property="article:section" content="kubernetes">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Why Your CRDs Show Healthy When They&#39;re Broken: Argo CD Custom Health Checks">
+  <meta name="twitter:description" content="Argo CD marks unknown CRDs as Healthy by default, hiding failures behind a green dashboard. Learn how to write Lua health checks that surface real status for cert-manager, Crossplane, and your own custom resources.">
+  <meta name="twitter:image" content="https://burrell.tech/blog/og/argo-cd-custom-health-checks.png">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Why Your CRDs Show Healthy When They&#39;re Broken: Argo CD Custom Health Checks",
+    "datePublished": "2026-04-04",
+    "dateModified": "2026-04-04",
+    "description": "Argo CD marks unknown CRDs as Healthy by default, hiding failures behind a green dashboard. Learn how to write Lua health checks that surface real status for cert-manager, Crossplane, and your own custom resources.",
+    "url": "https://burrell.tech/blog/argo-cd-custom-health-checks/",
+    "image": "https://burrell.tech/blog/og/argo-cd-custom-health-checks.png",
+    "timeRequired": "PT15M",
+    "author": {
+      "@type": "Person",
+      "name": "Noah Burrell",
+      "url": "https://burrell.tech/about"
+    },
+    "publisher": {
+      "@id": "https://burrell.tech/#organization"
+    },
+    "keywords": "kubernetes, argo-cd, gitops, health-checks"
+  }
+  </script>
+
+  <!-- Theme (blocking - must run before first paint to prevent flash) -->
+  <script src="/js/theme.js"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/tailwind.css">
+  <link rel="stylesheet" href="/css/custom.css">
+
+  <!-- Scripts -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="/js/analytics.js"></script>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans antialiased">
+
+  <div id="nav-placeholder" data-active-page="blog"></div>
+
+  <main class="flex-1">
+  <!-- Post Header -->
+  <section class="bg-gray-50 dark:bg-gray-900/40 border-b border-gray-200 dark:border-gray-800 py-16 sm:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <a href="/blog" class="inline-flex items-center gap-1.5 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors mb-6">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        All posts
+      </a>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Why Your CRDs Show Healthy When They&#39;re Broken: Argo CD Custom Health Checks</h1>
+      <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
+        <span>Posted <time datetime="2026-04-04">April 4, 2026</time></span>
+        <span>&middot;</span>
+        <span>Noah Burrell</span>
+        <span>&middot;</span>
+        <span>15 min read</span>
+      </div>
+      <div class="mt-4 flex flex-wrap gap-2">
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">kubernetes</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">argo-cd</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">gitops</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">health-checks</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Post Content -->
+  <section class="py-12 sm:py-16">
+    <div class="toc-layout">
+      <aside id="toc-sidebar-slot" class="toc-sidebar-column"></aside>
+      <div class="toc-content-column">
+        <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
+          <div class="blog-hero">
+  <img src="/blog/images/lua-logo.svg" alt="Lua language logo representing Argo CD health check scripting" width="200" style="display: inline-block;">
+</div>
+<p>You deploy a cert-manager Certificate, a Crossplane Composition, or a custom operator CRD through Argo CD. The dashboard shows a green Healthy status. Everything looks fine. Except the certificate never issued, the cloud resource never provisioned, and the operator is stuck in a reconciliation loop. Argo CD told you everything was fine because it did not know any better.</p>
+<p>By default, Argo CD marks any custom resource as Healthy the moment it exists in the cluster. It has no way to inspect the <code>.status</code> block of resources it does not recognize. For core Kubernetes types like Deployments, Services, and Jobs, Argo CD has built-in health assessments written in Go. And for over a hundred popular CRD API groups, including cert-manager, Crossplane, Istio, Knative, Strimzi Kafka, Flux, Kyverno, and many more, Argo CD ships pre-written Lua health checks in its <a href="https://github.com/argoproj/argo-cd/tree/master/resource_customizations" target="_blank" rel="noopener">resource_customizations</a> directory. But if you are running an operator that is not in that list, or if the built-in check does not match the behavior you need, you are back to a green checkmark that means nothing more than &quot;the resource was accepted by the API server.&quot;</p>
+<p>Custom health checks fix this. They are short Lua scripts that teach Argo CD how to read the status of any resource type and report an accurate health state. This post covers how the health check system works end to end, walks through the patterns used by the built-in checks so you can write your own, and explains how to override or extend the checks that ship with Argo CD.</p>
+<p>If you are new to Argo CD, my <a href="/blog/argo-cd/" target="_blank" rel="noopener">getting started guide</a> covers installation and core concepts. This post assumes you have a running Argo CD instance and at least one CRD-based operator deployed through it.</p>
+<h2 id="how-argo-cd-evaluates-health" tabindex="-1">How Argo CD Evaluates Health</h2>
+<p>Argo CD evaluates Application health in two layers. First, it checks each individual resource managed by the Application. Then, it aggregates those results into an overall Application health status by taking the worst status across all resources.</p>
+<p>The priority order from best to worst is: Healthy, Suspended, Progressing, Missing, Degraded, Unknown. If one resource is Degraded and everything else is Healthy, the Application shows Degraded. This means a single misconfigured health check can drag down your entire Application status, and a single missing health check can hide a real failure behind a Healthy status.</p>
+<p>For built-in Kubernetes types, Argo CD uses Go-based health assessments that understand the nuances of each resource. A Deployment is Healthy when its desired replica count matches its available replica count. A Job is Healthy when it completes successfully and Degraded when it fails. A PersistentVolumeClaim is Healthy when it reaches Bound status. These checks are hardcoded and handle edge cases well.</p>
+<p>For custom resources that have a pre-written Lua health check (either shipped with Argo CD or configured by you), the Lua script evaluates the resource's status and returns an appropriate health state. For custom resources that do not have any health check defined, Argo CD falls back to a simple rule: if the resource exists, it is Healthy. This default exists because Argo CD cannot assume anything about the status structure of an arbitrary CRD. The problem is obvious. A <code>DatabaseCluster</code> that failed to provision, a <code>Queue</code> that is misconfigured, a custom operator CRD that is stuck in a reconciliation loop, all of these show as Healthy if Argo CD does not have a health check for them.</p>
+<h2 id="writing-your-first-health-check" tabindex="-1">Writing Your First Health Check</h2>
+<p>Custom health checks are Lua scripts configured in the <code>argocd-cm</code> ConfigMap. The key follows the pattern <code>resource.customizations.health.&lt;group&gt;_&lt;kind&gt;</code>, where dots in the API group are literal and the group is separated from the kind by an underscore.</p>
+<p>The script receives the full resource object as a global variable called <code>obj</code>. It must return a table with a <code>status</code> field (one of <code>Healthy</code>, <code>Progressing</code>, <code>Degraded</code>, or <code>Suspended</code>) and an optional <code>message</code> field that appears in the Argo CD UI.</p>
+<p>Here is a health check for a hypothetical <code>DatabaseCluster</code> CRD from the API group <code>db.example.com</code>:</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+data:
+  resource.customizations.health.db.example.com_DatabaseCluster: |
+    local hs = {}
+    if obj.status ~= nil then
+      if obj.status.conditions ~= nil then
+        for i, condition in ipairs(obj.status.conditions) do
+          if condition.type == &quot;Ready&quot; and condition.status == &quot;True&quot; then
+            hs.status = &quot;Healthy&quot;
+            hs.message = condition.message
+            return hs
+          end
+          if condition.type == &quot;Ready&quot; and condition.status == &quot;False&quot; then
+            hs.status = &quot;Degraded&quot;
+            hs.message = condition.message
+            return hs
+          end
+        end
+      end
+    end
+    hs.status = &quot;Progressing&quot;
+    hs.message = &quot;Waiting for database cluster to become ready&quot;
+    return hs
+</code></pre>
+<p>The pattern here is common across most Kubernetes operators. Check for a <code>Ready</code> condition in the status block, return <code>Healthy</code> or <code>Degraded</code> based on its value, and fall back to <code>Progressing</code> if the status has not been populated yet. This fallback is important because there is always a window between when a resource is created and when the controller first writes to its status.</p>
+<p>After updating the ConfigMap, restart the <code>argocd-repo-server</code> and <code>argocd-server</code> pods to pick up the change. Argo CD reads resource customizations at startup and does not watch for ConfigMap changes at runtime.</p>
+<h2 id="real-world-examples" tabindex="-1">Real-World Examples</h2>
+<h3 id="cert-manager-certificates" tabindex="-1">cert-manager Certificates</h3>
+<p>cert-manager is one of the most popular CRDs in the Kubernetes ecosystem, and Argo CD ships a built-in health check for it. But understanding how it works is useful because the pattern applies to dozens of similar operators.</p>
+<p>The cert-manager Certificate health check handles a subtlety that a naive implementation misses: the <code>Issuing</code> condition. When a certificate is being renewed, it enters an <code>Issuing</code> state before it reaches <code>Ready</code>. If you only check for <code>Ready</code>, a certificate that is in the middle of renewal would briefly show as Degraded (because <code>Ready</code> becomes <code>False</code> during reissuance) before returning to Healthy. The built-in check handles this by checking <code>Issuing</code> first:</p>
+<pre><code class="language-lua">local hs = {}
+if obj.status ~= nil then
+  if obj.status.conditions ~= nil then
+
+    -- Always Handle Issuing First to ensure consistent behaviour
+    for i, condition in ipairs(obj.status.conditions) do
+      if condition.type == &quot;Issuing&quot; and condition.status == &quot;True&quot; then
+        hs.status = &quot;Progressing&quot;
+        hs.message = condition.message
+        return hs
+      end
+    end
+
+    for i, condition in ipairs(obj.status.conditions) do
+      if condition.type == &quot;Ready&quot; and condition.status == &quot;False&quot; then
+        hs.status = &quot;Degraded&quot;
+        hs.message = condition.message
+        return hs
+      end
+      if condition.type == &quot;Ready&quot; and condition.status == &quot;True&quot; then
+        hs.status = &quot;Healthy&quot;
+        hs.message = condition.message
+        return hs
+      end
+    end
+  end
+end
+
+hs.status = &quot;Progressing&quot;
+hs.message = &quot;Waiting for certificate&quot;
+return hs
+</code></pre>
+<p>The two-pass approach, scanning for <code>Issuing</code> first and then for <code>Ready</code>, prevents false Degraded alerts during certificate renewal. This is the kind of operator-specific behavior that makes generic health checks insufficient. You need to know how the controller uses its status conditions.</p>
+<h3 id="bitnami-sealed-secrets" tabindex="-1">Bitnami Sealed Secrets</h3>
+<p>Sealed Secrets is another common CRD. The controller decrypts <code>SealedSecret</code> resources into regular Kubernetes <code>Secret</code> resources. The health check uses the <code>Synced</code> condition type rather than <code>Ready</code>:</p>
+<pre><code class="language-lua">local health_status={}
+if obj.status ~= nil then
+    if obj.status.conditions ~= nil then
+        for i, condition in ipairs(obj.status.conditions) do
+            if condition.type == &quot;Synced&quot; and condition.status == &quot;False&quot; then
+                health_status.status = &quot;Degraded&quot;
+                health_status.message = condition.message
+                return health_status
+            end
+            if condition.type == &quot;Synced&quot; and condition.status == &quot;True&quot; then
+                health_status.status = &quot;Healthy&quot;
+                health_status.message = condition.message
+                return health_status
+            end
+        end
+    end
+end
+health_status.status = &quot;Progressing&quot;
+health_status.message = &quot;Waiting for Sealed Secret to be decrypted&quot;
+return health_status
+</code></pre>
+<p>Both cert-manager and Sealed Secrets have built-in health checks shipped with Argo CD, so you do not need to configure these yourself on a recent Argo CD version. They are included here because they clearly demonstrate the patterns you will use for your own CRDs.</p>
+<h3 id="crossplane-resources" tabindex="-1">Crossplane Resources</h3>
+<p>Crossplane is a good case study for understanding wildcard health checks because a typical Crossplane setup creates dozens of CRD types across multiple providers (AWS, GCP, Azure). Recent versions of Argo CD ship with built-in wildcard health checks for <code>*.crossplane.io</code> and <code>*.upbound.io</code> resources, so you may not need to configure these yourself. But the pattern is worth understanding because you will use the same approach for any operator that registers many CRD types under a shared API group.</p>
+<p>Crossplane resources use two important conditions: <code>Synced</code> and <code>Ready</code>. A resource that failed to sync with the cloud provider will have <code>Synced: False</code>. A resource that synced but has not finished provisioning will have <code>Ready: False</code>. You need to check both.</p>
+<p>The Crossplane documentation recommends configuring health checks with a wildcard to cover all Crossplane resource types at once, rather than writing individual checks for each CRD. If you need to customize the built-in checks, or if you are running an older Argo CD version that does not include them, the wildcard approach uses the nested <code>resource.customizations</code> key format:</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+data:
+  resource.customizations: |
+    &quot;*.upbound.io/*&quot;:
+      health.lua: |
+        local hs = {}
+        if obj.status ~= nil then
+          if obj.status.conditions ~= nil then
+            local ready = false
+            local synced = false
+            local suspended = false
+            for i, condition in ipairs(obj.status.conditions) do
+              if condition.type == &quot;Ready&quot; then
+                ready = true
+                if condition.status == &quot;True&quot; then
+                  hs.status = &quot;Healthy&quot;
+                  hs.message = condition.message
+                elseif condition.reason == &quot;Unavailable&quot; then
+                  hs.status = &quot;Degraded&quot;
+                  hs.message = condition.message
+                else
+                  hs.status = &quot;Progressing&quot;
+                  hs.message = condition.message
+                end
+              end
+              if condition.type == &quot;Synced&quot; then
+                synced = true
+                if condition.status == &quot;False&quot; then
+                  hs.status = &quot;Degraded&quot;
+                  hs.message = condition.message
+                end
+              end
+              if condition.type == &quot;Suspended&quot; and condition.status == &quot;True&quot; then
+                suspended = true
+                hs.status = &quot;Suspended&quot;
+                hs.message = condition.message
+              end
+            end
+            if ready and hs.status ~= nil then
+              return hs
+            end
+          end
+        end
+        hs.status = &quot;Progressing&quot;
+        hs.message = &quot;Waiting for resource to become ready&quot;
+        return hs
+    &quot;*.crossplane.io/*&quot;:
+      health.lua: |
+        local hs = {}
+        if obj.status ~= nil then
+          if obj.status.conditions ~= nil then
+            for i, condition in ipairs(obj.status.conditions) do
+              if condition.type == &quot;Ready&quot; and condition.status == &quot;True&quot; then
+                hs.status = &quot;Healthy&quot;
+                hs.message = condition.message
+                return hs
+              end
+              if condition.type == &quot;Synced&quot; and condition.status == &quot;False&quot; then
+                hs.status = &quot;Degraded&quot;
+                hs.message = condition.message
+                return hs
+              end
+            end
+          end
+        end
+        hs.status = &quot;Progressing&quot;
+        hs.message = &quot;Waiting for resource&quot;
+        return hs
+</code></pre>
+<p>Notice that the keys are quoted (<code>&quot;*.upbound.io/*&quot;</code>) because the asterisk at the beginning would otherwise be interpreted as a YAML alias. The wildcard <code>*</code> matches any API group prefix, and the <code>/*</code> after the group matches any kind. This single configuration block covers every Crossplane-managed resource type in your cluster.</p>
+<p>When using Crossplane with Argo CD, the Crossplane documentation also recommends ensuring your resource tracking method is set to annotation-based tracking (which became the default in Argo CD 3.0, but was available as an opt-in since 2.2) and excluding <code>ProviderConfigUsage</code> resources from the UI since they are high-volume and low-signal:</p>
+<pre><code class="language-yaml">data:
+  application.resourceTrackingMethod: annotation
+  resource.exclusions: |
+    - apiGroups:
+      - &quot;*&quot;
+      kinds:
+      - ProviderConfigUsage
+</code></pre>
+<h2 id="the-wildcard-configuration-format" tabindex="-1">The Wildcard Configuration Format</h2>
+<p>When you need a single health check to cover multiple resource types within the same API group, you use the nested <code>resource.customizations</code> key instead of the flat <code>resource.customizations.health.&lt;group&gt;_&lt;kind&gt;</code> key. These two approaches cannot be mixed for the same resource. If you define a health check in both the flat key and the nested key, the flat key takes precedence.</p>
+<p>The nested format also supports wildcards in the kind position:</p>
+<pre><code class="language-yaml">data:
+  resource.customizations: |
+    mycompany.io/*:
+      health.lua: |
+        -- This check applies to all resources in the mycompany.io API group
+        local hs = {}
+        if obj.status ~= nil and obj.status.phase ~= nil then
+          if obj.status.phase == &quot;Running&quot; or obj.status.phase == &quot;Ready&quot; then
+            hs.status = &quot;Healthy&quot;
+          elseif obj.status.phase == &quot;Failed&quot; then
+            hs.status = &quot;Degraded&quot;
+          else
+            hs.status = &quot;Progressing&quot;
+          end
+          hs.message = obj.status.phase
+        else
+          hs.status = &quot;Progressing&quot;
+          hs.message = &quot;Waiting for status&quot;
+        end
+        return hs
+</code></pre>
+<p>If both a specific check (like <code>mycompany.io/Database</code>) and a wildcard check (like <code>mycompany.io/*</code>) exist, the specific check wins. This lets you set a reasonable default for an entire API group and then override it for individual resource types that need special handling.</p>
+<h2 id="overriding-built-in-go-health-checks" tabindex="-1">Overriding Built-In Go Health Checks</h2>
+<p>Argo CD has several resource types with health logic implemented in Go rather than Lua. These include Pod, Deployment, DaemonSet, StatefulSet, ReplicaSet, Job, Service, Ingress (both <code>extensions</code> and <code>networking.k8s.io</code>), PersistentVolumeClaim, HorizontalPodAutoscaler, APIService, and the Argo project's own Workflow CRD. If the built-in behavior does not match your needs, you can override it with a Lua script using the same ConfigMap approach.</p>
+<p>For example, the default Ingress health check reports Progressing until the load balancer IP is assigned. If you are using an ingress controller that does not populate the load balancer status (some internal-only controllers skip this), every Ingress will be stuck in Progressing forever. You can override it:</p>
+<pre><code class="language-yaml">data:
+  resource.customizations.health.networking.k8s.io_Ingress: |
+    local hs = {}
+    hs.status = &quot;Healthy&quot;
+    hs.message = &quot;Ingress created&quot;
+    return hs
+</code></pre>
+<p>This is a blunt override that marks all Ingresses as Healthy immediately. In practice you would add more nuance, but it demonstrates the mechanism. Any Lua script you provide for a built-in type takes precedence over the Go implementation.</p>
+<h2 id="security%3A-lua-standard-libraries" tabindex="-1">Security: Lua Standard Libraries</h2>
+<p>By default, Argo CD disables access to the Lua standard libraries in health check scripts. This means you cannot use functions like <code>os.execute()</code>, <code>io.open()</code>, or <code>string.format()</code> in your health check code. The restriction exists to prevent health check scripts from performing side effects or accessing the filesystem of the repo server pod.</p>
+<p>If your health check needs standard library functions, such as <code>string.format()</code> for building message strings or <code>math</code> functions for calculating thresholds, you can enable them per resource type:</p>
+<pre><code class="language-yaml">data:
+  resource.customizations.useOpenLibs.mycompany.io_MyResource: &quot;true&quot;
+</code></pre>
+<p>Only enable this when you need it, and only for resource types whose health checks you control. If you are running a multi-tenant Argo CD instance and users can define their own resource customizations, leaving open libs enabled could allow unintended access to the Lua runtime environment.</p>
+<h2 id="ignoring-resources-in-health-aggregation" tabindex="-1">Ignoring Resources in Health Aggregation</h2>
+<p>Sometimes you want Argo CD to manage a resource (so it gets synced and pruned) but you do not want its health status to affect the Application's overall health. The <code>argocd.argoproj.io/ignore-healthcheck</code> annotation excludes a resource from the health aggregation:</p>
+<pre><code class="language-yaml">apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-migration
+  annotations:
+    argocd.argoproj.io/ignore-healthcheck: &quot;true&quot;
+</code></pre>
+<p>This is useful for one-shot Jobs that run during sync (like database migrations) where you do not want a completed-but-technically-failed-then-retried Job to permanently mark the Application as Degraded. It is also useful for resources that have known health check issues you cannot fix immediately.</p>
+<h2 id="debugging-health-check-failures" tabindex="-1">Debugging Health Check Failures</h2>
+<p>When a health check is not working as expected, the debugging workflow is straightforward.</p>
+<p>First, check whether your health check is actually being loaded. A common mistake is a typo in the ConfigMap key. The key must match the exact API group and kind of your resource. You can verify the API group and kind by looking at the resource:</p>
+<pre><code class="language-bash">kubectl get crd myclusters.db.example.com -o jsonpath='{.spec.group}'
+# db.example.com
+
+kubectl get crd myclusters.db.example.com -o jsonpath='{.spec.names.kind}'
+# MyCluster
+</code></pre>
+<p>The ConfigMap key would be <code>resource.customizations.health.db.example.com_MyCluster</code>. Note that the kind is case-sensitive.</p>
+<p>Second, check that the status block you are reading actually exists on the resource. Operators populate status at different speeds and some do not populate it at all until certain conditions are met:</p>
+<pre><code class="language-bash">kubectl get mycluster my-db -o jsonpath='{.status}' | jq .
+</code></pre>
+<p>If the status is empty or missing the conditions you are checking, your health check will fall through to whatever default you specified. Make sure your fallback behavior is correct for the case where status has not been populated yet. Returning <code>Progressing</code> is almost always the right default for a newly created resource.</p>
+<p>Third, you can test health check scripts locally using the <code>argocd admin settings resource-overrides health</code> command:</p>
+<pre><code class="language-bash">argocd admin settings resource-overrides health ./my-resource.yaml \
+  --argocd-cm-path ./argocd-cm.yaml
+</code></pre>
+<p>This runs the health check script against a sample resource definition and prints the result without requiring a running Argo CD instance.</p>
+<p>Finally, remember that changes to the <code>argocd-cm</code> ConfigMap require a restart of the Argo CD server components:</p>
+<pre><code class="language-bash">kubectl rollout restart deployment/argocd-server -n argocd
+kubectl rollout restart deployment/argocd-repo-server -n argocd
+</code></pre>
+<h2 id="common-patterns-and-mistakes" tabindex="-1">Common Patterns and Mistakes</h2>
+<p><strong>Always return a status.</strong> If your Lua script exits without returning a table that has a <code>status</code> field, Argo CD treats the resource as Unknown. This is worse than Healthy because it can block sync operations depending on your health assessment configuration.</p>
+<p><strong>Handle the nil case.</strong> Lua does not throw errors when you access nil fields, but chaining accesses like <code>obj.status.conditions</code> will fail if <code>obj.status</code> is nil. Always check each level:</p>
+<pre><code class="language-lua">if obj.status ~= nil then
+  if obj.status.conditions ~= nil then
+    -- safe to iterate
+  end
+end
+</code></pre>
+<p><strong>Do not assume condition order.</strong> The Kubernetes API does not guarantee the order of conditions in the status block. Some operators write <code>Ready</code> first, others write it last, and the order can change between versions. Always iterate through all conditions rather than accessing a specific index.</p>
+<p><strong>Use Progressing as your default, not Healthy.</strong> If your script cannot determine the health of a resource because the status has not been populated yet, return <code>Progressing</code>. Returning <code>Healthy</code> as a default defeats the purpose of the health check because it replicates the same problem you are trying to solve.</p>
+<p><strong>Watch out for condition types you do not expect.</strong> Some operators add custom condition types that your health check does not know about. If your script only checks for <code>Ready</code>, it will ignore a <code>Degraded</code> condition type that some operators use. Read the documentation for each operator you support and check for all relevant condition types.</p>
+<h2 id="contributing-health-checks-upstream" tabindex="-1">Contributing Health Checks Upstream</h2>
+<p>If you write a health check for a popular CRD, consider contributing it back to the Argo CD project. Upstream health checks live in the <code>resource_customizations</code> directory of the <a href="https://github.com/argoproj/argo-cd" target="_blank" rel="noopener">argoproj/argo-cd</a> repository. Each check follows a specific directory structure:</p>
+<pre><code>resource_customizations/
+  your.crd.group.io/
+    MyKind/
+      health.lua
+      health_test.yaml
+      testdata/
+        healthy.yaml
+        degraded.yaml
+        progressing.yaml
+</code></pre>
+<p>The <code>health_test.yaml</code> file defines test cases that map resource definitions to expected health statuses:</p>
+<pre><code class="language-yaml">tests:
+  - healthStatus:
+      status: Healthy
+      message: &quot;Certificate is up to date and has not expired&quot;
+    inputPath: testdata/healthy.yaml
+  - healthStatus:
+      status: Degraded
+      message: &quot;Certificate issuance failed&quot;
+    inputPath: testdata/degraded.yaml
+  - healthStatus:
+      status: Progressing
+      message: &quot;Waiting for certificate&quot;
+    inputPath: testdata/progressing.yaml
+</code></pre>
+<p>You can run the test suite locally with:</p>
+<pre><code class="language-bash">go test -v ./util/lua/
+</code></pre>
+<p>Contributing upstream means every Argo CD user benefits from the health check without configuring it themselves. The project has accepted health checks for hundreds of CRDs including cert-manager, Sealed Secrets, Crossplane, Istio, Knative, Strimzi Kafka, and many more.</p>
+<h2 id="putting-it-together" tabindex="-1">Putting It Together</h2>
+<p>Custom health checks are a small feature with outsized impact on operational trust. Argo CD ships with Lua health checks for over a hundred CRD API groups, covering most of the popular operators in the ecosystem. But if you are running anything custom, niche, or internal, those built-in checks will not cover you, and your dashboard will lie to you with a green status that means nothing.</p>
+<p>Start by auditing which CRDs you deploy through Argo CD today. For each one, check whether Argo CD already ships a built-in health check by looking at the <a href="https://github.com/argoproj/argo-cd/tree/master/resource_customizations" target="_blank" rel="noopener">resource_customizations directory</a> in the Argo CD repository. For any that are missing, read the operator's documentation to understand its status conditions, then write a Lua script using the patterns in this post. If the built-in check exists but does not match the behavior you need, you can override it with a custom Lua script in your <code>argocd-cm</code> ConfigMap. Test with real resources, not just happy-path YAML, and make sure your fallback returns <code>Progressing</code> rather than <code>Healthy</code>.</p>
+<p>The effort per CRD is small. A typical health check is ten to twenty lines of Lua. The payoff is knowing that when your dashboard says Healthy, your infrastructure actually is.</p>
+
+        </article>
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <div id="cta-placeholder"
+    data-i18n="blog_cta"
+    data-variant="simple"></div>
+  <div id="footer-placeholder"></div>
+
+  <!-- components.js must run before Alpine (deferred) so nav x-data is in the DOM at Alpine init time -->
+  <script src="/js/components.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="/js/blog-i18n-links.js"></script>
+  <script src="/js/code-copy.js"></script>
+  <script src="/js/toc.js"></script>
+  <script src="/js/heading-links.js"></script>
+  <script src="/js/mermaid.js" type="module"></script>
+</body>
+</html>

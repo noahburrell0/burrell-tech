@@ -69,7 +69,11 @@
       </a>
       <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">{{ title }}</h1>
       <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
-        <time datetime="{{ date | isoDate }}">{{ date | readableDate }}</time>
+        <span>Posted <time datetime="{{ date | isoDate }}">{{ date | readableDate }}</time></span>
+        {%- if modified %}
+        <span>&middot;</span>
+        <span>Updated <time datetime="{{ modified | isoDate }}">{{ modified | readableDate }}</time></span>
+        {%- endif %}
         <span>&middot;</span>
         <span>{{ site.author }}</span>
         <span>&middot;</span>
