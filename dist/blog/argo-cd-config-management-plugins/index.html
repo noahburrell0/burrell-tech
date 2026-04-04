@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Argo CD Config Management Plugins: Extending GitOps Beyond Helm and Kustomize | Burrell Technology Services</title>
+  <meta name="description" content="A deep dive into Argo CD Config Management Plugins. Covers the sidecar architecture, writing plugin configurations, discovery rules, parameterization, building custom plugins for tools like CUE and Tanka, deployment patterns, and debugging strategies for production CMPs.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://burrell.tech/blog/argo-cd-config-management-plugins/">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/logo.webp" as="image">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Burrell Technology Services S.A.">
+  <meta property="og:title" content="Argo CD Config Management Plugins: Extending GitOps Beyond Helm and Kustomize">
+  <meta property="og:description" content="A deep dive into Argo CD Config Management Plugins. Covers the sidecar architecture, writing plugin configurations, discovery rules, parameterization, building custom plugins for tools like CUE and Tanka, deployment patterns, and debugging strategies for production CMPs.">
+  <meta property="og:url" content="https://burrell.tech/blog/argo-cd-config-management-plugins/">
+  <meta property="og:image" content="https://burrell.tech/blog/og/argo-cd-config-management-plugins.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-04-03">
+  <meta property="article:modified_time" content="2026-04-03">
+  <meta property="article:author" content="Noah Burrell">
+  <meta property="article:tag" content="kubernetes">
+  <meta property="article:tag" content="argo-cd">
+  <meta property="article:tag" content="gitops">
+  <meta property="article:tag" content="config-management">
+  <meta property="article:section" content="kubernetes">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Argo CD Config Management Plugins: Extending GitOps Beyond Helm and Kustomize">
+  <meta name="twitter:description" content="A deep dive into Argo CD Config Management Plugins. Covers the sidecar architecture, writing plugin configurations, discovery rules, parameterization, building custom plugins for tools like CUE and Tanka, deployment patterns, and debugging strategies for production CMPs.">
+  <meta name="twitter:image" content="https://burrell.tech/blog/og/argo-cd-config-management-plugins.png">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Argo CD Config Management Plugins: Extending GitOps Beyond Helm and Kustomize",
+    "datePublished": "2026-04-03",
+    "dateModified": "2026-04-03",
+    "description": "A deep dive into Argo CD Config Management Plugins. Covers the sidecar architecture, writing plugin configurations, discovery rules, parameterization, building custom plugins for tools like CUE and Tanka, deployment patterns, and debugging strategies for production CMPs.",
+    "url": "https://burrell.tech/blog/argo-cd-config-management-plugins/",
+    "image": "https://burrell.tech/blog/og/argo-cd-config-management-plugins.png",
+    "timeRequired": "PT15M",
+    "author": {
+      "@type": "Person",
+      "name": "Noah Burrell",
+      "url": "https://burrell.tech/about"
+    },
+    "publisher": {
+      "@id": "https://burrell.tech/#organization"
+    },
+    "keywords": "kubernetes, argo-cd, gitops, config-management"
+  }
+  </script>
+
+  <!-- Theme (blocking - must run before first paint to prevent flash) -->
+  <script src="/js/theme.js"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/tailwind.css">
+  <link rel="stylesheet" href="/css/custom.css">
+
+  <!-- Scripts -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="/js/analytics.js"></script>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans antialiased">
+
+  <div id="nav-placeholder" data-active-page="blog"></div>
+
+  <main class="flex-1">
+  <!-- Post Header -->
+  <section class="bg-gray-50 dark:bg-gray-900/40 border-b border-gray-200 dark:border-gray-800 py-16 sm:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <a href="/blog" class="inline-flex items-center gap-1.5 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors mb-6">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        All posts
+      </a>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Argo CD Config Management Plugins: Extending GitOps Beyond Helm and Kustomize</h1>
+      <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
+        <time datetime="2026-04-03">April 3, 2026</time>
+        <span>&middot;</span>
+        <span>Noah Burrell</span>
+        <span>&middot;</span>
+        <span>15 min read</span>
+      </div>
+      <div class="mt-4 flex flex-wrap gap-2">
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">kubernetes</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">argo-cd</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">gitops</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">config-management</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Post Content -->
+  <section class="py-12 sm:py-16">
+    <div class="toc-layout">
+      <aside id="toc-sidebar-slot" class="toc-sidebar-column"></aside>
+      <div class="toc-content-column">
+        <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
+          <div class="blog-hero">
+  <img src="/blog/images/cmp-hero.svg" alt="Argo CD Config Management Plugin sidecar architecture" width="500" style="display: inline-block;">
+</div>
+<p>Argo CD ships with native support for Helm, Kustomize, and Jsonnet. For many teams, that covers everything. But the Kubernetes configuration management ecosystem is broader than those three tools. Maybe your team standardized on <a href="https://cuelang.org/" target="_blank" rel="noopener">CUE</a> for its type safety and validation. Maybe you inherited a stack built on <a href="https://tanka.dev/" target="_blank" rel="noopener">Grafana Tanka</a> and Jsonnet libraries that go beyond what Argo CD's native Jsonnet support handles. Maybe you have a proprietary templating pipeline that stitches together manifests from an internal API. Or maybe you just need to run a script that calls <code>envsubst</code> on plain YAML before Argo CD applies it.</p>
+<p>Config Management Plugins (CMPs) exist for exactly these situations. They let you teach Argo CD how to turn any source format into valid Kubernetes manifests. The mechanism is straightforward: you provide a container that knows how to render manifests, Argo CD hands it the repository contents, and your container writes the resulting YAML to stdout. Everything else, diffing, syncing, health checks, pruning, works exactly the same as it does with native tools.</p>
+<p>If you are new to Argo CD, my <a href="/blog/argo-cd/" target="_blank" rel="noopener">getting started guide</a> covers installation and core concepts. This post assumes you have a running Argo CD instance and want to extend it with a custom plugin.</p>
+<h2 id="the-sidecar-architecture" tabindex="-1">The Sidecar Architecture</h2>
+<p>The original CMP implementation, which was configured through the <code>argocd-cm</code> ConfigMap, was deprecated in Argo CD v2.4 and fully removed in v2.8. The current approach runs plugins as sidecar containers alongside the <code>argocd-repo-server</code> pod. Each sidecar runs a lightweight gRPC server called <code>argocd-cmp-server</code> that receives requests from the repo server, executes your plugin's commands against the repository contents, and returns the generated manifests.</p>
+<p>This architecture has several advantages. Each plugin runs in its own container with its own filesystem, dependencies, and resource limits. A misbehaving plugin cannot crash the repo server or interfere with other plugins. You can update a plugin's container image independently of the Argo CD version. And because each sidecar gets its own <code>/tmp</code> directory, there is no risk of path traversal attacks between plugins or between a plugin and the repo server.</p>
+<p>The repo server communicates with each sidecar over a Unix domain socket mounted from a shared volume. When Argo CD needs to render manifests for an Application, it streams the repository contents to the appropriate sidecar as a tar archive. The sidecar extracts the archive, runs your plugin's commands, and streams back the generated YAML.</p>
+<h2 id="writing-a-plugin-configuration" tabindex="-1">Writing a Plugin Configuration</h2>
+<p>Every CMP sidecar needs a plugin configuration file at <code>/home/argocd/cmp-server/config/plugin.yaml</code>. This file tells Argo CD what your plugin is called, how to detect when it should be used, and what commands to run. You can bake this file into a custom image, or if you are using a stock image and would rather maintain the configuration outside the image, nest the plugin config in a ConfigMap under the <code>plugin.yaml</code> key and mount it into the sidecar at the expected path. The deployment example later in this post uses the ConfigMap approach.</p>
+<p>Here is a minimal plugin wrapped in a ConfigMap that runs <code>envsubst</code> on all YAML files in a repository:</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: envsubst-plugin-config
+  namespace: argocd
+data:
+  plugin.yaml: |
+    apiVersion: argoproj.io/v1alpha1
+    kind: ConfigManagementPlugin
+    metadata:
+      name: envsubst
+    spec:
+      version: v1.0
+      generate:
+        command: [sh, -c]
+        args:
+          - |
+            set -o pipefail
+            for f in *.yaml; do
+              envsubst &lt; &quot;$f&quot;
+              echo &quot;---&quot;
+            done
+      discover:
+        fileName: &quot;.envsubst-marker&quot;
+</code></pre>
+<p>The <code>generate</code> block is the only required section. Its <code>command</code> must write valid Kubernetes YAML or JSON to stdout. Anything written to stderr is captured and displayed in the Argo CD UI as informational messages. If the command exits with a non-zero status, the manifest generation fails and Argo CD reports the error.</p>
+<p>The <code>discover</code> block tells Argo CD when to automatically use this plugin. In this example, any repository that contains a file called <code>.envsubst-marker</code> at its root will be matched to this plugin. Discovery is optional. If you omit it, you must explicitly name the plugin in each Application spec.</p>
+<h3 id="the-init-command" tabindex="-1">The Init Command</h3>
+<p>If your plugin needs to download dependencies or set up state before generating manifests, use the <code>init</code> block:</p>
+<pre><code class="language-yaml">spec:
+  init:
+    command: [sh, -c]
+    args:
+      - |
+        npm install
+  generate:
+    command: [sh, -c]
+    args:
+      - |
+        npx my-renderer --output yaml
+</code></pre>
+<p>The init command runs before every generate invocation. Its stdout is discarded, but a non-zero exit code will fail the entire manifest generation. Keep init commands fast because they add to every sync and diff operation.</p>
+<h3 id="discovery-rules" tabindex="-1">Discovery Rules</h3>
+<p>Discovery determines which plugin handles a given Application. Argo CD supports three discovery mechanisms, and you should only use one per plugin:</p>
+<p><code>fileName</code> matches against exact filenames or glob patterns:</p>
+<pre><code class="language-yaml">discover:
+  fileName: &quot;./kustomization.yaml&quot;
+</code></pre>
+<p><code>find.glob</code> searches the repository tree for matching files:</p>
+<pre><code class="language-yaml">discover:
+  find:
+    glob: &quot;**/*.cue&quot;
+</code></pre>
+<p><code>find.command</code> runs an arbitrary command that exits 0 if the plugin should handle the repository:</p>
+<pre><code class="language-yaml">discover:
+  find:
+    command: [sh, -c]
+    args:
+      - |
+        test -f jsonnetfile.json &amp;&amp; test -d environments/
+</code></pre>
+<p>When multiple plugins have discovery rules that match the same repository, the behavior is undefined. Only one plugin can handle a given Application, so make sure your discovery rules are specific enough to avoid collisions.</p>
+<h2 id="deploying-a-cmp-sidecar" tabindex="-1">Deploying a CMP Sidecar</h2>
+<p>To deploy a CMP, you need to patch the <code>argocd-repo-server</code> Deployment to add your sidecar container and mount the necessary volumes. Here is a complete example that adds a <code>yq</code>-based plugin. The plugin merges an environment-specific overlay file on top of base YAML manifests, a pattern that is useful when you want structured YAML merging without the overhead of Kustomize or Helm.</p>
+<p>First, create a ConfigMap with the plugin configuration:</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: yq-plugin-config
+  namespace: argocd
+data:
+  plugin.yaml: |
+    apiVersion: argoproj.io/v1alpha1
+    kind: ConfigManagementPlugin
+    metadata:
+      name: yq-overlay
+    spec:
+      version: v1.0
+      generate:
+        command: [sh, -c]
+        args:
+          - |
+            set -o pipefail
+            if [ -f &quot;overlay.yaml&quot; ]; then
+              for f in base/*.yaml; do
+                yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' &quot;$f&quot; overlay.yaml
+                echo &quot;---&quot;
+              done
+            else
+              cat base/*.yaml
+            fi
+      discover:
+        fileName: &quot;.yq-overlay-marker&quot;
+</code></pre>
+<p>Then patch the repo-server Deployment to add the sidecar. The <code>mikefarah/yq</code> image is Alpine-based, so it includes a shell and works as a CMP sidecar without any custom image builds:</p>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argocd-repo-server
+  namespace: argocd
+spec:
+  template:
+    spec:
+      containers:
+        - name: yq-plugin
+          command: [/var/run/argocd/argocd-cmp-server]
+          image: docker.io/mikefarah/yq:4.52.5
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 999
+          volumeMounts:
+            - mountPath: /var/run/argocd
+              name: var-files
+            - mountPath: /home/argocd/cmp-server/plugins
+              name: plugins
+            - mountPath: /home/argocd/cmp-server/config/plugin.yaml
+              subPath: plugin.yaml
+              name: yq-plugin-config
+            - mountPath: /tmp
+              name: yq-tmp
+      volumes:
+        - name: yq-plugin-config
+          configMap:
+            name: yq-plugin-config
+        - name: yq-tmp
+          emptyDir: {}
+</code></pre>
+<p>A few things to note about this configuration. The <code>command</code> must be <code>/var/run/argocd/argocd-cmp-server</code>, which is the gRPC server binary that the repo server uses to communicate with the sidecar. The <code>var-files</code> and <code>plugins</code> volumes are already defined by the default Argo CD installation and are shared between the repo server and all sidecars. The <code>/tmp</code> volume must be a separate <code>emptyDir</code> for each sidecar. Do not share the repo server's <code>/tmp</code> volume with your plugin because that opens a path traversal attack surface.</p>
+<p>The <code>runAsUser: 999</code> setting matches the non-root user that <code>argocd-cmp-server</code> expects. If your plugin's base image does not have a user with UID 999, the container will still run, but file ownership may behave unexpectedly. When choosing a sidecar image, prefer Alpine-based images or other lightweight images that include a shell, since the generate command needs <code>sh</code> to run. Minimal or distroless images that ship only a single binary will fail because <code>argocd-cmp-server</code> cannot execute shell commands against them.</p>
+<h2 id="a-practical-example%3A-tanka-plugin" tabindex="-1">A Practical Example: Tanka Plugin</h2>
+<p>Grafana Tanka is a Jsonnet-based configuration tool that adds environment management, resource formatting, and a CLI on top of raw Jsonnet. Argo CD's native Jsonnet support cannot handle Tanka's environment structure, so a CMP is the way to integrate the two.</p>
+<p>Here is a Tanka plugin configuration:</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: ConfigManagementPlugin
+metadata:
+  name: tanka
+spec:
+  version: v1.0
+  init:
+    command: [sh, -c]
+    args:
+      - |
+        jb install
+  generate:
+    command: [sh, -c]
+    args:
+      - |
+        set -o pipefail
+        tk show environments/$ARGOCD_ENV_TANKA_ENV --dangerous-allow-redirect
+  discover:
+    fileName: &quot;jsonnetfile.json&quot;
+</code></pre>
+<p>The init step runs <code>jb install</code> (jsonnet-bundler) to download Jsonnet library dependencies declared in <code>jsonnetfile.json</code>. The generate step calls <code>tk show</code> against a specific Tanka environment. The environment name is passed through the <code>ARGOCD_ENV_TANKA_ENV</code> variable, which you set on the Application spec.</p>
+<p>The Application that uses this plugin looks like this:</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: monitoring
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  source:
+    repoURL: https://github.com/mycompany/tanka-configs.git
+    targetRevision: main
+    path: .
+    plugin:
+      env:
+        - name: TANKA_ENV
+          value: production/monitoring
+</code></pre>
+<p>Notice that the <code>plugin</code> section does not specify a <code>name</code>. Because the Tanka plugin has a discovery rule matching <code>jsonnetfile.json</code>, Argo CD automatically selects it. The <code>env</code> block sets the <code>TANKA_ENV</code> variable, which the plugin accesses as <code>$ARGOCD_ENV_TANKA_ENV</code>. Argo CD automatically prefixes all application-defined environment variables with <code>ARGOCD_ENV_</code> before passing them to the plugin.</p>
+<h2 id="environment-variables-and-parameters" tabindex="-1">Environment Variables and Parameters</h2>
+<p>Plugins receive context about the current Application through environment variables. The standard set includes:</p>
+<ul>
+<li><code>ARGOCD_APP_NAME</code> - the Application's name</li>
+<li><code>ARGOCD_APP_NAMESPACE</code> - the Application's namespace in the cluster</li>
+<li><code>ARGOCD_APP_REVISION</code> - the Git revision being rendered</li>
+<li><code>KUBE_VERSION</code> - the target cluster's Kubernetes version</li>
+<li><code>KUBE_API_VERSIONS</code> - the API versions available on the target cluster</li>
+</ul>
+<p>Any variables defined in the Application's <code>source.plugin.env</code> block are available with the <code>ARGOCD_ENV_</code> prefix. This is the primary mechanism for passing configuration from an Application to a plugin without hardcoding values in the plugin itself.</p>
+<p>For more structured input, CMPs support parameters. Parameters are declared in the plugin configuration and surfaced in the Argo CD UI so users can fill them in without editing YAML:</p>
+<pre><code class="language-yaml">spec:
+  parameters:
+    static:
+      - name: environment
+        title: Target Environment
+        required: true
+        collectionType: string
+        string: dev
+      - name: features
+        title: Feature Flags
+        collectionType: array
+    dynamic:
+      command: [sh, -c]
+      args:
+        - |
+          echo '[{&quot;name&quot;: &quot;cluster&quot;, &quot;string&quot;: &quot;'&quot;$ARGOCD_APP_NAME&quot;'&quot;}]'
+</code></pre>
+<p>Static parameters have fixed definitions. Dynamic parameters are resolved at runtime by executing a command, which lets the plugin inspect the repository or call an external service to determine available options.</p>
+<p>All parameter values are passed to the generate command through the <code>ARGOCD_APP_PARAMETERS</code> environment variable as a JSON string. They are also available as individual environment variables with names derived from the parameter name: hyphens become underscores, and array elements get numeric suffixes. For example, a parameter named <code>feature-flags</code> with value <code>[&quot;canary&quot;, &quot;debug&quot;]</code> produces <code>PARAM_FEATURE_FLAGS_0=canary</code> and <code>PARAM_FEATURE_FLAGS_1=debug</code>.</p>
+<p>One important caveat: parameter defaults declared in the plugin configuration do not automatically populate <code>ARGOCD_APP_PARAMETERS</code>. The defaults are only used to populate the UI. Your generate command must implement its own defaulting logic if the parameter is not present.</p>
+<h2 id="performance-and-timeouts" tabindex="-1">Performance and Timeouts</h2>
+<p>Every time Argo CD diffs an Application or runs a sync, it calls the CMP's generate command. For large repositories or slow rendering tools, this can become a bottleneck. There are several timeout settings that control how long Argo CD waits for a CMP to respond.</p>
+<p>The repo server has <code>server.repo.server.timeout.seconds</code> (default 60 seconds) and the Application controller has <code>controller.repo.server.timeout.seconds</code> (also 60 seconds by default). On the sidecar side, the <code>ARGOCD_EXEC_TIMEOUT</code> environment variable controls how long the CMP server waits for your generate command to finish (default 90 seconds). There is also <code>ARGOCD_EXEC_FATAL_TIMEOUT</code> which, when exceeded, terminates the sidecar process entirely.</p>
+<p>If your plugin regularly takes more than a few seconds, you should increase these timeouts proportionally. The sidecar timeout should always be higher than the repo server timeout to ensure the sidecar has time to finish even when the repo server is willing to wait. Set the sidecar timeout to at least 30 seconds more than the repo server timeout.</p>
+<p>A subtle but common issue is that the timeout budget is shared across the entire render cycle, not allocated per phase. Argo CD first streams the repository contents to the sidecar as a tar archive (<code>MatchRepository</code>), then runs your generate command (<code>GenerateManifest</code>), all within the same deadline. For large repositories, the tar streaming alone can consume most of the timeout window. You may see <code>MatchRepository</code> succeed after 50 seconds, only for <code>GenerateManifest</code> to be immediately canceled because there are only a few seconds left on the clock. The error will say <code>DeadlineExceeded</code> or <code>context canceled</code>, which looks like a generate problem but is actually a streaming problem. If you hit this, the first thing to do is exclude unnecessary files from the tar stream using <code>--plugin-tar-exclude</code> on the repo server (covered in the monorepo section below). That often matters more than increasing timeouts, though you may need to do both.</p>
+<p>Beyond timeouts, consider what your generate command actually does. If it downloads dependencies in the init step on every invocation, that latency adds up. Pre-baking dependencies into your container image where possible is the single biggest performance optimization for CMPs. For Tanka and Jsonnet plugins, this means bundling the vendor directory or common libraries directly into the image rather than running <code>jb install</code> every time.</p>
+<h2 id="monorepo-support-with-manifest-generate-paths" tabindex="-1">Monorepo Support with Manifest Generate Paths</h2>
+<p>If you use a monorepo, Argo CD normally sends the entire repository to the CMP for rendering. For large repositories this is wasteful. The <code>manifest-generate-paths</code> annotation tells Argo CD to only trigger a refresh when files in specific paths change, and to only send those paths to the plugin:</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: billing
+  annotations:
+    argocd.argoproj.io/manifest-generate-paths: /services/billing
+</code></pre>
+<p>For this to work with CMPs, you must also enable it on the repo server by setting the <code>--plugin-use-manifest-generate-paths</code> argument or the <code>ARGOCD_REPO_SERVER_PLUGIN_USE_MANIFEST_GENERATE_PATHS</code> environment variable to <code>true</code>. Without this flag, the annotation is ignored for CMP-rendered Applications.</p>
+<p>You can also control which files are streamed to the sidecar using tar exclusions. The <code>--plugin-tar-exclude</code> flag on the repo server accepts Go filepath patterns:</p>
+<pre><code class="language-yaml">- --plugin-tar-exclude=.git/*
+- --plugin-tar-exclude=docs/*
+- --plugin-tar-exclude=**/*.md
+</code></pre>
+<p>This reduces the size of the tar stream sent to the sidecar, which speeds up rendering for repositories with large non-manifest directories.</p>
+<h2 id="providing-git-credentials-to-a-plugin" tabindex="-1">Providing Git Credentials to a Plugin</h2>
+<p>Some plugins need to clone additional repositories or access private Git submodules during generation. By default, CMPs do not have access to the credentials that the repo server uses to clone the primary repository. You can grant access by setting <code>provideGitCreds: true</code> in the plugin configuration:</p>
+<pre><code class="language-yaml">spec:
+  provideGitCreds: true
+  generate:
+    command: [sh, -c]
+    args:
+      - |
+        git submodule update --init --recursive
+        my-renderer generate ./
+</code></pre>
+<p>When enabled, the sidecar shares the repo server's Git ASKPASS mechanism through a Unix socket. This requires an additional volume mount for the ASKPASS socket and the <code>ARGOCD_ASK_PASS_SOCK</code> environment variable on both the repo server and the sidecar.</p>
+<p>Use this feature carefully. Granting Git credentials to a plugin means the plugin's code, and anything in the repository it processes, has access to your Git authentication. Only enable it for plugins you trust completely.</p>
+<h2 id="debugging-cmps-in-production" tabindex="-1">Debugging CMPs in Production</h2>
+<p>CMP debugging follows a predictable set of steps. Start by verifying both containers are running in the repo server pod:</p>
+<pre><code class="language-bash">kubectl get pod -n argocd -l app.kubernetes.io/component=repo-server \
+  -o jsonpath='{.items[0].spec.containers[*].name}'
+</code></pre>
+<p>You should see your sidecar container name alongside <code>argocd-repo-server</code>. If the sidecar is in <code>CrashLoopBackOff</code>, check that the plugin configuration file is mounted correctly at <code>/home/argocd/cmp-server/config/plugin.yaml</code> and that the entrypoint is <code>/var/run/argocd/argocd-cmp-server</code>.</p>
+<p>Next, check the sidecar logs for errors:</p>
+<pre><code class="language-bash">kubectl logs -n argocd deployment/argocd-repo-server -c yq-plugin
+</code></pre>
+<p>If you see timeout errors but the plugin works manually, increase <code>ARGOCD_EXEC_TIMEOUT</code> on the sidecar container. If the generate command fails, replicate the issue by exec'ing into the sidecar and running the command manually:</p>
+<pre><code class="language-bash">kubectl exec -n argocd deployment/argocd-repo-server -c yq-plugin -- \
+  sh -c &quot;cd /tmp &amp;&amp; yq --version&quot;
+</code></pre>
+<p>One subtle issue: Argo CD caches generated manifests in Redis. During development, you may change the plugin configuration or image and see stale results. Use the &quot;Hard Refresh&quot; button in the Argo CD UI, or call <code>argocd app get &lt;name&gt; --hard-refresh</code>, to force Argo CD to bypass the cache and re-render from scratch.</p>
+<p>If you are using a ConfigMap-mounted plugin configuration, remember that changes to the ConfigMap require a repo server pod restart. Kubernetes updates the mounted file in the pod, but the CMP server reads the configuration at startup and does not watch for changes. A rollout restart of the repo server Deployment is the cleanest way to pick up configuration changes:</p>
+<pre><code class="language-bash">kubectl rollout restart deployment/argocd-repo-server -n argocd
+</code></pre>
+<h2 id="safety-considerations" tabindex="-1">Safety Considerations</h2>
+<p>CMPs execute arbitrary commands inside your cluster. The sidecar runs as a non-root user (UID 999) and has no access to the Kubernetes API by default, but it does have network access and can reach external services. A malicious or buggy plugin could exfiltrate repository contents, mine cryptocurrency in the background, or produce manifests that deploy resources you did not intend.</p>
+<p>Treat CMP container images with the same rigor you apply to any workload running in your cluster. Pin image tags to specific digests rather than mutable tags. Scan images for vulnerabilities. Set CPU and memory limits on the sidecar container to prevent resource exhaustion. And audit the generate command logic, especially if it processes untrusted input from Application parameters.</p>
+<p>The <code>preserveFileMode</code> option in the plugin spec controls whether the sidecar preserves file permissions from the Git repository. The default is <code>false</code>, which strips executable permissions. Setting it to <code>true</code> allows repository files to be executable inside the sidecar, which is necessary for some workflows but increases the attack surface. Only enable it if your plugin specifically requires it.</p>
+<h2 id="when-to-use-a-cmp-vs.-other-approaches" tabindex="-1">When to Use a CMP vs. Other Approaches</h2>
+<p>CMPs are the right tool when you have a config management tool that Argo CD does not natively support and you want full integration with Argo CD's diff, sync, and health check pipeline. They are not the only option, though.</p>
+<p>For simple preprocessing like variable substitution or manifest patching, Argo CD's built-in <a href="https://argo-cd.readthedocs.io/en/stable/user-guide/kustomize/" target="_blank" rel="noopener">Kustomize</a> integration with inline patches might be enough. If you are doing post-render modification of Helm output, Helm's <a href="https://helm.sh/docs/topics/advanced/#post-rendering" target="_blank" rel="noopener">post-renderer</a> feature works with Argo CD's native Helm support and does not require a CMP.</p>
+<p>If you are considering a CMP to inject secrets into manifests, look at <a href="/blog/external-secrets-operator/" target="_blank" rel="noopener">External Secrets Operator</a> instead. ESO runs as a separate controller, integrates natively with Argo CD's sync and health checks, and keeps secrets management out of the manifest generation pipeline entirely. The popular argocd-vault-plugin was historically deployed as a CMP, but the community has largely moved toward ESO for new deployments.</p>
+<p>For teams using Kargo for promotion pipelines, CMPs and Kargo operate at different layers. Kargo handles the promotion of artifacts across stages, updating Git repositories and triggering syncs. CMPs handle the translation of whatever is in those repositories into Kubernetes manifests. The two complement each other without overlapping. A Kargo promotion might update a CUE value file in Git, and your CUE CMP would render the updated manifests when Argo CD syncs.</p>
+<h2 id="putting-it-together" tabindex="-1">Putting It Together</h2>
+<p>Here is a checklist for deploying a production CMP:</p>
+<p>Build or select a container image that contains your rendering tool and has <code>/var/run/argocd/argocd-cmp-server</code> available (it is present in the repo server image and can be copied with a multi-stage build or an init container). Write a plugin configuration with explicit discovery rules that do not overlap with other plugins or Argo CD's native detection. Create a ConfigMap with the configuration and patch the repo-server Deployment to add your sidecar with the correct volume mounts. Set appropriate resource limits and timeout values. Test with a simple Application first, then expand to production workloads.</p>
+<p>CMPs are one of those features where the initial setup takes some effort, but the payoff is substantial. Once deployed, your custom tooling becomes a first-class citizen in Argo CD. Diffs show exactly what changed, syncs apply your manifests atomically, and your team does not have to learn a new workflow just because the rendering tool is different.</p>
+
+        </article>
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <div id="cta-placeholder"
+    data-i18n="blog_cta"
+    data-variant="simple"></div>
+  <div id="footer-placeholder"></div>
+
+  <!-- components.js must run before Alpine (deferred) so nav x-data is in the DOM at Alpine init time -->
+  <script src="/js/components.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="/js/blog-i18n-links.js"></script>
+  <script src="/js/code-copy.js"></script>
+  <script src="/js/toc.js"></script>
+  <script src="/js/heading-links.js"></script>
+  <script src="/js/mermaid.js" type="module"></script>
+</body>
+</html>
