@@ -18,7 +18,7 @@ function main() {
       var content = fs.readFileSync(path.join(POSTS_DIR, f), 'utf8');
       var data = shared.parseFrontmatter(content);
       var slug = f.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.md$/, '');
-      return { slug: slug, date: data.date || '' };
+      return { slug: slug, date: data.modified || data.date || '' };
     })
     .sort(function (a, b) { return b.date.localeCompare(a.date); });
 
