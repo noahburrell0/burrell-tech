@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-Tenant Argo CD: Apps in Any Namespace | Burrell Technology Services</title>
+  <meta name="description" content="Every team piling Applications into argocd creates name collisions, bloated RBAC, and noisy events. Apps in Any Namespace lets each team own their Applications while keeping a shared control plane.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://burrell.tech/blog/argo-cd-apps-in-any-namespace/">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/logo.webp" as="image">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Burrell Technology Services S.A.">
+  <meta property="og:title" content="Multi-Tenant Argo CD: Apps in Any Namespace">
+  <meta property="og:description" content="Every team piling Applications into argocd creates name collisions, bloated RBAC, and noisy events. Apps in Any Namespace lets each team own their Applications while keeping a shared control plane.">
+  <meta property="og:url" content="https://burrell.tech/blog/argo-cd-apps-in-any-namespace/">
+  <meta property="og:image" content="https://burrell.tech/blog/og/argo-cd-apps-in-any-namespace.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-04-10">
+  <meta property="article:modified_time" content="2026-04-10">
+  <meta property="article:author" content="Noah Burrell">
+  <meta property="article:tag" content="kubernetes">
+  <meta property="article:tag" content="argo-cd">
+  <meta property="article:tag" content="gitops">
+  <meta property="article:tag" content="multi-tenancy">
+  <meta property="article:section" content="kubernetes">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Multi-Tenant Argo CD: Apps in Any Namespace">
+  <meta name="twitter:description" content="Every team piling Applications into argocd creates name collisions, bloated RBAC, and noisy events. Apps in Any Namespace lets each team own their Applications while keeping a shared control plane.">
+  <meta name="twitter:image" content="https://burrell.tech/blog/og/argo-cd-apps-in-any-namespace.png">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Multi-Tenant Argo CD: Apps in Any Namespace",
+    "datePublished": "2026-04-10",
+    "dateModified": "2026-04-10",
+    "description": "Every team piling Applications into argocd creates name collisions, bloated RBAC, and noisy events. Apps in Any Namespace lets each team own their Applications while keeping a shared control plane.",
+    "url": "https://burrell.tech/blog/argo-cd-apps-in-any-namespace/",
+    "image": "https://burrell.tech/blog/og/argo-cd-apps-in-any-namespace.png",
+    "timeRequired": "PT12M",
+    "author": {
+      "@type": "Person",
+      "name": "Noah Burrell",
+      "url": "https://burrell.tech/about"
+    },
+    "publisher": {
+      "@id": "https://burrell.tech/#organization"
+    },
+    "keywords": "kubernetes, argo-cd, gitops, multi-tenancy"
+  }
+  </script>
+
+  <!-- Theme (blocking - must run before first paint to prevent flash) -->
+  <script src="/js/theme.js"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/tailwind.css">
+  <link rel="stylesheet" href="/css/custom.css">
+
+  <!-- Scripts -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="/js/analytics.js"></script>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans antialiased">
+
+  <div id="nav-placeholder" data-active-page="blog"></div>
+
+  <main class="flex-1">
+  <!-- Post Header -->
+  <section class="bg-gray-50 dark:bg-gray-900/40 border-b border-gray-200 dark:border-gray-800 py-16 sm:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <a href="/blog" class="inline-flex items-center gap-1.5 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors mb-6">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        All posts
+      </a>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">Multi-Tenant Argo CD: Apps in Any Namespace</h1>
+      <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
+        <span>Posted <time datetime="2026-04-10">April 10, 2026</time></span>
+        <span>&middot;</span>
+        <span>Noah Burrell</span>
+        <span>&middot;</span>
+        <span>12 min read</span>
+      </div>
+      <div class="mt-4 flex flex-wrap gap-2">
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">kubernetes</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">argo-cd</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">gitops</span>
+          <span class="text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">multi-tenancy</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Post Content -->
+  <section class="py-12 sm:py-16">
+    <div class="toc-layout">
+      <aside id="toc-sidebar-slot" class="toc-sidebar-column"></aside>
+      <div class="toc-content-column">
+        <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-sm prose-pre:bg-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:bg-gray-800 dark:prose-pre:border-gray-700 prose-img:rounded-xl">
+          <div class="blog-hero">
+  <img src="/blog/images/apps-any-namespace-hero.svg" alt="Kubernetes namespace icons with a subscript Argo CD logo on each" width="600" style="display: inline-block;">
+</div>
+<p>You run a shared Argo CD instance for the whole company. Every team's Application manifests land in the <code>argocd</code> namespace. Team A names their frontend <code>web</code>. Team B wants to call theirs <code>web</code> too. They can't. So you invent a prefix scheme like <code>teamb-web</code> and document it in a wiki that nobody reads. Then team C asks for RBAC to manage only their apps, and you spend an afternoon writing Casbin policies full of wildcard prefixes. A month later, the audit log is full of noisy events from apps that have nothing to do with each other, and the <code>argocd</code> namespace has four hundred Application objects in it.</p>
+<p>This is the default way most people run Argo CD, and it gets ugly at scale. The control plane namespace becomes a shared junk drawer. RBAC becomes prefix-matching gymnastics. Resource events from every team pile up in one place. There is no natural blast radius between tenants.</p>
+<p>Apps in Any Namespace fixes this. It lets you keep a single shared Argo CD control plane but stores each team's Application resources in their own namespaces. Teams get a real boundary, RBAC gets a real scope, and you stop playing naming-convention whack-a-mole.</p>
+<p>This post walks through what the feature does, how to enable it safely, how AppProject <code>sourceNamespaces</code> gate what gets reconciled, what changes for RBAC and the CLI, why you should switch resource tracking methods before turning it on, and the security mistakes that are easy to make. If you are still getting familiar with how AppProjects and RBAC fit together, my <a href="/blog/argo-cd-appprojects-rbac/" target="_blank" rel="noopener">AppProjects and RBAC post</a> is a good primer.</p>
+<h2 id="what-changes-with-apps-in-any-namespace" tabindex="-1">What Changes With Apps in Any Namespace</h2>
+<p>By default, Argo CD only reconciles Application resources that live in its own control plane namespace, typically <code>argocd</code>. With Apps in Any Namespace enabled, you can list other namespaces where Application resources are also watched and reconciled. Those Applications are still owned by a project, still managed by the same application controller, and still show up in the same UI. The only difference is where the YAML lives.</p>
+<p>The feature has been available since Argo CD v2.5 and is no longer a beta. It is a prerequisite for multi-tenant setups where you want per-team isolation without running a separate Argo CD instance per team.</p>
+<p>There is one important constraint up front: you must be running a cluster-scoped Argo CD installation. The namespace-scoped install mode cannot use this feature because the controller does not have permissions to watch resources outside its own namespace.</p>
+<h2 id="check-your-resource-tracking-method-first" tabindex="-1">Check Your Resource Tracking Method First</h2>
+<p>Before you turn anything on, check how Argo CD tracks ownership of the resources it manages. In Argo CD v3.0 and later, the tracking method defaults to <code>annotation</code>, which uses the <code>argocd.argoproj.io/tracking-id</code> annotation. In v2.x installs, the default was <code>label</code>, which stamps the <code>app.kubernetes.io/instance</code> label on every managed resource with the Application name.</p>
+<p>Label-based tracking works fine when every Application lives in <code>argocd</code>, because the name is unique within a single namespace. Once Applications can live in multiple namespaces, the effective identifier becomes <code>&lt;namespace&gt;/&lt;name&gt;</code>, and Kubernetes label values are limited to 63 characters. Long combinations will hit the limit and break tracking.</p>
+<p>If you are still on a 2.x install with label tracking, switch to <code>annotation</code> before enabling Apps in Any Namespace. Annotations have no 63-character limit and do not conflict with other tools that also write the <code>app.kubernetes.io/instance</code> label. If you are already on v3.0 or later, the default is already <code>annotation</code> and there is nothing to change here, though it is worth confirming that your <code>argocd-cm</code> has not been overridden to <code>label</code> in your GitOps config.</p>
+<p>Update the <code>argocd-cm</code> ConfigMap if a change is needed:</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+data:
+  application.resourceTrackingMethod: annotation
+</code></pre>
+<p>If you have external tools that still read the <code>app.kubernetes.io/instance</code> label, you can use <code>annotation+label</code> instead. Argo CD will use the annotation for actual tracking and write the label as well for compatibility.</p>
+<p>After changing the tracking method, you need to refresh or resync your Applications for the change to take effect on their managed resources.</p>
+<h2 id="enabling-the-feature" tabindex="-1">Enabling the Feature</h2>
+<p>With tracking sorted, enable Apps in Any Namespace by setting <code>application.namespaces</code> in the <code>argocd-cmd-params-cm</code> ConfigMap:</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cmd-params-cm
+  namespace: argocd
+data:
+  application.namespaces: &quot;team-alpha, team-beta, platform-*&quot;
+</code></pre>
+<p>The value is a comma-separated list. It supports three pattern types: literal names like <code>team-alpha</code>, shell-style wildcards like <code>platform-*</code>, and Go regular expressions wrapped in forward slashes like <code>/^((?!kube-).*)$/</code>. A single <code>*</code> allows any namespace, which is almost never what you want in a shared cluster.</p>
+<p>After updating the ConfigMap, restart the API server and the application controller so they pick up the new namespace list:</p>
+<pre><code class="language-bash">kubectl rollout restart -n argocd deployment argocd-server
+kubectl rollout restart -n argocd statefulset argocd-application-controller
+</code></pre>
+<p>You also need to grant the API server the cluster-wide RBAC permissions to manage Application resources across namespaces. The Argo CD repository ships <a href="https://github.com/argoproj/argo-cd/tree/master/examples/k8s-rbac/argocd-server-applications" target="_blank" rel="noopener">example manifests</a> that define the required ClusterRole and ClusterRoleBinding. Apply those before anyone tries to use the feature, otherwise the API server will fail when attempting to read or write Applications in the new namespaces.</p>
+<h2 id="appproject-sourcenamespaces%3A-the-second-gate" tabindex="-1">AppProject sourceNamespaces: The Second Gate</h2>
+<p>Enabling the namespace list in <code>argocd-cmd-params-cm</code> is only half the story. It tells Argo CD which namespaces are eligible in principle. The second gate is the AppProject, which decides which of those namespaces each project actually allows.</p>
+<p>An Application in a non-control-plane namespace will only reconcile if both conditions are true: its namespace is listed in <code>application.namespaces</code>, and the AppProject it references has that namespace in <code>spec.sourceNamespaces</code>. Miss either one, and the controller refuses to touch the Application.</p>
+<p>Here is an AppProject that scopes team-alpha's apps to their own namespace:</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: team-alpha
+  namespace: argocd
+spec:
+  description: Team Alpha workloads
+  sourceRepos:
+    - https://github.com/acme/team-alpha-*
+  destinations:
+    - namespace: team-alpha-*
+      server: https://kubernetes.default.svc
+  sourceNamespaces:
+    - team-alpha
+  clusterResourceWhitelist: []
+  namespaceResourceWhitelist:
+    - group: &quot;*&quot;
+      kind: &quot;*&quot;
+</code></pre>
+<p>The <code>sourceNamespaces</code> entries accept shell-style wildcards, so you could write <code>team-alpha-*</code> to cover multiple team namespaces under one project if that matches your tenancy model.</p>
+<p>Two rules worth being explicit about:</p>
+<p><strong>Never add untrusted namespaces to the <code>default</code> AppProject.</strong> The <code>default</code> project has permissive settings out of the box, and adding a user-controlled namespace to its <code>sourceNamespaces</code> effectively gives that user the ability to deploy anywhere the project allows. Create purpose-built projects for each tenant and keep the default project reserved for the control plane.</p>
+<p><strong>Never list <code>argocd</code> in <code>sourceNamespaces</code> for a user-facing project.</strong> Applications in the control plane namespace get legacy behavior and bypass the <code>sourceNamespaces</code> check entirely for backwards compatibility. If you add <code>argocd</code> to a tenant project, you are giving that tenant a path to impersonate the control plane's trust boundary.</p>
+<h2 id="creating-an-application-in-a-team-namespace" tabindex="-1">Creating an Application in a Team Namespace</h2>
+<p>With the feature enabled and an AppProject scoped to <code>team-alpha</code>, a developer on that team can now drop an Application manifest into their own namespace:</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: web
+  namespace: team-alpha
+spec:
+  project: team-alpha
+  source:
+    repoURL: https://github.com/acme/team-alpha-web
+    targetRevision: HEAD
+    path: deploy
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: team-alpha-prod
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+</code></pre>
+<p>Team Beta can have a completely separate Application named <code>web</code> in the <code>team-beta</code> namespace, and there is no conflict. Each namespace is its own key space for Application names. The full identity of this app is now <code>team-alpha/web</code>, and Team Beta's is <code>team-beta/web</code>.</p>
+<h2 id="cli-and-ui-changes" tabindex="-1">CLI and UI Changes</h2>
+<p>In the CLI, applications outside the control plane namespace are addressed as <code>&lt;namespace&gt;/&lt;name&gt;</code>. For example, to fetch status on the app above:</p>
+<pre><code class="language-bash">argocd app get team-alpha/web
+argocd app sync team-alpha/web
+argocd app manifests team-alpha/web
+</code></pre>
+<p>For Applications that still live in the <code>argocd</code> control plane namespace, the old single-name form continues to work, so <code>argocd app get web</code> is equivalent to <code>argocd app get argocd/web</code>. This backwards compatibility means you do not have to migrate existing Applications to change how you address them.</p>
+<p>The UI and API follow the same convention. In the application list, tenant-namespace apps render with the namespace prefix, while control-plane apps render with just the name.</p>
+<h2 id="rbac-format-changes" tabindex="-1">RBAC Format Changes</h2>
+<p>Once Applications can live outside <code>argocd</code>, the RBAC policy format gains an extra segment. The object expression changes from <code>&lt;project&gt;/&lt;application&gt;</code> to <code>&lt;project&gt;/&lt;namespace&gt;/&lt;application&gt;</code>.</p>
+<p>Rules written in the old two-segment form still apply to Applications in the control plane namespace, which preserves backwards compatibility for existing policies. New rules targeting tenant namespaces need the three-segment form. Here is a policy giving <code>team-alpha-admin</code> full control over their own namespace and read-only access across the cluster:</p>
+<pre><code>p, role:team-alpha-admin, applications, *, team-alpha/team-alpha/*, allow
+p, role:team-alpha-admin, applications, get, */*/*, allow
+g, team-alpha-leads, role:team-alpha-admin
+</code></pre>
+<p>The first rule reads as: allow any action on Applications in project <code>team-alpha</code>, namespace <code>team-alpha</code>, with any name. The second rule reads as: allow <code>get</code> on Applications in any project, any namespace, with any name. Both segments support wildcards, and you can mix them. If you want to give a role visibility into one namespace across all projects, write something like <code>*/team-alpha/*</code>.</p>
+<p>The same pattern applies to related resource types like <code>logs</code> and <code>exec</code>. Rules for those resources also take the three-segment form once the feature is enabled.</p>
+<h2 id="notifications-in-tenant-namespaces" tabindex="-1">Notifications in Tenant Namespaces</h2>
+<p>One of the quieter benefits of Apps in Any Namespace is that each team can own their own notification configuration. By default, Argo CD notifications are configured globally in the <code>argocd-notifications-cm</code> ConfigMap in the control plane namespace. That centralizes Slack channels, PagerDuty routes, and templates in one place, which can become a bottleneck.</p>
+<p>With tenant-namespace Applications, teams can place their own <code>argocd-notifications-cm</code> ConfigMap and optionally an <code>argocd-notifications-secret</code> in the namespace where their Application lives. The notifications controller will read the local config and send alerts based on it, while still supporting global configuration from the control plane namespace.</p>
+<p>This is not automatic. Admins must explicitly enable self-service notifications by setting <code>notificationscontroller.selfservice.enabled</code> in <code>argocd-cmd-params-cm</code>:</p>
+<pre><code class="language-yaml">data:
+  notificationscontroller.selfservice.enabled: &quot;true&quot;
+</code></pre>
+<p>The notifications controller also needs cluster-wide RBAC to watch Applications and read config across namespaces. The Argo CD repository ships <code>argocd-notifications-controller-rbac-clusterrole.yaml</code> and <code>argocd-notifications-controller-rbac-clusterrolebinding.yaml</code> in the <a href="https://github.com/argoproj/argo-cd/tree/master/examples/k8s-rbac/argocd-server-applications" target="_blank" rel="noopener">same example RBAC directory</a> for exactly this purpose. Apply those alongside the API server RBAC before teams start configuring their own notifications. If you have not set up Argo CD notifications before, the <a href="/blog/argo-cd-notifications/" target="_blank" rel="noopener">notifications post</a> covers triggers and templates from the ground up.</p>
+<h2 id="what-about-applicationsets%3F" tabindex="-1">What About ApplicationSets?</h2>
+<p>Apps in Any Namespace handles Application resources, but ApplicationSet resources live in the control plane namespace by default. There is a separate feature called ApplicationSet in Any Namespace, introduced as a beta in v2.8, that lets you place ApplicationSet resources in tenant namespaces as well.</p>
+<p>You enable it with a parallel ConfigMap key in <code>argocd-cmd-params-cm</code>:</p>
+<pre><code class="language-yaml">data:
+  applicationsetcontroller.namespaces: &quot;team-alpha, team-beta&quot;
+</code></pre>
+<p>There are two constraints to know about. First, Apps in Any Namespace must already be enabled, with matching namespace lists. An ApplicationSet cannot generate Applications into a namespace that Apps in Any Namespace does not permit. Second, an ApplicationSet generates its child Applications in the same namespace as the ApplicationSet itself. You cannot put an ApplicationSet in <code>argocd</code> and have it create Applications in <code>team-alpha</code>. If team-alpha wants ApplicationSet-based generation, their ApplicationSet has to live in their own namespace.</p>
+<p>Because ApplicationSet generators like SCM Provider and Pull Request can pull secrets and reach external URLs, running them in tenant namespaces opens an SCM token exfiltration path if unchecked. Admins should restrict allowed SCM provider URLs with <code>ARGOCD_APPLICATIONSET_CONTROLLER_ALLOWED_SCM_PROVIDERS</code> and, if available in your version, enable <code>tokenref.strict.mode</code> to require that referenced secrets carry the <code>argocd.argoproj.io/secret-type: scm-creds</code> label.</p>
+<h2 id="gotchas" tabindex="-1">Gotchas</h2>
+<p>A handful of things can surprise you on first use.</p>
+<p><strong>Resource tracking label overflow.</strong> I mentioned this above, but it is worth repeating. If your install still uses label tracking and you enable Apps in Any Namespace without switching to annotation tracking, any Application whose namespace plus name exceeds 63 characters will break. The Application will show as out of sync or fail to reconcile with label errors. Argo CD v3.0 and later ship with annotation tracking as the default, so most modern installs will not hit this unless their <code>argocd-cm</code> was explicitly overridden.</p>
+<p><strong>Restarts matter.</strong> After changing <code>argocd-cmd-params-cm</code>, restart both the API server deployment and the application controller StatefulSet. If you restart only the API server, the controller will keep ignoring Applications in new namespaces until it restarts too.</p>
+<p><strong>Control plane Applications bypass sourceNamespaces.</strong> Applications in the <code>argocd</code> namespace ignore the <code>sourceNamespaces</code> check in their project. This is backwards-compatible behavior, but it means you should not treat the control plane as just another tenant namespace. Put platform and shared-infra apps in <code>argocd</code>, and put team apps in their own namespaces.</p>
+<p><strong>Cluster-scoped installations only.</strong> A namespace-scoped Argo CD install, where the controller only has RBAC inside its own namespace, cannot support this feature. If you installed with <code>install-namespace-install.yaml</code>, you will need to migrate to the cluster-scoped install before enabling.</p>
+<p><strong>Do not grant write access to unknown namespaces.</strong> It is tempting to set <code>application.namespaces: &quot;*&quot;</code> and move on. Do not. That lets anyone who can create namespaces also create Applications in them, and unless every AppProject is tightly locked down, that is a path to unexpected deployments. Enumerate the namespaces you actually want, or use a regex that explicitly excludes system namespaces.</p>
+<h2 id="when-this-is-worth-it" tabindex="-1">When This Is Worth It</h2>
+<p>Apps in Any Namespace is the right move when multiple teams share one Argo CD instance and you want each team to own their Applications as YAML files in their own namespaces. If you are running Argo CD for a single team, or if you have a small number of Applications, the feature adds configuration overhead without a real payoff.</p>
+<p>The sweet spot is somewhere around the point where RBAC rules for the control plane namespace start growing into prefix-matching Casbin policies, or where Application names are forced into <code>team-</code> prefixes to avoid collisions. That is the symptom of a shared namespace trying to act like a multi-tenant system. Apps in Any Namespace gives you the real thing.</p>
+<p>It also plays well with AppProjects. Each AppProject can scope its <code>sourceNamespaces</code> to exactly the tenant namespaces it covers, and the RBAC rules for that project can be written in terms of the real namespace structure rather than string prefixes. Combined with per-namespace notifications, each team ends up with a self-contained slice of the Argo CD experience, while platform teams keep a single control plane to operate.</p>
+<h2 id="wrapping-up" tabindex="-1">Wrapping Up</h2>
+<p>Apps in Any Namespace is one of the more impactful multi-tenancy features Argo CD has shipped. It is not flashy, but it rearranges the mental model enough that shared Argo CD installations stop feeling cramped. Switch your resource tracking method first, list your allowed namespaces in <code>argocd-cmd-params-cm</code>, configure each AppProject's <code>sourceNamespaces</code>, apply the extra RBAC manifests for the API server and notifications controller, and you are done. Tenants get real namespaces, RBAC gets a real scope, and the <code>argocd</code> namespace stops being a pile of everybody's YAML.</p>
+<p>If you need help setting up Apps in Any Namespace for your team or want to talk through your multi-tenancy strategy, feel free to <a href="/contact" target="_blank" rel="noopener">reach out</a>.</p>
+
+        </article>
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <div id="cta-placeholder"
+    data-i18n="blog_cta"
+    data-variant="simple"></div>
+  <div id="footer-placeholder"></div>
+
+  <!-- components.js must run before Alpine (deferred) so nav x-data is in the DOM at Alpine init time -->
+  <script src="/js/components.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="/js/blog-i18n-links.js"></script>
+  <script src="/js/code-copy.js"></script>
+  <script src="/js/toc.js"></script>
+  <script src="/js/heading-links.js"></script>
+  <script src="/js/mermaid.js" type="module"></script>
+</body>
+</html>

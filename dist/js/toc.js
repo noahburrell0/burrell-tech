@@ -106,6 +106,11 @@
   sidebar.appendChild(sidebarList);
   slot.appendChild(sidebar);
 
+  // Hide expand/collapse button when there are no sub-sections (no H3s)
+  if (sidebarList.querySelectorAll('.toc-list > li > ol').length === 0) {
+    expandAllBtn.style.display = 'none';
+  }
+
   // --- Expand/Collapse all toggle ---
   var allExpanded = false;
   expandAllBtn.addEventListener('click', function () {
